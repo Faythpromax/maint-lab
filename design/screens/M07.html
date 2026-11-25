@@ -1,0 +1,675 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>M07 - Gửi ảnh và nộp phiếu (6 trạng thái)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0b1120;
+      color: #0f172a;
+      margin: 0;
+      padding: 32px 24px 60px;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .phone-container {
+      width: 390px;
+      height: 844px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+    }
+    .status-badge-submitted {
+      background-color: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #ffedd5;
+    }
+    .status-badge-inprogress {
+      background-color: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #dbeafe;
+    }
+    .status-badge-assigned {
+      background-color: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+    .status-badge-approved {
+      background-color: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #dcfce7;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800">
+<!-- Header của Board thiết kế -->
+<header class="max-w-[2600px] mx-auto mb-8 px-2">
+<div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-700/60 pb-6">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-full text-xs font-semibold uppercase tracking-wider">APP ANDROID • M07</span>
+<span class="text-xs text-slate-400 font-mono">390 × 844 px (6 trạng thái)</span>
+<span class="text-xs px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-medium">Kỹ thuật viên: tech-a (Nguyễn Văn A)</span>
+</div>
+<h1 class="text-2xl lg:text-3xl font-bold text-white tracking-tight">M07: Gửi ảnh &amp; nộp phiếu bảo trì</h1>
+<p class="text-sm text-slate-400 mt-1 max-w-4xl">Giao diện nền sáng chuẩn Web MaintenanceLab &amp; M01/M02/M03/M04/M05/M06. Kỹ thuật viên xem lại ảnh thu nhỏ (nền tối), chỉ số độ sáng 142/255, bổ sung ghi chú hiện trường và nộp phiếu. Xử lý an toàn tiến độ upload, mất mạng không mất ảnh, ảnh lỗi, xung đột revision và hết phiên.</p>
+</div>
+<!-- Quy ước màu Badge -->
+<div class="bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 flex flex-col gap-2 shadow-lg">
+<span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Quy ước Badge trạng thái:</span>
+<div class="flex items-center gap-2">
+<span class="text-xs px-2.5 py-1 rounded-md font-medium status-badge-assigned">Đã giao</span>
+<span class="text-xs px-2.5 py-1 rounded-md font-medium status-badge-inprogress">Đang thực hiện</span>
+<span class="text-xs px-2.5 py-1 rounded-md font-medium status-badge-submitted">Chờ duyệt</span>
+<span class="text-xs px-2.5 py-1 rounded-md font-medium status-badge-approved">Hoàn tất</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Hàng hiển thị 6 Frame điện thoại -->
+<main class="max-w-[2600px] mx-auto overflow-x-auto pb-8">
+<div class="flex gap-7 min-w-max px-2">
+<!-- ================= FRAME 1: MẶC ĐỊNH ================= -->
+<div class="flex flex-col items-center">
+<div class="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider bg-slate-800/80 border border-slate-700/70 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          FRAME 1: MẶC ĐỊNH (SẴN SÀNG NỘP)
+        </div>
+<div class="phone-container">
+<!-- Android Status Bar (Nền sáng, chữ tối) -->
+<div class="h-10 pt-2 px-6 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white border-b border-slate-100 z-20">
+<span>09:20</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="text-[11px] font-bold">92%</span>
+</div>
+</div>
+<!-- Top App Bar (AppBar chuẩn M03, M04) -->
+<div class="h-14 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:bg-slate-200 transition-colors" title="Quay lại">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-sm font-bold text-blue-600 tracking-tight">P001</span>
+<span class="text-xs text-slate-400">•</span>
+<span class="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">TB-001</span>
+</div>
+<div class="text-[11px] text-slate-500 font-medium truncate max-w-[170px]">Máy bơm nước chính (Khu A)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full status-badge-inprogress flex-shrink-0">
+              Đang thực hiện
+            </span>
+</div>
+<!-- Nội dung cuộn -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+<!-- Thẻ xem lại ảnh đã chụp -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-500 tracking-wider uppercase">Ảnh chụp hiện trường</span>
+</div>
+<!-- Khung ảnh thu nhỏ (Nền tối theo quy chuẩn: chỉ camera và ảnh được nền tối) -->
+<div class="relative w-full h-44 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center group shadow-inner">
+<!-- Mô phỏng hình ảnh van cấp máy bơm -->
+<div class="absolute inset-0 opacity-40 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<div class="relative z-10 flex flex-col items-center text-center p-3">
+<div class="w-16 h-16 rounded-full bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-blue-400 mb-2 shadow-lg">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="13" r="3"></circle>
+</svg>
+</div>
+<span class="text-xs font-medium text-slate-200">Ảnh hiện trường thiết bị</span>
+<span class="text-[11px] text-slate-400 mt-0.5">Van áp lực chính • Máy bơm Khu A</span>
+</div>
+<!-- Thẻ độ sáng nổi bật phía dưới ảnh -->
+<div class="absolute bottom-2 left-2 right-2 bg-slate-900/85 backdrop-blur-sm border border-slate-700/60 rounded-lg px-2.5 py-1.5 flex items-center text-xs text-white">
+<div class="flex items-center gap-1.5">
+<svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round"></path></svg>
+<span class="text-slate-300 text-[11px]">Độ sáng:</span>
+<span class="font-mono font-bold text-amber-300">142/255</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 text-xs text-slate-500">
+<span>Dung lượng: <strong class="text-slate-700 font-mono">1.8 MB</strong></span>
+<span>Độ phân giải: <strong class="text-slate-700 font-mono">1080×1920</strong></span>
+</div>
+</div>
+<!-- Ô nhập Ghi chú nhiều dòng (không bắt buộc) -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-slate-700 uppercase tracking-wider" for="note-f1">Ghi chú hiện trường</label>
+<span class="text-[11px] text-slate-400 font-medium">(Không bắt buộc)</span>
+</div>
+<textarea class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all resize-none placeholder-slate-400" id="note-f1" placeholder="Nhập tình trạng máy, áp suất van đo được, hoặc lưu ý bổ sung cho quản lý..." rows="3">Áp suất hiển thị 4.2 bar, đồng hồ đo van cấp ổn định. Nhiệt độ vỏ bơm bình thường, không phát hiện rò rỉ.</textarea>
+</div>
+<!-- Thẻ tóm tắt quy trình nộp -->
+<div class="p-3 bg-blue-50/80 rounded-xl border border-blue-200/70 text-xs text-blue-900 space-y-1">
+<div class="font-semibold flex items-center gap-1.5 text-blue-800">
+<svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                Xác nhận nộp phiếu
+              </div>
+<p class="text-[11px] text-blue-700/90 leading-relaxed">
+                Sau khi gửi thành công, phiếu sẽ chuyển sang trạng thái <strong>Chờ duyệt</strong> để Quản lý kiểm tra.
+              </p>
+</div>
+</div>
+<!-- Bottom Action Bar (Cố định ở đáy) -->
+<div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+<button class="w-full h-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Gửi và nộp</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= FRAME 2: ĐANG GỬI ================= -->
+<div class="flex flex-col items-center">
+<div class="mb-3 flex items-center gap-2 text-xs font-semibold text-blue-400 uppercase tracking-wider bg-slate-800/80 border border-slate-700/70 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+          FRAME 2: ĐANG GỬI (TIẾN ĐỘ + KHÓA NÚT)
+        </div>
+<div class="phone-container">
+<!-- Android Status Bar -->
+<div class="h-10 pt-2 px-6 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white border-b border-slate-100 z-20">
+<span>09:20</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="text-[11px] font-bold">92%</span>
+</div>
+</div>
+<!-- Top App Bar -->
+<div class="h-14 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-slate-300 cursor-not-allowed" disabled="">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-sm font-bold text-blue-600 tracking-tight">P001</span>
+<span class="text-xs text-slate-400">•</span>
+<span class="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">TB-001</span>
+</div>
+<div class="text-[11px] text-slate-500 font-medium truncate max-w-[170px]">Máy bơm nước chính (Khu A)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full status-badge-inprogress flex-shrink-0">
+              Đang thực hiện
+            </span>
+</div>
+<!-- Nội dung -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+<!-- Thẻ tiến độ tải lên nổi bật -->
+<div class="bg-blue-600 text-white rounded-2xl p-4 shadow-lg shadow-blue-500/20 space-y-3">
+<div class="flex items-center justify-between text-xs font-medium">
+<span class="flex items-center gap-2">
+<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span>Đang tải ảnh lên máy chủ...</span>
+</span>
+<span class="font-mono font-bold text-blue-100">60%</span>
+</div>
+<!-- Thanh tiến độ 60% -->
+<div class="w-full h-2.5 bg-blue-900/40 rounded-full overflow-hidden p-0.5 border border-blue-400/30">
+<div class="h-full bg-white rounded-full transition-all duration-300 w-[60%]"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-blue-100">
+<span>1.1 MB / 1.8 MB</span>
+<span>Vui lòng không đóng app</span>
+</div>
+</div>
+<!-- Thẻ xem lại ảnh (Mờ nhẹ khi đang tải) -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3 opacity-90">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-500 tracking-wider uppercase">Ảnh chụp hiện trường</span>
+<span class="text-xs font-mono text-slate-500">142/255</span>
+</div>
+<div class="relative w-full h-40 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center shadow-inner">
+<div class="text-center p-3">
+<div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 mb-2">
+<svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2" stroke-linecap="round"></path></svg>
+</div>
+<span class="text-xs font-mono text-slate-300">Đang truyền tệp ảnh hiện trường...</span>
+</div>
+</div>
+</div>
+<!-- Ô Ghi chú bị KHÓA (disabled) -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-2 opacity-85">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Ghi chú hiện trường (Đã khóa)</label>
+<span class="text-[11px] text-slate-400 flex items-center gap-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  Đang xử lý
+                </span>
+</div>
+<textarea class="w-full text-sm text-slate-600 bg-slate-100 border border-slate-200 rounded-xl p-3 resize-none cursor-not-allowed" disabled="" rows="3">Áp suất hiển thị 4.2 bar, đồng hồ đo van cấp ổn định. Nhiệt độ vỏ bơm bình thường, không phát hiện rò rỉ.</textarea>
+</div>
+</div>
+<!-- Bottom Action Bar (Nút KHÓA) -->
+<div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+<button class="w-full h-12 bg-blue-300 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 cursor-not-allowed shadow-none" disabled="">
+<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span>Đang gửi và nộp (60%)...</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= FRAME 3: MẤT MẠNG (THỬ LẠI) ================= -->
+<div class="flex flex-col items-center">
+<div class="mb-3 flex items-center gap-2 text-xs font-semibold text-rose-400 uppercase tracking-wider bg-slate-800/80 border border-slate-700/70 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="w-2 h-2 rounded-full bg-rose-400"></span>
+          FRAME 3: MẤT MẠNG (GIỮ ẢNH &amp; NÚT THỬ LẠI)
+        </div>
+<div class="phone-container">
+<!-- Android Status Bar -->
+<div class="h-10 pt-2 px-6 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white border-b border-slate-100 z-20">
+<span>09:21</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+<div class="flex items-center gap-1.5 text-slate-400">
+<svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="text-[11px] font-bold text-slate-700">91%</span>
+</div>
+</div>
+<!-- Top App Bar -->
+<div class="h-14 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-sm font-bold text-blue-600">P001</span>
+<span class="text-xs text-slate-400">•</span>
+<span class="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">TB-001</span>
+</div>
+<div class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full status-badge-inprogress flex-shrink-0">
+              Đang thực hiện
+            </span>
+</div>
+<!-- Nội dung -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+<!-- Banner ĐỎ NHẠT: Mất mạng, giữ ảnh & ghi chú, KHÔNG có chữ "đã nộp" -->
+<div class="bg-rose-50 border border-rose-200 text-rose-900 rounded-2xl p-4 shadow-sm space-y-2">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-rose-100 border border-rose-300 flex items-center justify-center text-rose-600 flex-shrink-0 mt-0.5">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 4.243a9 9 0 01-2.828-6.364m0 0a9 9 0 012.828-6.364m0 0L3 3m5.657 5.657a5 5 0 010 7.072m0 0l-2.829 2.829" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="space-y-1">
+<h3 class="text-sm font-bold text-rose-800">Chưa gửi được. Ảnh và ghi chú vẫn được giữ</h3>
+<p class="text-xs text-rose-700 leading-relaxed">
+                    Kết nối mạng gián đoạn trong lúc tải dữ liệu. Phiếu <strong>chưa nộp lên hệ thống</strong>. Dữ liệu của bạn được bảo toàn an toàn trong máy.
+                  </p>
+</div>
+</div>
+</div>
+<!-- Thẻ ảnh vẫn được giữ nguyên vẹn -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Ảnh chụp (Đã lưu cục bộ)</span>
+<span class="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Độ sáng: 142/255</span>
+</div>
+<div class="relative w-full h-36 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center shadow-inner">
+<div class="text-center p-3">
+<div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 mb-1.5">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round"></path></svg>
+</div>
+<span class="text-xs font-medium text-slate-300">Ảnh hiện trường thiết bị (1.8 MB)</span>
+</div>
+</div>
+</div>
+<!-- Ô Ghi chú vẫn được GIỮ NGUYÊN VẸN -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2">
+<label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Ghi chú hiện trường (Giữ nguyên)</label>
+<textarea class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl p-3 resize-none focus:outline-none" rows="3">Áp suất hiển thị 4.2 bar, đồng hồ đo van cấp ổn định. Nhiệt độ vỏ bơm bình thường, không phát hiện rò rỉ.</textarea>
+</div>
+</div>
+<!-- Bottom Action Bar: NÚT THỬ LẠI (Xanh dương, 48px) -->
+<div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+<button class="w-full h-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Thử lại</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= FRAME 4: ẢNH KHÔNG HỢP LỆ ================= -->
+<div class="flex flex-col items-center">
+<div class="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-wider bg-slate-800/80 border border-slate-700/70 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          FRAME 4: ẢNH KHÔNG HỢP LỆ (CHỤP LẠI)
+        </div>
+<div class="phone-container">
+<!-- Android Status Bar -->
+<div class="h-10 pt-2 px-6 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white border-b border-slate-100 z-20">
+<span>09:21</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="text-[11px] font-bold">91%</span>
+</div>
+</div>
+<!-- Top App Bar -->
+<div class="h-14 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-sm font-bold text-blue-600">P001</span>
+<span class="text-xs text-slate-400">•</span>
+<span class="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">TB-001</span>
+</div>
+<div class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full status-badge-inprogress flex-shrink-0">
+              Đang thực hiện
+            </span>
+</div>
+<!-- Nội dung -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+<!-- Banner lỗi ảnh quá lớn / sai định dạng -->
+<div class="bg-amber-50 border border-amber-300 text-amber-950 rounded-2xl p-4 shadow-sm space-y-2">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700 flex-shrink-0 mt-0.5">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="space-y-1">
+<h3 class="text-sm font-bold text-amber-900">Ảnh quá lớn (tối đa 5 MB) hoặc sai định dạng</h3>
+<p class="text-xs text-amber-800 leading-relaxed">
+                    Ảnh chụp có dung lượng 6.4 MB vượt quá giới hạn hoặc file không tương thích. Vui lòng chụp lại ảnh chuẩn bằng camera máy.
+                  </p>
+</div>
+</div>
+</div>
+<!-- Khung cảnh báo ảnh lỗi -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Ảnh lỗi</span>
+<span class="text-xs font-mono font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">6.4 MB (Vượt mức)</span>
+</div>
+<!-- Nền tối theo quy chuẩn camera/ảnh -->
+<div class="relative w-full h-40 bg-slate-950 rounded-xl overflow-hidden border border-rose-900/60 flex items-center justify-center shadow-inner">
+<div class="text-center p-3">
+<div class="w-12 h-12 rounded-full bg-rose-950/80 border border-rose-800 mx-auto flex items-center justify-center text-rose-400 mb-2">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<span class="text-xs text-rose-300 font-medium">Tệp không đủ điều kiện tải lên</span>
+<span class="text-[11px] text-slate-400 block mt-0.5">Yêu cầu JPG/PNG ≤ 5 MB</span>
+</div>
+</div>
+</div>
+<!-- Ghi chú được giữ -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2">
+<label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Ghi chú hiện trường</label>
+<textarea class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl p-3 resize-none focus:outline-none" rows="3">Áp suất hiển thị 4.2 bar, đồng hồ đo van cấp ổn định. Nhiệt độ vỏ bơm bình thường, không phát hiện rò rỉ.</textarea>
+</div>
+</div>
+<!-- Bottom Action Bar: CHỈ CÒN DUY NHẤT 1 NÚT CHỤP LẠI (48px) -->
+<div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+<button class="w-full h-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Chụp lại</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= FRAME 5: XUNG ĐỘT (409) ================= -->
+<div class="flex flex-col items-center">
+<div class="mb-3 flex items-center gap-2 text-xs font-semibold text-orange-400 uppercase tracking-wider bg-slate-800/80 border border-slate-700/70 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="w-2 h-2 rounded-full bg-orange-400"></span>
+          FRAME 5: XUNG ĐỘT (DỮ LIỆU ĐÃ TẢI LẠI, GIỮ ẢNH)
+        </div>
+<div class="phone-container">
+<!-- Android Status Bar -->
+<div class="h-10 pt-2 px-6 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white border-b border-slate-100 z-20">
+<span>09:22</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="text-[11px] font-bold">90%</span>
+</div>
+</div>
+<!-- Top App Bar -->
+<div class="h-14 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-sm font-bold text-blue-600">P001</span>
+<span class="text-xs text-slate-400">•</span>
+<span class="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">TB-001</span>
+</div>
+<div class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full status-badge-inprogress flex-shrink-0">
+              Đang thực hiện
+            </span>
+</div>
+<!-- Nội dung -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+<!-- Banner XUNG ĐỘT (HTTP 409) -->
+<div class="bg-amber-50 border border-amber-300 text-amber-950 rounded-2xl p-4 shadow-sm space-y-2">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700 flex-shrink-0 mt-0.5">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="space-y-1">
+<h3 class="text-sm font-bold text-amber-900">Phiếu đã thay đổi. Dữ liệu vừa được tải lại</h3>
+<p class="text-xs text-amber-800 leading-relaxed">
+                    Phiên bản phiếu trên máy chủ vừa được cập nhật. Ứng dụng đã tự động đồng bộ dữ liệu mới nhất. Ảnh chụp và ghi chú của bạn vẫn được giữ an toàn.
+                  </p>
+</div>
+</div>
+</div>
+<!-- Ảnh vẫn được giữ nguyên -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Ảnh chụp hiện trường</span>
+<span class="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Độ sáng: 142/255</span>
+</div>
+<!-- Nền tối chuẩn quy ước -->
+<div class="relative w-full h-36 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center shadow-inner">
+<div class="text-center p-3">
+<div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 mb-1.5">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round"></path></svg>
+</div>
+<span class="text-xs font-medium text-slate-300">Ảnh hiện trường thiết bị (1.8 MB)</span>
+</div>
+</div>
+</div>
+<!-- Ghi chú được giữ nguyên -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2">
+<label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Ghi chú hiện trường (Đã bảo toàn)</label>
+<textarea class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl p-3 resize-none focus:outline-none" rows="3">Áp suất hiển thị 4.2 bar, đồng hồ đo van cấp ổn định. Nhiệt độ vỏ bơm bình thường, không phát hiện rò rỉ.</textarea>
+</div>
+</div>
+<!-- Bottom Action Bar: ĐỔI THÀNH "Gửi và nộp" -->
+<div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+<button class="w-full h-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Gửi và nộp</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ================= FRAME 6: HẾT PHIÊN (ĐĂNG NHẬP LẠI) ================= -->
+<div class="flex flex-col items-center">
+<div class="mb-3 flex items-center gap-2 text-xs font-semibold text-indigo-400 uppercase tracking-wider bg-slate-800/80 border border-slate-700/70 px-3 py-1.5 rounded-lg shadow-sm">
+<span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+          FRAME 6: HẾT PHIÊN (ĐĂNG NHẬP LẠI, KHÔNG MẤT ẢNH)
+        </div>
+<div class="phone-container">
+<!-- Android Status Bar -->
+<div class="h-10 pt-2 px-6 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white border-b border-slate-100 z-20">
+<span>09:23</span>
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="text-[11px] font-bold">90%</span>
+</div>
+</div>
+<!-- Top App Bar -->
+<div class="h-14 px-4 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+<div class="flex items-center gap-3">
+<button class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-sm font-bold text-blue-600">P001</span>
+<span class="text-xs text-slate-400">•</span>
+<span class="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">TB-001</span>
+</div>
+<div class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full status-badge-inprogress flex-shrink-0">
+              Đang thực hiện
+            </span>
+</div>
+<!-- Nội dung -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70">
+<!-- Banner Hết phiên: Bỏ chữ token -->
+<div class="bg-indigo-50 border border-indigo-200 text-indigo-950 rounded-2xl p-4 shadow-sm space-y-2">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-indigo-100 border border-indigo-300 flex items-center justify-center text-indigo-700 flex-shrink-0 mt-0.5">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="space-y-1">
+<h3 class="text-sm font-bold text-indigo-900 leading-snug">Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại, ảnh của bạn sẽ không bị mất</h3>
+<p class="text-xs text-indigo-700 leading-relaxed">
+                    Phiên làm việc đã hết hạn bảo mật. Vui lòng đăng nhập lại tài khoản kỹ thuật viên để tiếp tục gửi ảnh và nộp phiếu.
+                  </p>
+</div>
+</div>
+</div>
+<!-- Khối trạng thái lưu trữ an toàn: Bỏ chữ 100% -->
+<div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Trạng thái lưu trữ dữ liệu</span>
+<span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  Dữ liệu được bảo toàn an toàn
+                </span>
+</div>
+<!-- Thẻ ảnh thu nhỏ nền tối: Bỏ tên file cũ -->
+<div class="relative w-full h-32 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center shadow-inner">
+<div class="text-center p-2">
+<div class="w-10 h-10 rounded-full bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 mb-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round"></path></svg>
+</div>
+<span class="text-[11px] font-medium text-slate-300">Ảnh hiện trường • Độ sáng: 142/255</span>
+</div>
+</div>
+<div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600">
+                Ghi chú <strong>"Áp suất hiển thị 4.2 bar..."</strong> được lưu trong bộ nhớ tạm an toàn của máy.
+              </div>
+</div>
+</div>
+<!-- Bottom Action Bar: NÚT ĐĂNG NHẬP LẠI (Xanh dương, 48px) -->
+<div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+<button class="w-full h-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/25 transition-all">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Đăng nhập lại</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bảng đối soát quy chuẩn màn hình M07 -->
+<footer class="max-w-[2600px] mx-auto mt-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 text-slate-300 shadow-xl">
+<div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-blue-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<h2 class="font-bold text-base text-white">Bảng đối soát quy chuẩn màn hình M07 (SC02, SC04, SC05 – Kỹ thuật viên gửi ảnh &amp; nộp phiếu)</h2>
+</div>
+<span class="text-xs text-slate-400">Tài liệu tham chiếu: screens.md (M07) &amp; scenarios v2.md (SC02, SC05)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed">
+<div class="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+<h4 class="font-semibold text-slate-100 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+          1. Quy chuẩn bố cục &amp; Vùng bấm:
+        </h4>
+<ul class="list-disc pl-4 space-y-1 text-slate-300">
+<li>Khung nhìn smartphone Android chuẩn <strong>390×844px</strong>, tỷ lệ hiện đại bo cong các góc.</li>
+<li>Thanh trên nền sáng: nút quay lại tối thiểu <strong>48×48px</strong>, mã phiếu và thiết bị <strong>P001 - TB-001</strong> rõ ràng.</li>
+<li>Chỉ vùng camera/ảnh được phép nền tối (slate-950), toàn bộ các phần còn lại là nền sáng đồng bộ Web MaintenanceLab.</li>
+<li>Chữ sans-serif tối thiểu <strong>14px</strong> cho nội dung đọc chính, cỡ chữ phụ từ 11–12px.</li>
+<li>Nút chính cố định ở đáy đạt chiều cao chuẩn <strong>48px</strong>, dễ bấm bằng một tay tại hiện trường.</li>
+</ul>
+</div>
+<div class="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+<h4 class="font-semibold text-slate-100 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          2. Nguyên tắc Trạng thái &amp; An toàn dữ liệu (SC05):
+        </h4>
+<ul class="list-disc pl-4 space-y-1 text-slate-300">
+<li><strong>Xử lý mất mạng</strong>: Không bao giờ báo "đã nộp", giữ nguyên vẹn ảnh và ghi chú, có nút "Thử lại".</li>
+<li><strong>Khóa nút chống bấm đúp</strong>: Khi đang tải lên (60%), nút gửi và ô ghi chú chuyển sang trạng thái disabled.</li>
+<li><strong>Ảnh lỗi / quá dung lượng</strong>: Báo rõ "Ảnh quá lớn (tối đa 5 MB) hoặc sai định dạng", kèm nút "Chụp lại".</li>
+<li><strong>Xung đột dữ liệu (HTTP 409)</strong>: Báo "Phiếu đã thay đổi", tải lại dữ liệu mới nhất, không tự ý nộp sai revision.</li>
+<li><strong>Hết phiên (HTTP 401)</strong>: Thông báo rõ ràng "Hãy đăng nhập lại, ảnh của bạn sẽ không bị mất", giữ an toàn cache ảnh.</li>
+</ul>
+</div>
+<div class="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+<h4 class="font-semibold text-slate-100 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          3. Luồng tiếp nối màn hình kế tiếp:
+        </h4>
+<ul class="list-disc pl-4 space-y-1 text-slate-300">
+<li><strong>Gửi và nộp thành công</strong>: Sau khi server xác nhận, chuyển tiếp sang màn hình <strong>M08 (Kết quả &amp; Lịch sử)</strong>, phiếu chuyển sang trạng thái <strong>Chờ duyệt (submitted)</strong>.</li>
+<li><strong>Nút "Chụp lại"</strong>: Điều hướng trực tiếp quay lại màn hình <strong>M05 (Chụp và xem lại ảnh)</strong>.</li>
+<li><strong>Nút "Quay lại"</strong>: Đưa kỹ thuật viên trở về an toàn màn hình <strong>M06</strong> hoặc <strong>M04</strong>.</li>
+<li><strong>Không hiện chữ kỹ thuật</strong>: Không có mã lỗi backend, không có tên màn hình M07 trên giao diện điện thoại.</li>
+</ul>
+</div>
+</div>
+</footer>
+
+
+</body></html>

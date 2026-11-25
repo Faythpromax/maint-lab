@@ -1,0 +1,459 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>M05 - Chụp và xem lại ảnh (5 trạng thái) - MaintenanceLab Light Theme</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+      padding: 32px 20px;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .phone-mockup {
+      width: 360px;
+      height: 780px;
+      min-width: 360px;
+      min-height: 780px;
+      max-width: 360px;
+      max-height: 780px;
+      position: relative;
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12), 0 0 0 9px #e2e8f0, 0 0 0 11px #cbd5e1;
+      background-color: #ffffff;
+    }
+    /* Touch target min 48px guarantee */
+    .touch-target-48 {
+      min-width: 48px;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8 bg-slate-50 text-slate-800">
+<!-- Tiêu đề tổng quan bộ màn hình -->
+<div class="max-w-[1400px] mx-auto mb-8 text-slate-900">
+<div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
+<div>
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded bg-blue-50 text-blue-700 font-mono text-xs font-bold tracking-wider border border-blue-200 uppercase">App Android • M05</span>
+<span class="px-2.5 py-1 rounded bg-white text-slate-600 font-mono text-xs border border-slate-200 shadow-sm">390 x 844 px (Hiển thị 5 trạng thái)</span>
+<span class="px-2.5 py-1 rounded bg-amber-50 text-amber-800 font-mono text-xs border border-amber-200">Kỹ thuật viên (tech-a)</span>
+</div>
+<h1 class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mt-2">M05: Chụp và xem lại ảnh (Đầy đủ 5 trạng thái)</h1>
+<p class="text-slate-600 text-sm mt-1 max-w-3xl">Quy chuẩn kỹ thuật viên hiện trường MaintenanceLab: Khung camera chiếm toàn bộ màn hình, nút quay lại góc trên bên trái (min 48px), mã phiếu/máy "P001 - TB-001", nút chụp tròn lớn ở giữa phía dưới. Không flash, không zoom, không chọn ảnh từ thư viện, không bộ lọc màu theo chuẩn SC02.</p>
+</div>
+<!-- Badge hệ thống chuẩn -->
+<div class="flex items-center gap-2 bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-xs">
+<span class="text-slate-500 font-medium mr-1">Quy ước Badge:</span>
+<span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200 font-medium">Đã giao</span>
+<span class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-medium">Đang thực hiện</span>
+<span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200 font-medium">Chờ duyệt</span>
+<span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">Hoàn tất</span>
+</div>
+</div>
+</div>
+<!-- Lưới 5 Frame trạng thái bố cục linh hoạt (3 cột trên + 2 cột dưới căn giữa) -->
+<div class="max-w-[1400px] mx-auto pb-6 space-y-12">
+<!-- HÀNG 1: 3 Frame đầu tiên (Camera sẵn sàng, Khởi động, Xem lại ảnh) -->
+<div>
+<div class="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase mb-4 flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+<span>Nhóm 1: Luồng chụp &amp; xem lại thông thường</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+<!-- ========================================== -->
+<!-- FRAME 1: CAMERA SẴN SÀNG (DEFAULT READY) -->
+<!-- ========================================== -->
+<div class="flex flex-col items-center">
+<!-- Nhãn trạng thái trên cùng -->
+<div class="mb-3 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold flex items-center gap-2 shadow-xs w-full max-w-[360px] justify-center">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>FRAME 1: Camera sẵn sàng</span>
+</div>
+<div class="phone-mockup relative flex flex-col justify-between text-slate-800 select-none bg-white">
+<!-- Camera Background: Vùng viewfinder bên trong nền tối trơn với icon camera xám trắng -->
+<div class="absolute inset-0 z-0 bg-[#0f172a] flex items-center justify-center">
+<div class="w-20 h-20 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-300 shadow-md">
+<svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<!-- Scrim gradient chân mờ cho thanh dưới -->
+<div class="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
+</div>
+<!-- Top Chrome nền sáng: Status bar Android + Header -->
+<div class="relative z-20 bg-white/95 backdrop-blur border-b border-slate-200/80 shadow-xs">
+<!-- Status Bar Android (chữ tối/icon tối) -->
+<div class="pt-3 px-6 pb-1 flex justify-between items-center text-xs text-slate-700">
+<span class="font-semibold text-sm">09:14</span>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25l1.41 1.41 1.41-1.41C8.71 19.39 10.27 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path></svg>
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="font-mono text-xs font-semibold">92%</span>
+</div>
+</div>
+<!-- Top Header: nút quay lại tối + P001 - TB-001 chữ tối -->
+<div class="px-4 py-2 flex items-center justify-between">
+<a class="touch-target-48 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors" href="javascript:void(0)" title="Quay lại">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+<div class="font-mono font-bold text-base tracking-wide text-slate-900">
+              P001 - TB-001
+            </div>
+<div class="w-12 h-12"></div>
+</div>
+</div>
+<!-- Space giữa -->
+<div></div>
+<!-- Bottom Camera Controls: Nút chụp tròn lớn viền xám sáng/trắng ở phía dưới -->
+<div class="relative z-20 pb-8 pt-4 px-6 flex flex-col items-center">
+<div class="flex items-center justify-center w-full">
+<button aria-label="Chụp ảnh" class="touch-target-48 w-20 h-20 rounded-full border-4 border-slate-200 bg-white/20 backdrop-blur-xs p-1.5 flex items-center justify-center transition-transform active:scale-95 shadow-xl focus:outline-none" type="button">
+<div class="w-full h-full rounded-full bg-white hover:bg-slate-100 transition-colors shadow"></div>
+</button>
+</div>
+<!-- Home Indicator Android -->
+<div class="w-32 h-1 bg-white/60 rounded-full mt-6"></div>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- FRAME 2: CAMERA ĐANG KHỞI ĐỘNG (LOADING / NÚT KHÓA) -->
+<!-- ============================================================ -->
+<div class="flex flex-col items-center">
+<!-- Nhãn trạng thái trên cùng -->
+<div class="mb-3 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-2 shadow-xs w-full max-w-[360px] justify-center">
+<span class="w-2 h-2 rounded-full bg-amber-500 animate-spin"></span>
+<span>FRAME 2: Camera đang khởi động</span>
+</div>
+<div class="phone-mockup relative flex flex-col justify-between text-slate-800 select-none bg-white">
+<!-- Loading Viewfinder: Khung xem trước camera nền tối, spinner xanh dương, thông báo 'Đang mở camera...' -->
+<div class="absolute inset-0 z-0 bg-[#0f172a] flex flex-col items-center justify-center px-8">
+<div class="relative w-20 h-20 rounded-full bg-slate-800/90 border border-slate-700 flex items-center justify-center shadow-xl mb-4">
+<svg class="w-12 h-12 text-blue-500 animate-spin" fill="none" viewBox="0 0 24 24">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+<path class="opacity-95" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+</div>
+<h3 class="text-base font-semibold text-white tracking-wide text-center">Đang mở camera...</h3>
+<!-- Scrim gradient dưới -->
+<div class="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
+</div>
+<!-- Top Chrome nền sáng -->
+<div class="relative z-20 bg-white/95 backdrop-blur border-b border-slate-200/80 shadow-xs">
+<!-- Status Bar Android chữ tối -->
+<div class="pt-3 px-6 pb-1 flex justify-between items-center text-xs text-slate-700">
+<span class="font-semibold text-sm">09:14</span>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25l1.41 1.41 1.41-1.41C8.71 19.39 10.27 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path></svg>
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="font-mono text-xs font-semibold">92%</span>
+</div>
+</div>
+<!-- Top Header chữ tối -->
+<div class="px-4 py-2 flex items-center justify-between">
+<a class="touch-target-48 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors" href="javascript:void(0)" title="Quay lại">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+<div class="font-mono font-bold text-base tracking-wide text-slate-900">
+              P001 - TB-001
+            </div>
+<div class="w-12 h-12"></div>
+</div>
+</div>
+<!-- Space giữa -->
+<div></div>
+<!-- Bottom Camera Controls: Nút chụp khóa ở dưới -->
+<div class="relative z-20 pb-8 pt-4 px-6 flex flex-col items-center">
+<div class="flex items-center justify-center w-full">
+<button aria-label="Camera đang chuẩn bị" class="touch-target-48 w-20 h-20 rounded-full border-4 border-slate-400/40 p-1.5 flex items-center justify-center cursor-not-allowed opacity-60 shadow-inner" disabled="" type="button">
+<div class="w-full h-full rounded-full bg-slate-700/80 flex items-center justify-center">
+<svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</button>
+</div>
+<div class="w-32 h-1 bg-white/50 rounded-full mt-6"></div>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- FRAME 3: XEM LẠI ẢNH VỪA CHỤP (REVIEW PHOTO) -->
+<!-- ============================================================ -->
+<div class="flex flex-col items-center">
+<!-- Nhãn trạng thái trên cùng -->
+<div class="mb-3 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold flex items-center gap-2 shadow-xs w-full max-w-[360px] justify-center">
+<span class="w-2 h-2 rounded-full bg-blue-600"></span>
+<span>FRAME 3: Xem lại ảnh vừa chụp</span>
+</div>
+<div class="phone-mockup relative flex flex-col justify-between text-slate-800 select-none bg-white">
+<!-- Captured Photo Simulation: CHỈ RIÊNG vùng hiển thị ảnh vừa chụp là nền tối -->
+<div class="absolute inset-0 z-0 bg-[#0b1322] overflow-hidden">
+<svg class="w-full h-full object-cover" fill="none" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#0b1322" height="844" width="390"></rect>
+<path d="M0 600 L390 600" stroke="#1e293b" stroke-width="2"></path>
+<path d="M0 600 L110 844" stroke="#1e293b" stroke-width="1.5"></path>
+<path d="M390 600 L280 844" stroke="#1e293b" stroke-width="1.5"></path>
+<!-- Machinery Image Captured (ảnh máy bơm) -->
+<g>
+<rect fill="#1e293b" height="80" rx="4" stroke="#475569" stroke-width="2" width="250" x="70" y="540"></rect>
+<rect fill="#1d4ed8" height="210" rx="16" stroke="#60a5fa" stroke-width="2" width="135" x="90" y="340"></rect>
+<line stroke="#93c5fd" stroke-width="3" x1="105" x2="105" y1="360" y2="530"></line>
+<line stroke="#93c5fd" stroke-width="3" x1="125" x2="125" y1="360" y2="530"></line>
+<line stroke="#93c5fd" stroke-width="3" x1="145" x2="145" y1="360" y2="530"></line>
+<line stroke="#93c5fd" stroke-width="3" x1="165" x2="165" y1="360" y2="530"></line>
+<line stroke="#93c5fd" stroke-width="3" x1="185" x2="185" y1="360" y2="530"></line>
+<line stroke="#93c5fd" stroke-width="3" x1="205" x2="205" y1="360" y2="530"></line>
+<circle cx="265" cy="455" fill="#1e3a8a" r="65" stroke="#60a5fa" stroke-width="3"></circle>
+<circle cx="265" cy="455" fill="#172554" r="35" stroke="#93c5fd" stroke-width="2"></circle>
+<circle cx="265" cy="405" fill="#f8fafc" r="4"></circle>
+<circle cx="265" cy="505" fill="#f8fafc" r="4"></circle>
+<circle cx="215" cy="455" fill="#f8fafc" r="4"></circle>
+<circle cx="315" cy="455" fill="#f8fafc" r="4"></circle>
+<rect fill="#0f172a" height="38" rx="3" stroke="#38bdf8" stroke-width="2" width="76" x="105" y="440"></rect>
+<text fill="#38bdf8" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle" x="143" y="463">TB-001</text>
+</g>
+</svg>
+</div>
+<!-- Top Chrome nền sáng -->
+<div class="relative z-20 bg-white/95 backdrop-blur border-b border-slate-200/80 shadow-xs">
+<!-- Status Bar Android chữ tối -->
+<div class="pt-3 px-6 pb-1 flex justify-between items-center text-xs text-slate-700">
+<span class="font-semibold text-sm">09:14</span>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25l1.41 1.41 1.41-1.41C8.71 19.39 10.27 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path></svg>
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="font-mono text-xs font-semibold">92%</span>
+</div>
+</div>
+<!-- Top Header chữ tối -->
+<div class="px-4 py-2 flex items-center justify-between">
+<a class="touch-target-48 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors" href="javascript:void(0)" title="Quay lại">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+<div class="font-mono font-bold text-base tracking-wide text-slate-900">
+              P001 - TB-001
+            </div>
+<div class="w-12 h-12"></div>
+</div>
+</div>
+<!-- Space giữa -->
+<div></div>
+<!-- Bottom Action Buttons: Cụm nút trên thanh đáy nền sáng MaintPro -->
+<div class="relative z-20 pb-8 pt-4 px-5 flex flex-col gap-3 bg-white/95 backdrop-blur border-t border-slate-200/90 shadow-lg">
+<div class="grid grid-cols-2 gap-3 w-full">
+<!-- Nút 1: "Chụp lại" (Nút phụ viền slate-300, nền trắng, chữ slate-700) -->
+<button class="touch-target-48 h-12 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 active:scale-95 text-slate-700 font-semibold text-sm shadow-xs transition-all flex items-center justify-center gap-2" type="button">
+<svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Chụp lại</span>
+</button>
+<!-- Nút 2: "Dùng ảnh này" (Nút chính xanh dương #2563eb, chữ trắng) -->
+<button class="touch-target-48 h-12 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2" type="button">
+<span>Dùng ảnh này</span>
+<svg class="w-5 h-5 text-blue-100" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<div class="w-32 h-1 bg-slate-300 rounded-full mx-auto mt-1"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- HÀNG 2: 2 Frame xử lý ngoại lệ (Chưa cấp quyền & Lỗi camera) -->
+<div>
+<div class="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase mb-4 flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+<span>Nhóm 2: Xử lý ngoại lệ &amp; phân quyền sự cố</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center max-w-4xl mx-auto justify-items-center">
+<!-- ============================================================ -->
+<!-- FRAME 4: CHƯA CẤP QUYỀN CAMERA (PERMISSION DENIED STATE) -->
+<!-- ============================================================ -->
+<div class="flex flex-col items-center">
+<!-- Nhãn trạng thái trên cùng -->
+<div class="mb-3 px-3 py-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2 shadow-xs w-full max-w-[360px] justify-center">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<span>FRAME 4: Chưa cấp quyền camera</span>
+</div>
+<!-- Toàn bộ nền điện thoại là NỀN SÁNG HOÀN TOÀN (trắng) -->
+<div class="phone-mockup relative flex flex-col justify-between text-slate-800 bg-white select-none">
+<!-- Top Chrome nền sáng -->
+<div class="relative z-20 bg-white border-b border-slate-100">
+<!-- Status Bar Android chữ tối -->
+<div class="pt-3 px-6 pb-1 flex justify-between items-center text-xs text-slate-700">
+<span class="font-semibold text-sm">09:14</span>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25l1.41 1.41 1.41-1.41C8.71 19.39 10.27 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path></svg>
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="font-mono text-xs font-semibold">92%</span>
+</div>
+</div>
+<!-- Top Header: nút quay lại tối + P001 - TB-001 chữ tối -->
+<div class="px-4 py-2 flex items-center justify-between">
+<a class="touch-target-48 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors" href="javascript:void(0)" title="Quay lại">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+<div class="font-mono font-bold text-base tracking-wide text-slate-900">
+              P001 - TB-001
+            </div>
+<div class="w-12 h-12"></div>
+</div>
+</div>
+<!-- Permission Explanatory Card nền sáng -->
+<div class="relative z-20 px-6 py-4 flex flex-col items-center text-center my-auto">
+<div class="w-20 h-20 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500 mb-5 shadow-xs">
+<svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" stroke-linecap="round" stroke-linejoin="round"></path>
+<line stroke="currentColor" stroke-linecap="round" stroke-width="2" x1="3" x2="21" y1="3" y2="21"></line>
+</svg>
+</div>
+<h2 class="text-xl font-bold text-slate-900 tracking-tight">Cần quyền camera</h2>
+<p class="text-sm text-slate-600 mt-2 leading-relaxed max-w-xs">
+              Cần quyền camera để chụp ảnh bằng chứng kiểm tra thiết bị.
+            </p>
+</div>
+<!-- Bottom Action Buttons: Mở cài đặt (xanh dương) & Quay lại (viền slate-300) -->
+<div class="relative z-20 pb-8 pt-4 px-6 flex flex-col gap-3 bg-white border-t border-slate-100">
+<button class="touch-target-48 w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Mở cài đặt</span>
+</button>
+<button class="touch-target-48 w-full h-12 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-colors shadow-xs" type="button">
+<span>Quay lại</span>
+</button>
+<div class="w-32 h-1 bg-slate-300 rounded-full mx-auto mt-2"></div>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- FRAME 5: LỖI CAMERA (HARDWARE / SENSOR ERROR STATE) -->
+<!-- ============================================================ -->
+<div class="flex flex-col items-center">
+<!-- Nhãn trạng thái trên cùng -->
+<div class="mb-3 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2 shadow-xs w-full max-w-[360px] justify-center">
+<span class="w-2 h-2 rounded-full bg-red-500"></span>
+<span>FRAME 5: Lỗi camera</span>
+</div>
+<!-- Toàn bộ nền điện thoại là NỀN SÁNG HOÀN TOÀN (trắng) -->
+<div class="phone-mockup relative flex flex-col justify-between text-slate-800 bg-white select-none">
+<!-- Top Chrome nền sáng -->
+<div class="relative z-20 bg-white border-b border-slate-100">
+<!-- Status Bar Android chữ tối -->
+<div class="pt-3 px-6 pb-1 flex justify-between items-center text-xs text-slate-700">
+<span class="font-semibold text-sm">09:14</span>
+<div class="flex items-center gap-1.5 text-slate-700">
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25l1.41 1.41 1.41-1.41C8.71 19.39 10.27 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path></svg>
+<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+<span class="font-mono text-xs font-semibold">92%</span>
+</div>
+</div>
+<!-- Top Header chữ tối -->
+<div class="px-4 py-2 flex items-center justify-between">
+<a class="touch-target-48 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors" href="javascript:void(0)" title="Quay lại">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+<div class="font-mono font-bold text-base tracking-wide text-slate-900">
+              P001 - TB-001
+            </div>
+<div class="w-12 h-12"></div>
+</div>
+</div>
+<!-- Error Content: Icon cảnh báo tam giác trong badge tròn nền red-50 viền red-100 icon red-500 -->
+<div class="relative z-20 px-6 py-4 flex flex-col items-center text-center my-auto">
+<div class="w-20 h-20 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500 mb-5 shadow-xs">
+<svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold text-slate-900 tracking-tight">Không thể mở camera</h2>
+<p class="text-sm text-slate-600 mt-2.5 leading-relaxed max-w-xs">
+              Hãy đóng ứng dụng khác đang dùng camera rồi thử lại.
+            </p>
+</div>
+<!-- Bottom Action Buttons: Thử lại (xanh dương) và Quay lại (viền slate-300) -->
+<div class="relative z-20 pb-8 pt-4 px-6 flex flex-col gap-3 bg-white border-t border-slate-100">
+<button class="touch-target-48 w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2" type="button">
+<svg class="w-5 h-5 text-blue-100" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Thử lại</span>
+</button>
+<button class="touch-target-48 w-full h-12 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-colors shadow-xs" type="button">
+<span>Quay lại</span>
+</button>
+<div class="w-32 h-1 bg-slate-300 rounded-full mx-auto mt-2"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bảng ghi chú đối soát tiêu chuẩn kịch bản (Evidence Checklist SC02/SC05/screens.md) - Phong cách nền sáng MaintPro -->
+<div class="max-w-[1400px] mx-auto mt-8 bg-white rounded-2xl border border-slate-200 p-6 text-slate-800 text-xs shadow-sm">
+<div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+<div class="flex items-center gap-2 font-semibold text-sm text-slate-900"><svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Bảng đối soát quy chuẩn màn hình M05 (SC02 - Kỹ thuật viên thực hiện &amp; nộp phiếu) - MaintenanceLab</span></div>
+<span class="text-slate-500">Tài liệu tham chiếu: screens.md (M05) &amp; scenarios v2.md (SC02, SC05)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-700">
+<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+<span class="font-bold text-blue-700 block mb-1.5">1. Khung camera &amp; Không gian thao tác:</span>
+<ul class="list-disc list-inside space-y-1.5 text-slate-600">
+<li>Khung camera chiếm 100% không gian màn hình 390x844.</li>
+<li>Thanh trên nền sáng rõ nét có mã <code class="text-slate-800 font-mono bg-white px-1 py-0.5 rounded border border-slate-200">P001 - TB-001</code> và nút back góc trên bên trái.</li>
+<li>Vùng bấm tối thiểu 48px cho toàn bộ nút cảm ứng một tay.</li>
+<li>Nút chụp tròn lớn nằm ở giữa phía dưới.</li>
+</ul>
+</div>
+<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+<span class="font-bold text-amber-700 block mb-1.5">2. Nguyên tắc chống thêm tính năng ngoài mô tả:</span>
+<ul class="list-disc list-inside space-y-1.5 text-slate-600">
+<li><strong>Không</strong> có đèn flash (flashlight toggle).</li>
+<li><strong>Không</strong> có nút zoom (0.5x, 1x, 2x).</li>
+<li><strong>Không</strong> có nút chọn ảnh từ thư viện (Gallery picker).</li>
+<li><strong>Không</strong> có watermark/đóng dấu đè lên ảnh.</li>
+</ul>
+</div>
+<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+<span class="font-bold text-emerald-700 block mb-1.5">3. Luồng tiếp nối màn hình kế tiếp:</span>
+<ul class="list-disc list-inside space-y-1.5 text-slate-600">
+<li>Sau khi bấm <strong>"Dùng ảnh này"</strong> → Chuyển sang màn <strong>M06: Kết quả ảnh/C++</strong> đo độ sáng (0–255).</li>
+<li>Nếu bấm <strong>"Chụp lại"</strong> → Quay về Frame 1 camera sẵn sàng.</li>
+<li>Xử lý sự cố lỗi kết nối cảm biến và quyền camera với giao diện nền sáng lịch thiệp, dễ thao tác.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+</body></html>

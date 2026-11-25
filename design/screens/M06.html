@@ -1,0 +1,664 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M06 - Kết quả ảnh (4 trạng thái)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #0f172a;
+      background-color: #0b1120;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Touch target min 48px */
+    .touch-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .45; }
+    }
+    .animate-skeleton {
+      animation: pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="p-6 md:p-10 text-slate-800 bg-slate-950 min-h-screen">
+
+  <!-- Tiêu đề tổng quan bộ màn hình -->
+  <div class="max-w-[1720px] mx-auto mb-8 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl text-slate-100">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-1 text-xs font-semibold tracking-wide uppercase bg-blue-600/30 text-blue-400 border border-blue-500/30 rounded-md">App Android • M06</span>
+          <span class="px-2.5 py-1 text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 rounded-md">390 × 844 px (4 trạng thái)</span>
+          <span class="px-2.5 py-1 text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-md">Kỹ thuật viên (tech-a)</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">M06: Kết quả ảnh (Kiểm tra độ sáng &amp; Đưa ra quyết định)</h1>
+        <p class="text-sm text-slate-400 mt-1 max-w-4xl">Quy chuẩn Kỹ thuật viên: Giao diện nền sáng chuẩn Web MaintenanceLab &amp; M05. Khung ảnh chiếm ~50% chiều cao màn hình (nền tối trơn), thẻ đo độ sáng từ 0–255, không hiện tên công nghệ backend (C++, JNI), độ sáng chỉ để tham khảo chất lượng chụp, người dùng luôn có quyền tự quyết định.</p>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs bg-slate-950/70 border border-slate-800 p-3 rounded-xl">
+        <span class="text-slate-400">Quy ước Badge:</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-medium">Đã giao</span>
+        <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800 font-medium">Đang thực hiện</span>
+        <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 font-medium">Chờ duyệt</span>
+        <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-medium">Hoàn tất</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BỐ CỤC 4 FRAME DI ĐỘNG (390 x 844 px) -->
+  <div class="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+
+    <!-- ======================================================== -->
+    <!-- FRAME 1: ẢNH BÌNH THƯỜNG (142/255 - ĐỘ SÁNG ỔN) -->
+    <!-- ======================================================== -->
+    <div class="flex flex-col items-center">
+      <!-- Tag trạng thái Frame -->
+      <div class="w-[390px] mb-3 flex items-center justify-between px-3 py-1.5 bg-emerald-950/60 border border-emerald-500/40 rounded-full text-xs text-emerald-300">
+        <span class="flex items-center gap-1.5 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          FRAME 1: Ảnh bình thường
+        </span>
+        <span class="text-emerald-400/80 font-mono font-medium">142 / 255 (Đạt)</span>
+      </div>
+
+      <!-- Khung điện thoại Android 390x844 (Nền sáng chuẩn MaintPro) -->
+      <div class="w-[390px] h-[844px] bg-white text-slate-800 rounded-[44px] border-[10px] border-slate-800 shadow-2xl relative flex flex-col overflow-hidden">
+        
+        <!-- Status Bar Android (Nền sáng, chữ tối) -->
+        <div class="w-full h-11 px-7 flex items-center justify-between text-xs font-semibold text-slate-800 select-none bg-white z-20">
+          <span>09:15</span>
+          <div class="flex items-center gap-1.5">
+            <!-- Icon sóng -->
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z" opacity=".2"></path><path d="M12 6c-3.31 0-6 2.69-6 6 0 1.43.5 2.74 1.34 3.78L12 19l4.66-3.22C17.5 14.74 18 13.43 18 12c0-3.31-2.69-6-6-6z"></path></svg>
+            <!-- Wifi -->
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.55 0 6.78 1.41 9.17 3.71L12 18.29 2.83 11.21C5.22 8.91 8.45 7.5 12 7.5z"></path></svg>
+            <!-- Pin -->
+            <div class="flex items-center gap-0.5">
+              <span class="text-[10px]">92%</span>
+              <div class="w-4 h-2 border border-slate-700 rounded-sm p-0.5 flex items-center">
+                <div class="w-2.5 h-full bg-slate-800 rounded-2xs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thanh trên nền sáng: nút quay lại + tiêu đề "P001 - TB-001" -->
+        <div class="w-full h-14 px-3 flex items-center justify-between border-b border-slate-100 bg-white z-10">
+          <div class="flex items-center gap-1">
+            <button class="touch-target w-12 h-12 flex items-center justify-center rounded-full text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Quay lại">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <div class="flex flex-col">
+              <span class="font-mono font-bold text-base text-slate-900 tracking-tight">P001 - TB-001</span>
+              <span class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-50 text-blue-700 border border-blue-200">Đang thực hiện</span>
+        </div>
+
+        <!-- VÙNG NỘI DUNG CHÍNH (Scrollable nhẹ nếu màn hình bé, ở đây cố định 844px) -->
+        <div class="flex-1 flex flex-col px-4 pt-3 pb-3 justify-between overflow-hidden bg-slate-50/50">
+
+          <!-- 1. Vùng hiển thị ảnh vừa chụp (Placeholder trong khung bo góc, chiếm khoảng 1/2 chiều cao màn hình ~ 310px) -->
+          <div class="w-full h-[300px] bg-slate-950 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner flex flex-col items-center justify-center">
+            <!-- Mô phỏng thiết bị máy bơm chụp thực tế trên nền tối sạch sẽ, không đóng dấu text lên ảnh -->
+            <div class="relative w-44 h-48 flex items-center justify-center">
+              <!-- Thân bơm chính -->
+              <div class="w-24 h-36 bg-blue-700 rounded-lg border-2 border-blue-400/50 relative shadow-lg flex flex-col justify-between py-2 px-1">
+                <div class="flex justify-between gap-1 h-full">
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                </div>
+                <!-- Nhãn máy TB-001 trên thiết bị -->
+                <div class="absolute inset-0 m-auto w-16 h-6 bg-slate-900/90 rounded border border-blue-400 flex items-center justify-center">
+                  <span class="text-[10px] font-mono font-bold text-blue-300">TB-001</span>
+                </div>
+              </div>
+              <!-- Cụm van & đồng hồ -->
+              <div class="w-16 h-16 rounded-full bg-blue-900/90 border-2 border-blue-400/60 -ml-4 flex items-center justify-center shadow-lg relative">
+                <div class="w-8 h-8 rounded-full border border-blue-300/40 flex items-center justify-center">
+                  <div class="w-1 h-3 bg-amber-400 rounded-full -rotate-45"></div>
+                </div>
+                <!-- Ốc định vị -->
+                <div class="absolute top-1 w-1.5 h-1.5 bg-blue-200 rounded-full"></div>
+                <div class="absolute bottom-1 w-1.5 h-1.5 bg-blue-200 rounded-full"></div>
+                <div class="absolute right-1 w-1.5 h-1.5 bg-blue-200 rounded-full"></div>
+              </div>
+            </div>
+            <!-- Badge góc ảnh chỉ rõ "Ảnh vừa chụp" không che chi tiết máy -->
+            <div class="absolute bottom-2.5 left-3 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[11px] text-slate-300 border border-white/10 flex items-center gap-1.5 font-medium">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              Khung xem trước ảnh gốc
+            </div>
+          </div>
+
+          <!-- 2. Thẻ "Độ sáng ảnh": Thẻ màu xanh lá nhẹ, chữ "Độ sáng ổn" -->
+          <div class="w-full bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 shadow-sm mt-3">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-emerald-900">Độ sáng ảnh</span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Độ sáng ổn
+              </span>
+            </div>
+
+            <!-- Con số lớn 142 / 255 -->
+            <div class="flex items-baseline gap-1.5 mb-2.5">
+              <span class="text-3xl font-extrabold font-mono text-emerald-900 tracking-tight">142</span>
+              <span class="text-sm font-semibold font-mono text-emerald-700">/ 255</span>
+              <span class="text-xs text-emerald-600 ml-auto font-medium">Tiêu chuẩn nghiệm thu (≥ 60)</span>
+            </div>
+
+            <!-- Thanh đo ngang từ 0 đến 255 có điểm đánh dấu tại giá trị đo (142/255 ~ 55.7%) -->
+            <div class="space-y-1 mb-2">
+              <div class="w-full h-3 bg-slate-200 rounded-full relative overflow-visible p-0.5">
+                <!-- Vùng dải màu minh họa: Tối (0-59), Ổn (60-255) -->
+                <div class="absolute inset-0 rounded-full flex overflow-hidden">
+                  <div class="w-[24%] bg-amber-300/70"></div>
+                  <div class="w-[76%] bg-emerald-400/80"></div>
+                </div>
+                <!-- Con trỏ đánh dấu giá trị đo tại 55.7% -->
+                <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-emerald-900 border-2 border-white rounded-full shadow-md z-10" style="left: 55.7%;"></div>
+              </div>
+              <div class="flex justify-between text-[11px] font-mono text-slate-500 font-medium px-0.5">
+                <span>0 (Tối)</span>
+                <span class="text-emerald-800 font-bold">142</span>
+                <span>255 (Sáng)</span>
+              </div>
+            </div>
+
+            <!-- Dòng nhỏ phiên bản phân tích: rgba_luma_v1 (không có C++/JNI) -->
+            <div class="pt-2 border-t border-emerald-200/60 flex items-center justify-between text-[11px] text-emerald-800">
+              <span class="text-emerald-700">Phiên bản phân tích:</span>
+              <span class="font-mono font-semibold bg-emerald-100/80 px-1.5 py-0.5 rounded border border-emerald-200">rgba_luma_v1</span>
+            </div>
+          </div>
+
+          <!-- Dòng chú thích nhỏ -->
+          <div class="text-center px-2 py-1">
+            <p class="text-xs text-slate-500 leading-tight">
+              Độ sáng chỉ để tham khảo chất lượng ảnh.
+            </p>
+          </div>
+
+          <!-- 3. Hai nút ở đáy: "Chụp lại" (nút phụ viền) và "Giữ ảnh" (nút chính xanh dương) -->
+          <div class="grid grid-cols-2 gap-3 pt-1 pb-1">
+            <!-- Nút phụ viền: Chụp lại -->
+            <button class="touch-target h-12 w-full px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Chụp lại
+            </button>
+
+            <!-- Nút chính xanh dương: Giữ ảnh -->
+            <button class="touch-target h-12 w-full px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-1.5 transition-colors shadow-sm shadow-blue-500/20">
+              <span>Giữ ảnh</span>
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Android Home Indicator Bar -->
+        <div class="w-full h-5 flex justify-center items-center pb-1 bg-white select-none">
+          <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- FRAME 2: ẢNH TỐI (38/255 - CẢNH BÁO, TỰ QUYẾT ĐỊNH) -->
+    <!-- ======================================================== -->
+    <div class="flex flex-col items-center">
+      <!-- Tag trạng thái Frame -->
+      <div class="w-[390px] mb-3 flex items-center justify-between px-3 py-1.5 bg-amber-950/60 border border-amber-500/40 rounded-full text-xs text-amber-300">
+        <span class="flex items-center gap-1.5 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          FRAME 2: Ảnh tối (Cảnh báo)
+        </span>
+        <span class="text-amber-400/80 font-mono font-medium">38 / 255 (Dưới chuẩn)</span>
+      </div>
+
+      <!-- Khung điện thoại Android 390x844 (Nền sáng chuẩn MaintPro) -->
+      <div class="w-[390px] h-[844px] bg-white text-slate-800 rounded-[44px] border-[10px] border-slate-800 shadow-2xl relative flex flex-col overflow-hidden">
+        
+        <!-- Status Bar Android -->
+        <div class="w-full h-11 px-7 flex items-center justify-between text-xs font-semibold text-slate-800 select-none bg-white z-20">
+          <span>09:16</span>
+          <div class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z" opacity=".2"></path><path d="M12 6c-3.31 0-6 2.69-6 6 0 1.43.5 2.74 1.34 3.78L12 19l4.66-3.22C17.5 14.74 18 13.43 18 12c0-3.31-2.69-6-6-6z"></path></svg>
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.55 0 6.78 1.41 9.17 3.71L12 18.29 2.83 11.21C5.22 8.91 8.45 7.5 12 7.5z"></path></svg>
+            <div class="flex items-center gap-0.5">
+              <span class="text-[10px]">91%</span>
+              <div class="w-4 h-2 border border-slate-700 rounded-sm p-0.5 flex items-center">
+                <div class="w-2.5 h-full bg-slate-800 rounded-2xs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thanh trên nền sáng -->
+        <div class="w-full h-14 px-3 flex items-center justify-between border-b border-slate-100 bg-white z-10">
+          <div class="flex items-center gap-1">
+            <button class="touch-target w-12 h-12 flex items-center justify-center rounded-full text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Quay lại">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <div class="flex flex-col">
+              <span class="font-mono font-bold text-base text-slate-900 tracking-tight">P001 - TB-001</span>
+              <span class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-50 text-blue-700 border border-blue-200">Đang thực hiện</span>
+        </div>
+
+        <!-- VÙNG NỘI DUNG CHÍNH -->
+        <div class="flex-1 flex flex-col px-4 pt-2.5 pb-3 justify-between overflow-hidden bg-slate-50/50">
+
+          <!-- 1. Vùng hiển thị ảnh vừa chụp (Mô phỏng ảnh chụp bị tối trong hầm máy) -->
+          <div class="w-full h-[280px] bg-slate-950 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner flex flex-col items-center justify-center">
+            <!-- Thiết bị mờ tối do thiếu sáng -->
+            <div class="relative w-44 h-44 flex items-center justify-center opacity-40 filter brightness-50">
+              <div class="w-24 h-36 bg-blue-900/60 rounded-lg border border-blue-600/30 relative flex flex-col justify-between py-2 px-1">
+                <div class="flex justify-between gap-1 h-full opacity-30">
+                  <div class="w-1.5 h-full bg-blue-500 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500 rounded-full"></div>
+                </div>
+                <div class="absolute inset-0 m-auto w-16 h-6 bg-slate-950 rounded border border-blue-900 flex items-center justify-center">
+                  <span class="text-[10px] font-mono font-bold text-blue-500">TB-001</span>
+                </div>
+              </div>
+              <div class="w-14 h-14 rounded-full bg-slate-900 border border-blue-900 -ml-4 flex items-center justify-center"></div>
+            </div>
+            <!-- Cảnh báo góc ảnh -->
+            <div class="absolute bottom-2.5 left-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[11px] text-amber-300 border border-amber-500/30 flex items-center gap-1.5 font-medium">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              Khung hình thiếu sáng
+            </div>
+          </div>
+
+          <!-- BANNER VÀNG PHÍA TRÊN THẺ ĐỘ SÁNG: "Ảnh khá tối, nên chụp lại" -->
+          <div class="w-full bg-amber-50 border border-amber-300/80 rounded-xl px-3 py-2 flex items-center gap-2 shadow-xs mt-2">
+            <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0 text-amber-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+            </div>
+            <div class="flex-1 text-xs text-amber-900 font-semibold leading-tight">
+              Ảnh khá tối, nên chụp lại
+            </div>
+          </div>
+
+          <!-- 2. Thẻ "Độ sáng ảnh" cho trường hợp ảnh tối -->
+          <div class="w-full bg-white border border-amber-200 rounded-2xl p-3 shadow-sm mt-1.5">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-700">Độ sáng ảnh</span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold border border-amber-300">
+                Thấp (Cần lưu ý)
+              </span>
+            </div>
+
+            <!-- Con số lớn 38 / 255 -->
+            <div class="flex items-baseline gap-1.5 mb-2">
+              <span class="text-3xl font-extrabold font-mono text-amber-700 tracking-tight">38</span>
+              <span class="text-sm font-semibold font-mono text-slate-500">/ 255</span>
+              <span class="text-xs text-amber-700 ml-auto font-medium">Khuyến nghị: ≥ 60</span>
+            </div>
+
+            <!-- Thanh đo ngang tại giá trị 38/255 ~ 14.9% -->
+            <div class="space-y-1 mb-2">
+              <div class="w-full h-3 bg-slate-200 rounded-full relative overflow-visible p-0.5">
+                <div class="absolute inset-0 rounded-full flex overflow-hidden">
+                  <div class="w-[24%] bg-amber-400"></div>
+                  <div class="w-[76%] bg-slate-300"></div>
+                </div>
+                <!-- Con trỏ tại 14.9% -->
+                <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-amber-700 border-2 border-white rounded-full shadow-md z-10" style="left: 14.9%;"></div>
+              </div>
+              <div class="flex justify-between text-[11px] font-mono text-slate-500 font-medium px-0.5">
+                <span class="text-amber-700 font-bold">38</span>
+                <span>Ngưỡng chuẩn (60)</span>
+                <span>255</span>
+              </div>
+            </div>
+
+            <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600">
+              <span>Phiên bản phân tích:</span>
+              <span class="font-mono font-semibold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">rgba_luma_v1</span>
+            </div>
+          </div>
+
+          <!-- Dòng chú thích nhỏ -->
+          <div class="text-center px-2 py-0.5">
+            <p class="text-xs text-slate-500 leading-tight">
+              Độ sáng chỉ để tham khảo chất lượng ảnh.
+            </p>
+          </div>
+
+          <!-- 3. Hai nút ở đáy: "Chụp lại" ĐƯỢC NỔI BẬT HƠN (viền đậm + nền xanh dương nhạt / nút khuyến nghị), nhưng "Giữ ảnh" VẪN BẤM ĐƯỢC -->
+          <div class="grid grid-cols-2 gap-3 pt-1 pb-1">
+            <!-- Nút Chụp lại (Được nổi bật trực quan để khuyến khích kỹ thuật viên chụp lại nét hơn) -->
+            <button class="touch-target h-12 w-full px-4 rounded-xl border-2 border-blue-600 bg-blue-50/80 hover:bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center gap-1.5 transition-colors shadow-sm ring-2 ring-blue-500/20">
+              <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Chụp lại (Khuyên dùng)
+            </button>
+
+            <!-- Nút Giữ ảnh (Vẫn bấm được bình thường vì người dùng tự quyết định) -->
+            <button class="touch-target h-12 w-full px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+              <span>Giữ ảnh</span>
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Android Home Indicator Bar -->
+        <div class="w-full h-5 flex justify-center items-center pb-1 bg-white select-none">
+          <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- FRAME 3: ĐANG PHÂN TÍCH ẢNH (LOADING / SPINNER / KHÓA NÚT) -->
+    <!-- ======================================================== -->
+    <div class="flex flex-col items-center">
+      <!-- Tag trạng thái Frame -->
+      <div class="w-[390px] mb-3 flex items-center justify-between px-3 py-1.5 bg-blue-950/60 border border-blue-500/40 rounded-full text-xs text-blue-300">
+        <span class="flex items-center gap-1.5 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-spin"></span>
+          FRAME 3: Đang phân tích ảnh
+        </span>
+        <span class="text-blue-300 font-mono font-medium">Khóa tương tác</span>
+      </div>
+
+      <!-- Khung điện thoại Android 390x844 (Nền sáng chuẩn MaintPro) -->
+      <div class="w-[390px] h-[844px] bg-white text-slate-800 rounded-[44px] border-[10px] border-slate-800 shadow-2xl relative flex flex-col overflow-hidden">
+        
+        <!-- Status Bar Android -->
+        <div class="w-full h-11 px-7 flex items-center justify-between text-xs font-semibold text-slate-800 select-none bg-white z-20">
+          <span>09:14</span>
+          <div class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z" opacity=".2"></path><path d="M12 6c-3.31 0-6 2.69-6 6 0 1.43.5 2.74 1.34 3.78L12 19l4.66-3.22C17.5 14.74 18 13.43 18 12c0-3.31-2.69-6-6-6z"></path></svg>
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.55 0 6.78 1.41 9.17 3.71L12 18.29 2.83 11.21C5.22 8.91 8.45 7.5 12 7.5z"></path></svg>
+            <div class="flex items-center gap-0.5">
+              <span class="text-[10px]">92%</span>
+              <div class="w-4 h-2 border border-slate-700 rounded-sm p-0.5 flex items-center">
+                <div class="w-2.5 h-full bg-slate-800 rounded-2xs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thanh trên nền sáng -->
+        <div class="w-full h-14 px-3 flex items-center justify-between border-b border-slate-100 bg-white z-10">
+          <div class="flex items-center gap-1">
+            <button class="touch-target w-12 h-12 flex items-center justify-center rounded-full text-slate-400 cursor-not-allowed" disabled="" aria-label="Quay lại">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <div class="flex flex-col">
+              <span class="font-mono font-bold text-base text-slate-900 tracking-tight">P001 - TB-001</span>
+              <span class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-50 text-blue-700 border border-blue-200">Đang thực hiện</span>
+        </div>
+
+        <!-- VÙNG NỘI DUNG CHÍNH -->
+        <div class="flex-1 flex flex-col px-4 pt-3 pb-3 justify-between overflow-hidden bg-slate-50/50">
+
+          <!-- 1. Vùng hiển thị ảnh (ảnh vẫn hiển thị bình thường) -->
+          <div class="w-full h-[300px] bg-slate-950 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner flex flex-col items-center justify-center">
+            <div class="relative w-44 h-48 flex items-center justify-center">
+              <div class="w-24 h-36 bg-blue-700 rounded-lg border-2 border-blue-400/50 relative shadow-lg flex flex-col justify-between py-2 px-1">
+                <div class="flex justify-between gap-1 h-full">
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                  <div class="w-1.5 h-full bg-blue-500/40 rounded-full"></div>
+                </div>
+                <div class="absolute inset-0 m-auto w-16 h-6 bg-slate-900/90 rounded border border-blue-400 flex items-center justify-center">
+                  <span class="text-[10px] font-mono font-bold text-blue-300">TB-001</span>
+                </div>
+              </div>
+              <div class="w-16 h-16 rounded-full bg-blue-900/90 border-2 border-blue-400/60 -ml-4 flex items-center justify-center">
+                <div class="w-8 h-8 rounded-full border border-blue-300/40 flex items-center justify-center">
+                  <div class="w-1 h-3 bg-amber-400 rounded-full -rotate-45"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Indicator đang quét nhẹ trên ảnh -->
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent animate-pulse"></div>
+          </div>
+
+          <!-- 2. Thẻ "Độ sáng ảnh" là khung chờ (Skeleton/Loading) kèm thông điệp "Đang phân tích ảnh..." -->
+          <div class="w-full bg-white border border-slate-200 rounded-2xl p-4 shadow-sm mt-3 flex flex-col items-center justify-center min-h-[148px]">
+            <!-- Spinner tải -->
+            <div class="w-9 h-9 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+            
+            <p class="text-sm font-bold text-slate-800 text-center mb-1">
+              Đang phân tích ảnh...
+            </p>
+            <p class="text-xs text-slate-500 text-center mb-3">
+              Vui lòng chờ trong giây lát
+            </p>
+
+            <!-- Skeleton thanh đo ngang -->
+            <div class="w-full h-2.5 bg-slate-100 rounded-full animate-skeleton overflow-hidden">
+              <div class="h-full bg-slate-200 w-2/3 rounded-full"></div>
+            </div>
+          </div>
+
+          <!-- Dòng chú thích nhỏ -->
+          <div class="text-center px-2 py-1">
+            <p class="text-xs text-slate-400 leading-tight">
+              Độ sáng chỉ để tham khảo chất lượng ảnh.
+            </p>
+          </div>
+
+          <!-- 3. Hai nút ở đáy: BỊ KHÓA HOÀN TOÀN (Disabled) khi đang phân tích -->
+          <div class="grid grid-cols-2 gap-3 pt-1 pb-1">
+            <!-- Nút Chụp lại bị khóa -->
+            <button disabled="" class="touch-target h-12 w-full px-4 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 font-semibold text-sm flex items-center justify-center gap-1.5 cursor-not-allowed">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Chụp lại
+            </button>
+
+            <!-- Nút Giữ ảnh bị khóa -->
+            <button disabled="" class="touch-target h-12 w-full px-4 rounded-xl bg-slate-200 text-slate-400 font-semibold text-sm flex items-center justify-center gap-1.5 cursor-not-allowed">
+              <span>Giữ ảnh</span>
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Android Home Indicator Bar -->
+        <div class="w-full h-5 flex justify-center items-center pb-1 bg-white select-none">
+          <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- FRAME 4: LỖI KHÔNG ĐỌC ĐƯỢC ẢNH (ICON ĐỎ NHẠT, CHỈ CÒN NÚT CHỤP LẠI) -->
+    <!-- ======================================================== -->
+    <div class="flex flex-col items-center">
+      <!-- Tag trạng thái Frame -->
+      <div class="w-[390px] mb-3 flex items-center justify-between px-3 py-1.5 bg-rose-950/60 border border-rose-500/40 rounded-full text-xs text-rose-300">
+        <span class="flex items-center gap-1.5 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+          FRAME 4: Lỗi không đọc được ảnh
+        </span>
+        <span class="text-rose-400/80 font-mono font-medium">Lỗi đọc file</span>
+      </div>
+
+      <!-- Khung điện thoại Android 390x844 (Nền sáng chuẩn MaintPro) -->
+      <div class="w-[390px] h-[844px] bg-white text-slate-800 rounded-[44px] border-[10px] border-slate-800 shadow-2xl relative flex flex-col overflow-hidden">
+        
+        <!-- Status Bar Android -->
+        <div class="w-full h-11 px-7 flex items-center justify-between text-xs font-semibold text-slate-800 select-none bg-white z-20">
+          <span>09:16</span>
+          <div class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z" opacity=".2"></path><path d="M12 6c-3.31 0-6 2.69-6 6 0 1.43.5 2.74 1.34 3.78L12 19l4.66-3.22C17.5 14.74 18 13.43 18 12c0-3.31-2.69-6-6-6z"></path></svg>
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.55 0 6.78 1.41 9.17 3.71L12 18.29 2.83 11.21C5.22 8.91 8.45 7.5 12 7.5z"></path></svg>
+            <div class="flex items-center gap-0.5">
+              <span class="text-[10px]">91%</span>
+              <div class="w-4 h-2 border border-slate-700 rounded-sm p-0.5 flex items-center">
+                <div class="w-2.5 h-full bg-slate-800 rounded-2xs"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thanh trên nền sáng -->
+        <div class="w-full h-14 px-3 flex items-center justify-between border-b border-slate-100 bg-white z-10">
+          <div class="flex items-center gap-1">
+            <button class="touch-target w-12 h-12 flex items-center justify-center rounded-full text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Quay lại">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <div class="flex flex-col">
+              <span class="font-mono font-bold text-base text-slate-900 tracking-tight">P001 - TB-001</span>
+              <span class="text-[11px] text-slate-500 font-medium">Máy bơm nước chính (Khu A)</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-semibold rounded bg-blue-50 text-blue-700 border border-blue-200">Đang thực hiện</span>
+        </div>
+
+        <!-- VÙNG NỘI DUNG CHÍNH (Nền sáng hoàn toàn, xử lý lỗi chuẩn UX không gây hoang mang) -->
+        <div class="flex-1 flex flex-col px-4 pt-4 pb-4 justify-between overflow-hidden bg-slate-50/50">
+
+          <!-- Khối thông báo lỗi trung tâm -->
+          <div class="my-auto flex flex-col items-center justify-center text-center px-4 py-8 bg-white border border-rose-100 rounded-3xl shadow-sm">
+            <!-- Icon cảnh báo đỏ nhạt trong hình tròn mềm mại -->
+            <div class="w-16 h-16 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-500 mb-5 shadow-xs">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+            </div>
+
+            <!-- Tiêu đề & Thông báo đúng yêu cầu: không dùng chữ "hỏng", không kết luận thiết bị -->
+            <h3 class="text-lg font-bold text-slate-900 mb-2">
+              Không đọc được ảnh
+            </h3>
+            <p class="text-sm text-slate-600 max-w-[260px] leading-relaxed mb-6">
+              Không đọc được ảnh. Vui lòng chụp lại.
+            </p>
+
+            <!-- Gợi ý thao tác nhẹ nhàng -->
+            <div class="w-full bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs text-slate-500 text-left">
+              <div class="font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Gợi ý cho bạn:
+              </div>
+              <ul class="list-disc list-inside space-y-0.5">
+                <li>Kiểm tra ống kính camera sạch sẽ</li>
+                <li>Giữ chắc tay khi bấm chụp</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Đáy: CHỈ CÒN DUY NHẤT NÚT "CHỤP LẠI" (nút chính màu xanh dương nổi bật, touch target 48px) -->
+          <div class="pt-2 pb-1">
+            <button class="touch-target h-12 w-full px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-sm shadow-blue-500/20">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>Chụp lại</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Android Home Indicator Bar -->
+        <div class="w-full h-5 flex justify-center items-center pb-1 bg-white select-none">
+          <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BẢNG ĐỐI SOÁT QUY CHUẨN KỸ THUẬT VÀ TÀI LIỆU SC02, SC05 -->
+  <div class="max-w-[1720px] mx-auto mt-8 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 text-slate-300">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+      <div class="flex items-center gap-2 text-sm font-semibold text-white">
+        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Bảng đối soát quy chuẩn màn hình M06 (SC02, SC04, SC05 - Kỹ thuật viên xem kết quả ảnh)
+      </div>
+      <span class="text-xs text-slate-400">Tài liệu tham chiếu: screens.md (M06) &amp; scenarios v2.md (SC02)</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-400">
+      <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
+        <div class="font-bold text-slate-200 mb-2">1. Quy chuẩn bố cục &amp; Vùng bấm:</div>
+        <ul class="space-y-1.5 list-disc list-inside">
+          <li>Thanh trên nền sáng: nút quay lại + mã <span class="font-mono text-slate-200">P001 - TB-001</span>.</li>
+          <li>Khung ảnh chiếm ~50% chiều cao màn hình, bo góc mềm mại, hiển thị rõ nét trên nền tối.</li>
+          <li>Vùng bấm tối thiểu <span class="text-slate-200 font-semibold">48px</span> cho tất cả các nút cảm ứng một tay tại hiện trường.</li>
+        </ul>
+      </div>
+
+      <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
+        <div class="font-bold text-slate-200 mb-2">2. Nguyên tắc thông điệp &amp; Tự quyết định:</div>
+        <ul class="space-y-1.5 list-disc list-inside">
+          <li><span class="text-amber-300 font-semibold">Ảnh tối:</span> Chỉ là cảnh báo chất lượng ảnh chụp, <strong class="text-white">tuyệt đối không kết luận thiết bị hỏng</strong>.</li>
+          <li>Nút "Chụp lại" được làm nổi bật nhưng nút "Giữ ảnh" vẫn bấm được bình thường để kỹ thuật viên tự quyết định.</li>
+          <li><strong class="text-white">Không</strong> hiện tên công nghệ backend (C++, JNI, Rec.601). Chỉ hiển thị phiên bản phân tích: <span class="font-mono text-slate-300">rgba_luma_v1</span>.</li>
+        </ul>
+      </div>
+
+      <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
+        <div class="font-bold text-slate-200 mb-2">3. Luồng tiếp nối màn hình kế tiếp:</div>
+        <ul class="space-y-1.5 list-disc list-inside">
+          <li>Bấm <strong class="text-white">"Chụp lại"</strong>: Quay trở lại màn hình <strong class="text-blue-400">M05 (Frame 1 Camera sẵn sàng)</strong> để chụp lại.</li>
+          <li>Bấm <strong class="text-white">"Giữ ảnh"</strong>: Chuyển tiếp sang màn hình <strong class="text-blue-400">M07 (Gửi ảnh &amp; nộp phiếu)</strong>.</li>
+          <li><span class="text-rose-300 font-semibold">Lỗi không đọc được ảnh:</span> Ẩn nút "Giữ ảnh", chỉ cho phép bấm "Chụp lại" để đảm bảo tính toàn vẹn dữ liệu.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+</body></html>

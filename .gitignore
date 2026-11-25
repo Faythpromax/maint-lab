@@ -2,3 +2,7 @@
 build
 keystore
 assets
+
+node_modules/
+AGENTS.md
+CLAUDE.md

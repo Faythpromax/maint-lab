@@ -1,0 +1,946 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1440, initial-scale=1.0">
+  <title>W07 - Chi tiết phiếu và lịch sử (MaintenanceLab)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            sidebar: '#0f172a',
+            surface: '#f8fafc',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+    .skeleton-box {
+      animation: pulse-subtle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-800 font-sans antialiased text-[14px] leading-relaxed p-6">
+
+  <!-- TOP BAR: THÔNG BÁO TÀI LIỆU VÀ CHỈ DẪN NGHIỆM THU -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto mb-6 bg-slate-800 text-white rounded-xl p-4 shadow-lg border border-slate-700 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <span class="px-2.5 py-1 rounded bg-blue-600 text-white font-mono text-xs font-semibold">ID: W07</span>
+      <h1 class="font-bold text-base tracking-wide">W07 - Chi tiết phiếu và lịch sử (5 trạng thái &amp; Phân quyền)</h1>
+      <span class="text-xs text-slate-400">| Chuẩn Desktop Viewport 1440px • Chỉ để theo dõi (Read-Only) • screens.md &amp; SC01, SC02, SC03, SC06</span>
+    </div>
+    <div class="flex items-center space-x-2 text-xs">
+      <span class="px-3 py-1 rounded bg-slate-700 text-slate-300 font-medium">1. Đã nộp có ảnh (submitted)</span>
+      <span class="px-3 py-1 rounded bg-slate-700 text-slate-300 font-medium">2. Đang tải</span>
+      <span class="px-3 py-1 rounded bg-slate-700 text-slate-300 font-medium">3. Chưa có ảnh (assigned)</span>
+      <span class="px-3 py-1 rounded bg-slate-700 text-slate-300 font-medium">4. Không có quyền / 404</span>
+      <span class="px-3 py-1 rounded bg-slate-700 text-slate-300 font-medium">5. Lỗi tải ảnh &amp; Hết phiên</span>
+    </div>
+  </div>
+
+  <!-- CONTAINER TẤT CẢ 5 FRAMES -->
+  <div class="space-y-12">
+
+    <!-- ========================================================================= -->
+    <!-- FRAME 1: PHIẾU ĐÃ NỘP CÓ ẢNH (SUBMITTED) - MẶC ĐỊNH                      -->
+    <!-- ========================================================================= -->
+    <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-100 rounded-2xl overflow-hidden shadow-2xl border border-slate-300">
+      
+      <!-- Frame Meta Header -->
+      <div class="bg-slate-900 text-slate-200 px-6 py-2.5 text-xs font-mono flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          <span class="font-bold text-white uppercase">FRAME 1: PHIẾU ĐÃ NỘP CÓ ẢNH CHỤP KIỂM TRA (SUBMITTED)</span>
+          <span class="text-slate-400">• Read-Only: Tuyệt đối không có nút Duyệt/Trả lại • Có chỉ dẫn điều hướng quy trình Desktop (D03)</span>
+        </div>
+        <div class="text-emerald-400 font-semibold">P001 • tech-a • TB-001</div>
+      </div>
+
+      <!-- App Shell 1440px: Sidebar + Main Content -->
+      <div class="flex w-[1440px] min-h-[820px] bg-slate-50">
+        
+        <!-- SIDEBAR TRÁI PERSISTENT 240px -->
+        <aside class="w-[240px] flex-shrink-0 bg-sidebar text-white flex flex-col justify-between p-4 border-r border-slate-800 select-none">
+          <div>
+            <!-- Brand -->
+            <div class="flex items-center space-x-3 px-2 py-3 mb-6 border-b border-slate-800/80">
+              <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="font-bold text-base tracking-tight leading-none text-white">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-400 mt-1">Bảo trì &amp; Thiết bị</div>
+              </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 px-3 mb-2">Thực đơn quản lý</div>
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                <span class="font-medium">Tổng quan (W02)</span>
+              </a>
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                </svg>
+                <span class="font-medium">Thiết bị (W03)</span>
+              </a>
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-sm transition">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                </svg>
+                <span>Phiếu kiểm tra (W06)</span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- User session info -->
+          <div class="pt-4 border-t border-slate-800/80">
+            <div class="flex items-center justify-between px-2">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold text-xs">QL</div>
+                <div>
+                  <div class="text-xs font-semibold text-slate-200">manager@demo.vn</div>
+                  <div class="text-[11px] text-slate-400">Vai trò: Quản lý</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-slate-400 hover:text-white cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+            </div>
+          </div>
+        </aside>
+
+        <!-- MAIN WORKSPACE 1200px -->
+        <main class="w-[1200px] flex-1 p-8 overflow-y-auto">
+          
+          <!-- Top Breadcrumb & Action Bar -->
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-3">
+              <!-- Nút quay lại -->
+              <a href="#" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-100 hover:text-blue-600 transition shadow-sm text-[13px]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                <span>Quay lại (W06)</span>
+              </a>
+              <span class="text-slate-300">/</span>
+              <span class="text-xs text-slate-500 font-mono">Phiếu kiểm tra định kỳ</span>
+              <span class="text-slate-300">/</span>
+              <span class="text-xs font-mono font-semibold text-slate-700">P001</span>
+            </div>
+
+            <!-- Chú thích quy định hệ thống (Read-only Web) -->
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium">
+              <svg class="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>Màn hình web chỉ để theo dõi. <strong>Việc duyệt thực hiện trên ứng dụng desktop (D03)</strong></span>
+            </div>
+          </div>
+
+          <!-- Ticket Header Card -->
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6">
+            <div class="flex items-start justify-between">
+              <div class="space-y-1">
+                <div class="flex items-center space-x-3">
+                  <h2 class="text-2xl font-bold font-mono text-slate-900">Mã phiếu: P001</h2>
+                  <!-- Badge trạng thái: submitted (Chờ duyệt) -->
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                    <span class="w-2 h-2 rounded-full bg-purple-500 mr-1.5"></span>
+                    Chờ duyệt (submitted)
+                  </span>
+                  <span class="text-xs text-slate-400 font-mono">Tạo lúc: 15/03/2025 08:30</span>
+                </div>
+                <p class="text-slate-500 text-[13px]">Phiếu bảo trì kiểm tra định kỳ hệ thống cấp nước làm mát trung tâm khu A</p>
+              </div>
+
+              <!-- Quick Meta Summary Tags -->
+              <div class="flex items-center space-x-2">
+                <div class="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-xs">
+                  <span class="text-slate-400">Revision:</span> <strong class="font-mono text-slate-700">rev_3</strong>
+                </div>
+                <div class="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-xs">
+                  <span class="text-slate-400">Phân quyền:</span> <span class="font-medium text-blue-600">Được phép xem</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4-Column Ticket Metadata Grid -->
+            <div class="grid grid-cols-4 gap-4 mt-6 pt-5 border-t border-slate-100">
+              <!-- Thiết bị -->
+              <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">THIẾT BỊ KIỂM TRA</div>
+                <div class="font-bold text-slate-800 text-base font-mono">TB-001</div>
+                <div class="text-xs text-slate-600 mt-0.5 truncate">Máy bơm nước chính</div>
+                <div class="text-[11px] text-slate-400 mt-1 flex items-center">
+                  <svg class="w-3 h-3 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                  Khu A - Tầng hầm kỹ thuật
+                </div>
+              </div>
+
+              <!-- Người nhận -->
+              <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">KỸ THUẬT VIÊN ĐƯỢC GIAO</div>
+                <div class="font-bold text-slate-800 text-base flex items-center space-x-1.5">
+                  <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-xs flex items-center justify-center font-bold">A</span>
+                  <span>Nguyễn Văn A</span>
+                </div>
+                <div class="text-xs text-slate-600 mt-0.5 font-mono">tech-a</div>
+                <div class="text-[11px] text-slate-400 mt-1">Đội Cơ điện hiện trường</div>
+              </div>
+
+              <!-- Hạn hoàn thành -->
+              <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">HẠN HOÀN THÀNH (DUE_AT)</div>
+                <div class="font-bold text-slate-800 text-base font-mono">15/03/2025 • 17:00</div>
+                <div class="text-xs text-emerald-600 font-medium mt-0.5 flex items-center">
+                  <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                  Đã nộp lúc 10:15 (Trước hạn)
+                </div>
+                <div class="text-[11px] text-slate-400 mt-1">Kỹ thuật viên đã nộp đủ ảnh</div>
+              </div>
+
+              <!-- Ghi chú công việc -->
+              <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">GHI CHÚ KIỂM TRA</div>
+                <div class="text-[13px] text-slate-700 font-medium leading-snug">Kiểm tra van áp suất, áp lực dòng chảy và rò rỉ gioăng phớt đầu bơm.</div>
+                <div class="text-[11px] text-slate-400 mt-1">Tạo bởi: manager@demo.vn</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main 2-Column Split: Cột trái (Ảnh & Phân tích C++) - Cột phải (Lịch sử Timeline) -->
+          <div class="grid grid-cols-12 gap-6">
+            
+            <!-- CỘT TRÁI: KHU VỰC ẢNH CHỨNG THỰC & ĐO ĐỘ SÁNG C++ (7 CỘT) -->
+            <div class="col-span-7 space-y-6">
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <h3 class="font-bold text-slate-800 text-base">Hình ảnh hiện trường (Bằng chứng kiểm tra)</h3>
+                  </div>
+                  <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded">1 ảnh hợp lệ</span>
+                </div>
+
+                <!-- Vùng hiển thị ảnh chụp thật từ Mobile M05 -->
+                <div class="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-900 group">
+                  <!-- Ảnh giả lập ảnh hiện trường máy bơm có đồng hồ áp suất & mã QR -->
+                  <div class="w-full h-80 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 flex flex-col items-center justify-center p-6 text-white text-center relative">
+                    
+                    <!-- Giả lập hình ảnh thiết bị thực địa -->
+                    <div class="w-48 h-48 rounded-xl border-2 border-dashed border-slate-600 flex flex-col items-center justify-center p-4 bg-slate-800/60 backdrop-blur-sm shadow-inner">
+                      <svg class="w-16 h-16 text-blue-400 mb-2 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                      </svg>
+                      <span class="text-xs font-bold text-slate-200">ẢNH HIỆN TRƯỜNG THỰC ĐỊA</span>
+                      <span class="text-[11px] text-slate-400 font-mono mt-1">TB-001 • Bơm nước #1</span>
+                      <span class="mt-2 text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/30">Camera Android Phone</span>
+                    </div>
+
+                    <!-- Watermark nhận diện chụp trực tiếp tại hiện trường -->
+                    <div class="absolute bottom-3 left-3 bg-black/75 backdrop-blur-md text-white text-[11px] font-mono px-3 py-1.5 rounded-lg border border-white/10 space-y-0.5 text-left">
+                      <div>📍 Khu A - Tầng hầm KT • TB-001</div>
+                      <div class="text-slate-300">🕒 15/03/2025 10:14:22 • tech-a</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Phân tích độ sáng thuật toán C++ / JNI (0 - 255) & analysis_version -->
+                <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                      <span class="font-bold text-slate-800 text-[13px] uppercase tracking-wide">Kết quả phân tích độ sáng (C++ Native Core)</span>
+                    </div>
+                    <span class="text-[11px] text-slate-500 font-mono bg-white px-2 py-0.5 rounded border border-slate-200">libimage_brightness.so</span>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                    <!-- Brightness gauge -->
+                    <div class="bg-white p-3 rounded-lg border border-slate-200">
+                      <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                        <span>Độ sáng (Brightness):</span>
+                        <strong class="text-slate-900 font-mono text-sm font-bold">142 / 255</strong>
+                      </div>
+                      <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full rounded-full" style="width: 55.6%"></div>
+                      </div>
+                      <div class="flex justify-between items-center text-[10px] text-slate-400 mt-1 font-mono">
+                        <span>0 (Tối đen)</span>
+                        <span class="text-emerald-600 font-semibold">Đủ sáng (Chuẩn)</span>
+                        <span>255 (Chói)</span>
+                      </div>
+                    </div>
+
+                    <!-- Analysis Version & Engine -->
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col justify-between">
+                      <div class="text-xs text-slate-500">Thuật toán phân tích:</div>
+                      <div class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded border border-blue-100 inline-block">
+                        rgba_luma_v1
+                      </div>
+                      <div class="text-[11px] text-slate-400">Chuẩn đo luma Rec.601 / C++ engine</div>
+                    </div>
+                  </div>
+
+                  <div class="mt-3 text-xs text-slate-500 flex items-start space-x-1.5">
+                    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Ảnh đạt tiêu chuẩn độ sáng phục vụ đối chiếu và nghiệm thu. Không phát hiện hiện tượng thiếu sáng nghiêm trọng.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CỘT PHẢI: LỊCH SỬ SỰ KIỆN DẠNG TIMELINE (5 CỘT) -->
+            <div class="col-span-5">
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="font-bold text-slate-800 text-base">Lịch sử sự kiện (Audit Log)</h3>
+                  </div>
+                  <span class="text-xs text-slate-400 font-mono">3 sự kiện</span>
+                </div>
+
+                <!-- Vertical Timeline List -->
+                <div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                  
+                  <!-- Event 3: Nộp phiếu (Mới nhất) -->
+                  <div class="relative">
+                    <!-- Dot indicator -->
+                    <div class="absolute -left-[27px] top-1 w-4 h-4 rounded-full bg-purple-600 border-2 border-white ring-2 ring-purple-100"></div>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 text-sm">Nộp phiếu kiểm tra</span>
+                        <span class="text-[11px] font-mono text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-semibold">submitted</span>
+                      </div>
+                      <div class="mt-1 text-xs text-slate-600 flex items-center space-x-2">
+                        <span class="font-medium text-slate-700">Kỹ thuật viên:</span>
+                        <span class="font-mono bg-white px-1.5 py-0.2 rounded border border-slate-200">tech-a</span>
+                        <span>(Nguyễn Văn A)</span>
+                      </div>
+                      <div class="text-[11px] text-slate-400 font-mono mt-1">15/03/2025 • 10:15:00</div>
+                      <div class="mt-2 text-xs text-slate-600 bg-white p-2 rounded border border-slate-200 text-[12px]">
+                        "Đã kiểm tra áp suất bơm bình thường, thay thế gioăng cao su van xả đáy. Kèm ảnh thực tế."
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 2: Bắt đầu phiếu -->
+                  <div class="relative">
+                    <div class="absolute -left-[27px] top-1 w-4 h-4 rounded-full bg-amber-500 border-2 border-white ring-2 ring-amber-100"></div>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 text-sm">Bắt đầu thực hiện</span>
+                        <span class="text-[11px] font-mono text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-semibold">in_progress</span>
+                      </div>
+                      <div class="mt-1 text-xs text-slate-600 flex items-center space-x-2">
+                        <span class="font-medium text-slate-700">Kỹ thuật viên:</span>
+                        <span class="font-mono bg-white px-1.5 py-0.2 rounded border border-slate-200">tech-a</span>
+                      </div>
+                      <div class="text-[11px] text-slate-400 font-mono mt-1">15/03/2025 • 09:10:12</div>
+                      <div class="mt-1 text-xs text-slate-500">Đã quét QR TB-001 thành công tại hiện trường và bấm bắt đầu.</div>
+                    </div>
+                  </div>
+
+                  <!-- Event 1: Tạo phiếu -->
+                  <div class="relative">
+                    <div class="absolute -left-[27px] top-1 w-4 h-4 rounded-full bg-blue-600 border-2 border-white ring-2 ring-blue-100"></div>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 text-sm">Tạo và giao phiếu</span>
+                        <span class="text-[11px] font-mono text-blue-700 bg-blue-100 px-2 py-0.5 rounded font-semibold">assigned</span>
+                      </div>
+                      <div class="mt-1 text-xs text-slate-600 flex items-center space-x-2">
+                        <span class="font-medium text-slate-700">Quản lý giao:</span>
+                        <span class="font-mono bg-white px-1.5 py-0.2 rounded border border-slate-200">manager</span>
+                      </div>
+                      <div class="text-[11px] text-slate-400 font-mono mt-1">15/03/2025 • 08:30:00</div>
+                      <div class="mt-1 text-xs text-slate-500">Khởi tạo phiếu định kỳ từ màn hình W05. Hạn hoàn thành: 17:00 cùng ngày.</div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Box giải thích phân quyền nghiêm ngặt -->
+                <div class="mt-6 p-3 rounded-lg bg-blue-50/60 border border-blue-100 text-[12px] text-slate-600 leading-relaxed">
+                  <div class="font-semibold text-blue-800 mb-1 flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    Quy chuẩn phê duyệt (SC03 &amp; screens.md)
+                  </div>
+                  Các thao tác <strong>Duyệt phiếu (Approve)</strong> hoặc <strong>Trả lại (Reject kèm lý do)</strong> bắt buộc thực hiện trên app desktop (D03). Giao diện web được cố ý thiết kế chỉ-đọc để tránh duyệt nhầm trên trình duyệt di động hoặc thiết bị chưa kiểm chuẩn màn hình.
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- FRAME 2: ĐANG TẢI (LOADING / SKELETON STATE)                              -->
+    <!-- ========================================================================= -->
+    <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-100 rounded-2xl overflow-hidden shadow-2xl border border-slate-300">
+      
+      <!-- Frame Meta Header -->
+      <div class="bg-slate-900 text-slate-200 px-6 py-2.5 text-xs font-mono flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+          <span class="font-bold text-white uppercase">FRAME 2: ĐANG TẢI DỮ LIỆU PHIẾU VÀ ẢNH (LOADING / SKELETON STATE)</span>
+          <span class="text-slate-400">• Skeleton đúng cấu trúc 2 cột • Spinner đồng bộ API</span>
+        </div>
+        <div class="text-amber-400 font-semibold">Đang fetch API GET /tickets/:id...</div>
+      </div>
+
+      <!-- App Shell 1440px -->
+      <div class="flex w-[1440px] min-h-[760px] bg-slate-50">
+        <!-- Sidebar -->
+        <aside class="w-[240px] flex-shrink-0 bg-sidebar text-white p-4 border-r border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 px-2 py-3 mb-6 border-b border-slate-800/80">
+              <div class="w-9 h-9 rounded-lg bg-blue-600/50 flex items-center justify-center text-white">
+                <span class="font-bold text-sm">ML</span>
+              </div>
+              <div>
+                <div class="font-bold text-base text-white">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="h-9 rounded-lg bg-slate-800/60 skeleton-box"></div>
+              <div class="h-9 rounded-lg bg-slate-800/60 skeleton-box"></div>
+              <div class="h-9 rounded-lg bg-blue-600/60"></div>
+            </div>
+          </div>
+          <div class="h-10 rounded-lg bg-slate-800/60 skeleton-box"></div>
+        </aside>
+
+        <!-- Main Skeleton -->
+        <main class="w-[1200px] flex-1 p-8 space-y-6">
+          <!-- Top bar skeleton -->
+          <div class="flex items-center justify-between">
+            <div class="h-9 w-36 bg-slate-200 rounded-lg skeleton-box"></div>
+            <div class="h-8 w-96 bg-slate-200 rounded-lg skeleton-box"></div>
+          </div>
+
+          <!-- Header card skeleton -->
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-5">
+            <div class="flex justify-between items-center">
+              <div class="space-y-2">
+                <div class="h-7 w-64 bg-slate-200 rounded skeleton-box"></div>
+                <div class="h-4 w-96 bg-slate-100 rounded skeleton-box"></div>
+              </div>
+              <div class="h-7 w-32 bg-slate-200 rounded-full skeleton-box"></div>
+            </div>
+            <div class="grid grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+              <div class="h-20 bg-slate-100 rounded-lg skeleton-box"></div>
+              <div class="h-20 bg-slate-100 rounded-lg skeleton-box"></div>
+              <div class="h-20 bg-slate-100 rounded-lg skeleton-box"></div>
+              <div class="h-20 bg-slate-100 rounded-lg skeleton-box"></div>
+            </div>
+          </div>
+
+          <!-- Content skeleton 2 columns -->
+          <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-7 bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+              <div class="flex justify-between items-center">
+                <div class="h-6 w-48 bg-slate-200 rounded skeleton-box"></div>
+                <div class="flex items-center space-x-2 text-xs text-blue-600 font-medium">
+                  <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                  <span>Đang tải hình ảnh từ máy chủ...</span>
+                </div>
+              </div>
+              <div class="h-72 w-full bg-slate-100 rounded-xl flex items-center justify-center skeleton-box">
+                <svg class="w-12 h-12 text-slate-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div class="h-24 bg-slate-50 rounded-xl skeleton-box"></div>
+            </div>
+
+            <div class="col-span-5 bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+              <div class="h-6 w-36 bg-slate-200 rounded skeleton-box"></div>
+              <div class="space-y-4 pt-2">
+                <div class="h-20 bg-slate-50 rounded-lg skeleton-box"></div>
+                <div class="h-20 bg-slate-50 rounded-lg skeleton-box"></div>
+                <div class="h-20 bg-slate-50 rounded-lg skeleton-box"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- FRAME 3: CHƯA CÓ ẢNH (ASSIGNED / EMPTY PHOTO STATE)                       -->
+    <!-- ========================================================================= -->
+    <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-100 rounded-2xl overflow-hidden shadow-2xl border border-slate-300">
+      
+      <!-- Frame Meta Header -->
+      <div class="bg-slate-900 text-slate-200 px-6 py-2.5 text-xs font-mono flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+          <span class="font-bold text-white uppercase">FRAME 3: PHIẾU VỪA TẠO - CHƯA CÓ ẢNH CHỤP KIỂM TRA (EMPTY PHOTO STATE)</span>
+          <span class="text-slate-400">• screens.md &amp; SC01 bước 4 • Hiện rõ thông báo "Chưa có ảnh" • Trạng thái assigned</span>
+        </div>
+        <div class="text-blue-400 font-semibold">P003 • tech-b • TB-003</div>
+      </div>
+
+      <!-- App Shell 1440px -->
+      <div class="flex w-[1440px] min-h-[780px] bg-slate-50">
+        <!-- Sidebar -->
+        <aside class="w-[240px] flex-shrink-0 bg-sidebar text-white p-4 border-r border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 px-2 py-3 mb-6 border-b border-slate-800/80">
+              <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </div>
+              <div>
+                <div class="font-bold text-base text-white">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+              </div>
+            </div>
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <span class="font-medium">Tổng quan (W02)</span>
+              </a>
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <span class="font-medium">Thiết bị (W03)</span>
+              </a>
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium">
+                <span>Phiếu kiểm tra (W06)</span>
+              </a>
+            </nav>
+          </div>
+          <div class="text-xs text-slate-400 px-2">manager@demo.vn</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="w-[1200px] flex-1 p-8">
+          <div class="flex items-center justify-between mb-6">
+            <a href="#" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-100 transition shadow-sm text-[13px]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+              <span>Quay lại danh sách phiếu (W06)</span>
+            </a>
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium">
+              <span>Việc duyệt thực hiện trên ứng dụng desktop (D03)</span>
+            </div>
+          </div>
+
+          <!-- Header info card -->
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center space-x-3">
+                  <h2 class="text-2xl font-bold font-mono text-slate-900">Mã phiếu: P003</h2>
+                  <!-- Badge trạng thái: assigned (Đã giao) -->
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span>
+                    Đã giao (assigned)
+                  </span>
+                  <span class="text-xs text-slate-400 font-mono">Tạo lúc: 15/03/2025 16:45</span>
+                </div>
+                <p class="text-slate-500 text-[13px] mt-1">Phiếu kiểm tra tủ điện phân phối B2 - Trạm biến áp ngoài trời</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 mt-6 pt-5 border-t border-slate-100">
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">THIẾT BỊ</div>
+                <div class="font-bold text-slate-800 font-mono">TB-003</div>
+                <div class="text-xs text-slate-600">Tủ điện phân phối B2</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">KỸ THUẬT VIÊN</div>
+                <div class="font-bold text-slate-800">Trần Văn B (tech-b)</div>
+                <div class="text-xs text-slate-600">Đội Tự động hóa</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">HẠN HOÀN THÀNH</div>
+                <div class="font-bold text-slate-800 font-mono">16/03/2025 • 09:00</div>
+                <div class="text-xs text-blue-600">Còn 1 ngày</div>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-xs text-slate-400 font-medium mb-1">TRẠNG THÁI HIỆN TẠI</div>
+                <div class="font-semibold text-slate-700 text-xs">Chờ KTV nhận việc tại hiện trường</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 Columns with EMPTY PHOTO STATE -->
+          <div class="grid grid-cols-12 gap-6">
+            <!-- Cột trái: KHÔNG CÓ ẢNH -->
+            <div class="col-span-7 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center space-x-2">
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Hình ảnh hiện trường (Bằng chứng kiểm tra)</span>
+              </h3>
+
+              <!-- Khối Empty State theo screens.md: "Chưa có ảnh" -->
+              <div class="h-72 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div class="text-base font-bold text-slate-700">Chưa có ảnh</div>
+                <p class="text-xs text-slate-500 max-w-sm mt-1 leading-relaxed">
+                  Phiếu đang ở trạng thái <strong>Đã giao (assigned)</strong>. Kỹ thuật viên cần quét mã QR tại máy trên ứng dụng di động (M03) và chụp ảnh hiện trường (M05) trước khi nộp.
+                </p>
+                <div class="mt-4 px-3 py-1 rounded-md bg-white border border-slate-200 text-[11px] font-mono text-slate-500">
+                  brightness: null • analysis_version: null
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột phải: Timeline chỉ có 1 event tạo phiếu (SC01 bước 4) -->
+            <div class="col-span-5 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <h3 class="font-bold text-slate-800 text-base mb-4 pb-3 border-b border-slate-100 flex items-center justify-between">
+                <span>Lịch sử sự kiện (Audit Log)</span>
+                <span class="text-xs font-mono text-slate-400">1 sự kiện</span>
+              </h3>
+
+              <div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <!-- Chỉ có Event 1: Tạo phiếu -->
+                <div class="relative">
+                  <div class="absolute -left-[27px] top-1 w-4 h-4 rounded-full bg-blue-600 border-2 border-white ring-2 ring-blue-100"></div>
+                  <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-slate-800 text-sm">Tạo và giao phiếu</span>
+                      <span class="text-[11px] font-mono text-blue-700 bg-blue-100 px-2 py-0.5 rounded font-semibold">assigned</span>
+                    </div>
+                    <div class="mt-1 text-xs text-slate-600 flex items-center space-x-2">
+                      <span class="font-medium text-slate-700">Actor:</span>
+                      <span class="font-mono bg-white px-1.5 py-0.2 rounded border border-slate-200">manager</span>
+                    </div>
+                    <div class="text-[11px] text-slate-400 font-mono mt-1">15/03/2025 • 16:45:00</div>
+                    <div class="mt-2 text-xs text-slate-500 bg-white p-2 rounded border border-slate-200">
+                      Giao phiếu kiểm tra định kỳ TB-003 cho kỹ thuật viên Trần Văn B (tech-b).
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-500">
+                ℹ️ Phiếu chưa phát sinh sự kiện quét QR hoặc nộp ảnh từ di động.
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- FRAME 4: KHÔNG CÓ QUYỀN HOẶC KHÔNG TỒN TẠI (403 / 404 STATE)              -->
+    <!-- ========================================================================= -->
+    <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-100 rounded-2xl overflow-hidden shadow-2xl border border-slate-300">
+      
+      <!-- Frame Meta Header -->
+      <div class="bg-slate-900 text-slate-200 px-6 py-2.5 text-xs font-mono flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+          <span class="font-bold text-white uppercase">FRAME 4: KHÔNG CÓ QUYỀN HOẶC KHÔNG TỒN TẠI (403 FORBIDDEN / 404 NOT FOUND)</span>
+          <span class="text-slate-400">• screens.md &amp; SC06: "Không xem được phiếu này" • Tuyệt đối không hiện bất kỳ ảnh hay lịch sử nào</span>
+        </div>
+        <div class="text-rose-400 font-semibold font-mono">HTTP 403 / 404 • Access Denied</div>
+      </div>
+
+      <!-- App Shell 1440px (Góc nhìn tech-b cố ý truy cập phiếu của tech-a hoặc ID không tồn tại) -->
+      <div class="flex w-[1440px] min-h-[640px] bg-slate-50">
+        
+        <!-- Sidebar tech-b (chỉ có Phiếu kiểm tra) -->
+        <aside class="w-[240px] flex-shrink-0 bg-sidebar text-white p-4 border-r border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 px-2 py-3 mb-6 border-b border-slate-800/80">
+              <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                <span class="font-bold text-sm">ML</span>
+              </div>
+              <div>
+                <div class="font-bold text-base text-white">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-400">Kỹ thuật viên</div>
+              </div>
+            </div>
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium">
+                <span>Phiếu kiểm tra (W06)</span>
+              </a>
+            </nav>
+            <div class="mt-4 p-2.5 rounded bg-slate-800/80 text-[11px] text-slate-400 leading-tight">
+              KTV chỉ được xem các phiếu do quản lý chỉ định trực tiếp cho mình.
+            </div>
+          </div>
+          <div class="text-xs text-slate-300 px-2 font-mono">tech-b@demo.vn</div>
+        </aside>
+
+        <!-- Main Workspace: Báo lỗi bảo mật 403/404, KHÔNG CÓ DỮ LIỆU -->
+        <main class="w-[1200px] flex-1 p-8 flex flex-col justify-between">
+          <!-- Top breadcrumb -->
+          <div class="flex items-center justify-between mb-8">
+            <a href="#" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-100 transition shadow-sm text-[13px]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+              <span>Quay lại danh sách phiếu (W06)</span>
+            </a>
+            <div class="text-xs font-mono text-slate-400">Security Policy: ISO/IEC 27001 • RBAC Server Enforcement</div>
+          </div>
+
+          <!-- Trung tâm: Khối báo Không xem được phiếu này -->
+          <div class="max-w-xl mx-auto w-full bg-white rounded-2xl p-10 border border-slate-200 shadow-md text-center my-auto">
+            <div class="w-20 h-20 rounded-full bg-rose-50 text-rose-500 mx-auto flex items-center justify-center mb-5 ring-8 ring-rose-50/50">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v2m0-2h2m-2 0H10m11-3.5a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+              </svg>
+            </div>
+
+            <!-- Tiêu đề đúng verbatim screens.md: "Không xem được phiếu này" -->
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Không xem được phiếu này</h2>
+            
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+              Mã phiếu bạn đang truy cập không tồn tại trên hệ thống hoặc tài khoản của bạn không được cấp quyền hạn để xem dữ liệu này (Mã phản hồi: <code class="font-mono text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded font-bold">403 FORBIDDEN</code>).
+            </p>
+
+            <!-- Ghi chú bảo mật quy định SC06 -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 text-left mb-6 space-y-1">
+              <div class="font-semibold text-slate-700 flex items-center">
+                <svg class="w-4 h-4 mr-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Quy tắc an toàn bảo mật dữ liệu:
+              </div>
+              <div>• Toàn bộ ảnh hiện trường, chỉ số độ sáng C++ và lược sử sự kiện đã được máy chủ khóa lại hoàn toàn nhằm ngăn chặn hành vi rà quét thông tin trái phép.</div>
+            </div>
+
+            <div class="flex items-center justify-center space-x-3">
+              <a href="#" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition shadow-sm text-sm">
+                Quay lại danh sách phiếu (W06)
+              </a>
+              <a href="#" class="px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition text-sm">
+                Đăng nhập tài khoản khác (W01)
+              </a>
+            </div>
+          </div>
+
+          <div class="text-center text-xs text-slate-400 pt-8">Hệ thống MaintenanceLab • Phiên bản 2.4.0 • Kiểm tra phân quyền thực hiện tại Server API Gateway</div>
+        </main>
+      </div>
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- FRAME 5: LỖI TẢI ẢNH RIÊNG & BÁO HẾT PHIÊN PHÂN BIỆT RÕ                  -->
+    <!-- ========================================================================= -->
+    <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-100 rounded-2xl overflow-hidden shadow-2xl border border-slate-300">
+      
+      <!-- Frame Meta Header -->
+      <div class="bg-slate-900 text-slate-200 px-6 py-2.5 text-xs font-mono flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+          <span class="font-bold text-white uppercase">FRAME 5: LỖI TẢI ẢNH RIÊNG PHẦN ẢNH (KÈM NÚT THỬ LẠI) &amp; MODAL HẾT PHIÊN (401)</span>
+          <span class="text-slate-400">• screens.md: Hết phiên (401) không được hiểu là ảnh hỏng • Báo lỗi riêng từng phân vùng</span>
+        </div>
+        <div class="text-rose-400 font-semibold font-mono">Image 502 / Auth 401 Disambiguation</div>
+      </div>
+
+      <!-- App Shell 1440px with Image Error inside and 401 Session Expired notification -->
+      <div class="relative flex w-[1440px] min-h-[820px] bg-slate-50">
+        
+        <!-- Sidebar -->
+        <aside class="w-[240px] flex-shrink-0 bg-sidebar text-white p-4 border-r border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 px-2 py-3 mb-6 border-b border-slate-800/80">
+              <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                <span class="font-bold text-sm">ML</span>
+              </div>
+              <div>
+                <div class="font-bold text-base text-white">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+              </div>
+            </div>
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <span class="font-medium">Tổng quan (W02)</span>
+              </a>
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <span class="font-medium">Thiết bị (W03)</span>
+              </a>
+              <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium">
+                <span>Phiếu kiểm tra (W06)</span>
+              </a>
+            </nav>
+          </div>
+          <div class="text-xs text-slate-400 px-2 font-mono">manager@demo.vn</div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="w-[1200px] flex-1 p-8">
+          
+          <!-- Banner phân biệt trạng thái đặc tả screens.md -->
+          <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 flex items-start justify-between shadow-sm">
+            <div class="flex items-start space-x-3">
+              <svg class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+              <div>
+                <div class="font-bold text-sm">Quy tắc chuẩn hóa xử lý lỗi (screens.md):</div>
+                <div class="text-xs text-amber-800 mt-0.5">
+                  1. <strong>Lỗi mạng khi tải ảnh</strong>: Báo lỗi riêng biệt ở khung ảnh kèm nút "Thử lại", thông tin phiếu và lịch sử vẫn hiển thị bình thường.<br>
+                  2. <strong>Hết phiên (HTTP 401)</strong>: Hệ thống phải báo rõ "Phiên đăng nhập đã hết hạn", <strong>tuyệt đối không được hiểu nhầm hoặc báo là ảnh hỏng</strong>.
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-white text-amber-900 font-mono text-xs font-bold border border-amber-200">Test Cases</span>
+          </div>
+
+          <!-- Ticket Header Card Vẫn hiển thị (không bị sập toàn trang) -->
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6 opacity-90">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center space-x-3">
+                  <h2 class="text-2xl font-bold font-mono text-slate-900">Mã phiếu: P004</h2>
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-200">
+                    <span class="w-2 h-2 rounded-full bg-purple-500 mr-1.5"></span>
+                    Chờ duyệt (submitted)
+                  </span>
+                  <span class="text-xs text-slate-400 font-mono">Tạo lúc: 13/03/2025 09:00</span>
+                </div>
+                <p class="text-slate-500 text-[13px] mt-1">TB-004 - Quạt thông gió xưởng 1 • tech-a</p>
+              </div>
+              <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium">
+                <span>Việc duyệt thực hiện trên ứng dụng desktop (D03)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 Columns: Cột trái BÁO LỖI TẢI ẢNH RIÊNG - Cột phải VẪN GIỮ LỊCH SỬ -->
+          <div class="grid grid-cols-12 gap-6">
+            
+            <!-- CỘT TRÁI: LỖI TẢI ẢNH RIÊNG PHẦN ẢNH (KÈM NÚT THỬ LẠI) -->
+            <div class="col-span-7 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-slate-800 text-base">Hình ảnh hiện trường (Bằng chứng kiểm tra)</h3>
+                <span class="text-xs font-mono text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">ERR_IMAGE_FETCH_502</span>
+              </div>
+
+              <!-- Box Báo Lỗi Tải Ảnh Riêng -->
+              <div class="rounded-xl border border-rose-200 bg-rose-50/40 p-8 text-center flex flex-col items-center justify-center min-h-[320px]">
+                <div class="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mb-3 shadow-sm">
+                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                  </svg>
+                </div>
+                
+                <h4 class="text-base font-bold text-slate-800 mb-1">Không thể tải hình ảnh hiện trường</h4>
+                <p class="text-xs text-slate-600 max-w-md mb-5 leading-relaxed">
+                  Đường truyền mạng gặp sự cố hoặc máy chủ lưu trữ hình ảnh phản hồi chậm. Dữ liệu phiếu và lịch sử sự kiện vẫn an toàn.
+                </p>
+
+                <!-- Nút THỬ LẠI riêng cho phần ảnh -->
+                <button type="button" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition shadow-sm text-xs cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                  <span>Thử tải lại ảnh</span>
+                </button>
+              </div>
+
+              <!-- Ghi chú thuật toán -->
+              <div class="mt-4 p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-400 flex items-center justify-between">
+                <span>Thông số C++: <strong class="font-mono text-slate-600">analysis_version: rgba_luma_v1</strong></span>
+                <span>Chờ kết nối lại ảnh để hiển thị thước đo độ sáng</span>
+              </div>
+            </div>
+
+            <!-- CỘT PHẢI: LỊCH SỬ VẪN NGUYÊN VẸN -->
+            <div class="col-span-5 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <h3 class="font-bold text-slate-800 text-base mb-4 pb-3 border-b border-slate-100 flex items-center justify-between">
+                <span>Lịch sử sự kiện (Audit Log)</span>
+                <span class="text-xs font-mono text-slate-400">2 sự kiện</span>
+              </h3>
+
+              <div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <div class="relative">
+                  <div class="absolute -left-[27px] top-1 w-4 h-4 rounded-full bg-purple-600 border-2 border-white"></div>
+                  <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                    <div class="font-bold text-slate-800">Nộp phiếu kiểm tra (submitted)</div>
+                    <div class="text-slate-500 text-[11px] font-mono mt-0.5">13/03/2025 • 16:00:00 • tech-a</div>
+                    <div class="text-slate-600 mt-1">Đã nộp ảnh và biên bản kiểm tra tiếng ồn ổ bi quạt.</div>
+                  </div>
+                </div>
+
+                <div class="relative">
+                  <div class="absolute -left-[27px] top-1 w-4 h-4 rounded-full bg-blue-600 border-2 border-white"></div>
+                  <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                    <div class="font-bold text-slate-800">Tạo và giao phiếu (assigned)</div>
+                    <div class="text-slate-500 text-[11px] font-mono mt-0.5">13/03/2025 • 09:00:00 • manager</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- HỘP THOẠI MINH HỌA TRƯỜNG HỢP HẾT PHIÊN (401) KHÔNG BÁO ẢNH HỎNG -->
+              <div class="mt-6 p-4 rounded-xl bg-red-50 border border-red-200">
+                <div class="flex items-center space-x-2 text-rose-800 font-bold text-xs mb-1">
+                  <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                  <span>Minh họa: Khi Token hết hạn (HTTP 401 Unauthorized)</span>
+                </div>
+                <p class="text-[12px] text-rose-700 leading-snug">
+                  Hệ thống lập tức xuất hiện thông báo: <em>"Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại để xem ảnh và dữ liệu"</em>. Tuyệt đối không quy lỗi cho tệp tin hình ảnh!
+                </p>
+                <div class="mt-3">
+                  <a href="#" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded bg-rose-600 text-white font-medium text-xs hover:bg-rose-700 transition">
+                    <span>Đăng nhập lại (W01)</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+</body></html>

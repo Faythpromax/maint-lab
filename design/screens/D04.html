@@ -1,0 +1,957 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D04 - Nhập/xuất dữ liệu (5 trạng thái)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #1e293b;
+      margin: 0;
+      padding: 32px 16px;
+    }
+    .desktop-window {
+      width: 1280px;
+      margin: 0 auto;
+      background-color: #f8fafc;
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      border: 1px solid #cbd5e1;
+      overflow: hidden;
+    }
+    .window-titlebar {
+      height: 38px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-size: 13px;
+      color: #475569;
+      user-select: none;
+    }
+    .status-header-banner {
+      width: 1280px;
+      margin: 0 auto 12px auto;
+      background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body class="space-y-16">
+
+  <!-- ==================== HEADER TỔNG DỰ ÁN ==================== -->
+  <div class="max-w-[1280px] mx-auto text-white">
+    <div class="inline-block px-3 py-1 rounded bg-blue-950 border border-blue-600 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
+      Ứng dụng Windows Desktop • 1280px
+    </div>
+    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-100">D04 - Nhập/xuất dữ liệu (5 trạng thái nghiệp vụ)</h1>
+        <p class="text-sm text-slate-400 mt-1">Hệ thống Quản lý Thiết bị &amp; Bảo trì MaintenanceLab • Vai trò Quản lý (manager) • Giao diện chuẩn Windows Desktop 1280px</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 bg-slate-800 text-slate-300 rounded text-xs border border-slate-700">Windows Desktop 1280px</span>
+        <span class="px-3 py-1 bg-blue-900/60 text-blue-300 rounded text-xs border border-blue-700">5 Trạng thái</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== FRAME 1: CHƯA CHỌN FILE (NÚT NHẬP TẮT) ==================== -->
+  <section>
+    <div class="status-header-banner">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        <span class="text-sm font-semibold text-emerald-400">TRẠNG THÁI 1: TAB NHẬP THIẾT BỊ — CHƯA CHỌN FILE</span>
+        <span class="text-xs text-slate-400">— Nút "Nhập" bị tắt (disabled), khung hướng dẫn tải file CSV/JSON và mẫu xem trước trống</span>
+      </div>
+      <span class="text-xs px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Chờ chọn file</span>
+    </div>
+
+    <div class="desktop-window">
+      <!-- Titlebar -->
+      <div class="window-titlebar">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded bg-blue-600 text-white font-bold flex items-center justify-center text-xs">ML</div>
+          <span class="font-medium text-slate-700">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-xs text-slate-500">Tài khoản: <span class="font-semibold text-slate-700">manager</span></div>
+          <div class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="hover:text-slate-600 cursor-pointer">─</span>
+            <span class="hover:text-slate-600 cursor-pointer">□</span>
+            <span class="hover:text-red-500 cursor-pointer">✕</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout: Sidebar + Content -->
+      <div class="flex min-h-[620px]">
+        <!-- Sidebar Navigation -->
+        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col justify-between p-3 select-none">
+          <div class="space-y-6">
+            <div class="flex items-center gap-2.5 px-3 py-2 border-b border-slate-100">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+              </div>
+            </div>
+
+            <!-- Menu Items -->
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                  <span>Hàng chờ duyệt</span>
+                </div>
+                <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">2</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold text-sm border-l-4 border-blue-600 shadow-sm">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <span>Nhập/xuất dữ liệu</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Báo cáo</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Cấu hình</span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- Bottom Status in Sidebar -->
+          
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-slate-50 p-6 flex flex-col justify-between">
+          <div>
+            <!-- Header Title -->
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-800">Nhập/xuất dữ liệu</h2>
+                <p class="text-sm text-slate-500 mt-0.5">Nhập hàng loạt thiết bị vào hệ thống hoặc xuất dữ liệu báo cáo</p>
+              </div>
+            </div>
+
+            <!-- Tab Switching Bar -->
+            <div class="flex border-b border-slate-200 mb-5 gap-6">
+              <button class="pb-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+              <button class="pb-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Xuất dữ liệu</span>
+              </button>
+            </div>
+
+            <!-- Action Controls: Chọn file + Nút Nhập -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between mb-5">
+              <div class="flex items-center gap-4">
+                <button class="px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-sm hover:bg-slate-50 hover:border-slate-400 flex items-center gap-2 shadow-sm transition-all">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                  <span>Chọn file</span>
+                </button>
+                <div class="text-sm text-slate-500">
+                  <span class="font-medium text-slate-600">Định dạng hỗ trợ:</span> CSV hoặc JSON • Tối đa 5 MB
+                </div>
+              </div>
+
+              <!-- Nút Nhập (Bị tắt do chưa chọn file) -->
+              <button disabled="" class="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-400 font-semibold text-sm cursor-not-allowed flex items-center gap-2">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+            </div>
+
+            <!-- Bảng Xem Trước (Trạng thái rỗng - chưa chọn file) -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-4 py-3 bg-slate-50/70 border-b border-slate-200 flex items-center justify-between">
+                <div class="text-sm font-semibold text-slate-700">Xem trước dữ liệu tải lên</div>
+                <div class="text-xs text-slate-400">0 dòng dữ liệu</div>
+              </div>
+
+              <div class="p-12 text-center flex flex-col items-center justify-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3 border border-slate-200">
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div class="text-sm font-semibold text-slate-700">Chưa chọn file dữ liệu</div>
+                <p class="text-xs text-slate-500 mt-1 max-w-md">Vui lòng bấm nút "Chọn file" ở trên để tải file danh sách thiết bị dạng CSV hoặc JSON. Dữ liệu sẽ được kiểm tra trước khi ghi vào hệ thống.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>Quy tắc dữ liệu thiết bị: gồm Mã thiết bị, Tên thiết bị, Vị trí. Mã không được trùng và không để trống tên.</div>
+            <div class="text-slate-400">Trạng thái: Sẵn sàng</div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== FRAME 2: XEM TRƯỚC CÓ LỖI TỪNG DÒNG ==================== -->
+  <section>
+    <div class="status-header-banner">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+        <span class="text-sm font-semibold text-amber-400">TRẠNG THÁI 2: TAB NHẬP THIẾT BỊ — XEM TRƯỚC CÓ LỖI TỪNG DÒNG</span>
+        <span class="text-xs text-slate-400">— Đã chọn file, bảng hiện cột "Kết quả kiểm tra"; phát hiện dòng lỗi nên nút "Nhập" tiếp tục bị tắt</span>
+      </div>
+      <span class="text-xs px-2.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">2 dòng lỗi / 1 hợp lệ</span>
+    </div>
+
+    <div class="desktop-window">
+      <!-- Titlebar -->
+      <div class="window-titlebar">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded bg-blue-600 text-white font-bold flex items-center justify-center text-xs">ML</div>
+          <span class="font-medium text-slate-700">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-xs text-slate-500">Tài khoản: <span class="font-semibold text-slate-700">manager</span></div>
+          <div class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="hover:text-slate-600 cursor-pointer">─</span>
+            <span class="hover:text-slate-600 cursor-pointer">□</span>
+            <span class="hover:text-red-500 cursor-pointer">✕</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="flex min-h-[620px]">
+        <!-- Sidebar Navigation -->
+        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col justify-between p-3 select-none">
+          <div class="space-y-6">
+            <div class="flex items-center gap-2.5 px-3 py-2 border-b border-slate-100">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+              </div>
+            </div>
+
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                  <span>Hàng chờ duyệt</span>
+                </div>
+                <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">2</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold text-sm border-l-4 border-blue-600 shadow-sm">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <span>Nhập/xuất dữ liệu</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Báo cáo</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Cấu hình</span>
+              </a>
+            </nav>
+          </div>
+
+          
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-slate-50 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-800">Nhập/xuất dữ liệu</h2>
+                <p class="text-sm text-slate-500 mt-0.5">Nhập hàng loạt thiết bị vào hệ thống hoặc xuất dữ liệu báo cáo</p>
+              </div>
+            </div>
+
+            <!-- Tab Switching Bar -->
+            <div class="flex border-b border-slate-200 mb-5 gap-6">
+              <button class="pb-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+              <button class="pb-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Xuất dữ liệu</span>
+              </button>
+            </div>
+
+            <!-- Action Controls: Đã chọn file thiet_bi_moi.csv -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between mb-5">
+              <div class="flex items-center gap-4">
+                <button class="px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-sm hover:bg-slate-50 flex items-center gap-2 shadow-sm">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                  <span>Chọn file khác</span>
+                </button>
+                <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs">
+                  <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                  <span class="font-medium text-slate-700">danh_sach_thiet_bi.csv</span>
+                  <span class="text-slate-400">• 14.2 KB (3 dòng)</span>
+                </div>
+              </div>
+
+              <!-- Nút Nhập (Bị tắt do còn 2 dòng lỗi) -->
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-rose-600 font-medium">Vui lòng sửa các dòng lỗi trong file trước khi nhập</span>
+                <button disabled="" class="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-400 font-semibold text-sm cursor-not-allowed flex items-center gap-2 shadow-none">
+                  <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Nhập</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Warning Banner -->
+            <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-2.5 text-xs text-amber-800">
+              <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <span>Phát hiện <strong>2 dòng dữ liệu lỗi</strong>. Ứng dụng chỉ đọc dữ liệu và không ghi đè vào hệ thống khi file còn lỗi.</span>
+            </div>
+
+            <!-- Bảng Xem Trước Chi Tiết Từng Dòng -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-4 py-3 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+                <div class="text-sm font-semibold text-slate-800">Bảng xem trước dữ liệu tải lên (3 dòng)</div>
+                <div class="flex items-center gap-3 text-xs">
+                  <span class="inline-flex items-center gap-1 text-emerald-600 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 1 dòng hợp lệ
+                  </span>
+                  <span class="inline-flex items-center gap-1 text-rose-600 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> 2 dòng lỗi
+                  </span>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-600 text-xs uppercase border-b border-slate-200">
+                    <tr>
+                      <th class="py-3 px-4 font-semibold w-16">Dòng</th>
+                      <th class="py-3 px-4 font-semibold w-36">Mã thiết bị</th>
+                      <th class="py-3 px-4 font-semibold">Tên thiết bị</th>
+                      <th class="py-3 px-4 font-semibold w-48">Vị trí</th>
+                      <th class="py-3 px-4 font-semibold w-72">Kết quả kiểm tra</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <!-- Dòng 1: Hợp lệ TB-007 -->
+                    <tr class="hover:bg-slate-50/60 bg-emerald-50/20">
+                      <td class="py-3.5 px-4 font-mono text-xs text-slate-500">1</td>
+                      <td class="py-3.5 px-4 font-bold text-slate-900">TB-007</td>
+                      <td class="py-3.5 px-4 text-slate-700 font-medium">Máy tiện cơ khí vạn năng</td>
+                      <td class="py-3.5 px-4 text-slate-600">Khu G</td>
+                      <td class="py-3.5 px-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                          <span>Hợp lệ (sẵn sàng nhập)</span>
+                        </span>
+                      </td>
+                    </tr>
+
+                    <!-- Dòng 2: Lỗi mã đã tồn tại TB-001 -->
+                    <tr class="hover:bg-rose-50/40 bg-rose-50/20">
+                      <td class="py-3.5 px-4 font-mono text-xs text-slate-500">2</td>
+                      <td class="py-3.5 px-4 font-bold text-rose-700">TB-001</td>
+                      <td class="py-3.5 px-4 text-slate-700">Máy bơm nước chính</td>
+                      <td class="py-3.5 px-4 text-slate-600">Khu A</td>
+                      <td class="py-3.5 px-4">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                          <svg class="w-3.5 h-3.5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                          <span>Lỗi: Mã thiết bị đã tồn tại trong hệ thống</span>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <!-- Dòng 3: Lỗi thiếu tên thiết bị -->
+                    <tr class="hover:bg-rose-50/40 bg-rose-50/20">
+                      <td class="py-3.5 px-4 font-mono text-xs text-slate-500">3</td>
+                      <td class="py-3.5 px-4 font-bold text-slate-900">TB-008</td>
+                      <td class="py-3.5 px-4 text-rose-500 italic bg-rose-100/50 rounded px-2">
+                        [Trống - chưa có tên thiết bị]
+                      </td>
+                      <td class="py-3.5 px-4 text-slate-600">Xưởng 2</td>
+                      <td class="py-3.5 px-4">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                          <svg class="w-3.5 h-3.5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                          <span>Lỗi: Thiếu tên thiết bị (bắt buộc)</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>Nút "Nhập thiết bị" sẽ được kích hoạt ngay khi toàn bộ các dòng trong file đều vượt qua kiểm tra tính hợp lệ.</div>
+            <div class="text-rose-600 font-medium">Trạng thái: Có dòng lỗi, nút Nhập bị khóa</div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== FRAME 3: ĐANG NHẬP (THANH TIẾN ĐỘ, NÚT KHÓA) ==================== -->
+  <section>
+    <div class="status-header-banner">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+        <span class="text-sm font-semibold text-blue-400">TRẠNG THÁI 3: TAB NHẬP THIẾT BỊ — ĐANG NHẬP DỮ LIỆU</span>
+        <span class="text-xs text-slate-400">— Đang đẩy dữ liệu thiết bị vào máy chủ; thanh tiến độ % rõ ràng, nút bấm khóa để tránh gửi trùng</span>
+      </div>
+      <span class="text-xs px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">Đang xử lý 65%</span>
+    </div>
+
+    <div class="desktop-window">
+      <!-- Titlebar -->
+      <div class="window-titlebar">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded bg-blue-600 text-white font-bold flex items-center justify-center text-xs">ML</div>
+          <span class="font-medium text-slate-700">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-xs text-slate-500">Tài khoản: <span class="font-semibold text-slate-700">manager</span></div>
+          <div class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="hover:text-slate-600 cursor-pointer">─</span>
+            <span class="hover:text-slate-600 cursor-pointer">□</span>
+            <span class="hover:text-red-500 cursor-pointer">✕</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="flex min-h-[620px]">
+        <!-- Sidebar Navigation -->
+        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col justify-between p-3 select-none">
+          <div class="space-y-6">
+            <div class="flex items-center gap-2.5 px-3 py-2 border-b border-slate-100">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+              </div>
+            </div>
+
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors opacity-60 pointer-events-none">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                  <span>Hàng chờ duyệt</span>
+                </div>
+                <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">2</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold text-sm border-l-4 border-blue-600 shadow-sm">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <span>Nhập/xuất dữ liệu</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors opacity-60 pointer-events-none">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Báo cáo</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors opacity-60 pointer-events-none">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Cấu hình</span>
+              </a>
+            </nav>
+          </div>
+
+          
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-slate-50 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-800">Nhập/xuất dữ liệu</h2>
+                <p class="text-sm text-slate-500 mt-0.5">Nhập hàng loạt thiết bị vào hệ thống hoặc xuất dữ liệu báo cáo</p>
+              </div>
+            </div>
+
+            <!-- Tab Switching Bar (Disabled khi đang nhập) -->
+            <div class="flex border-b border-slate-200 mb-5 gap-6">
+              <button class="pb-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+              <button disabled="" class="pb-2.5 text-sm font-medium text-slate-400 cursor-not-allowed flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Xuất dữ liệu</span>
+              </button>
+            </div>
+
+            <!-- Action Controls: Nút khóa, hiển thị spinner -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <button disabled="" class="px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-100 text-slate-400 font-semibold text-sm cursor-not-allowed flex items-center gap-2">
+                  <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                  <span>Chọn file</span>
+                </button>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                  <span class="font-medium text-slate-700">danh_sach_hop_le.csv</span>
+                  <span class="text-slate-500">• 12 thiết bị mới</span>
+                </div>
+              </div>
+
+              <!-- Nút Nhập ở trạng thái khóa & hiển thị xoay vòng -->
+              <button disabled="" class="px-5 py-2.5 rounded-lg bg-blue-600/70 text-white font-semibold text-sm cursor-wait flex items-center gap-2 shadow-sm">
+                <svg class="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                <span>Đang nhập dữ liệu...</span>
+              </button>
+            </div>
+
+            <!-- Card Hiển Thị Tiến Độ Đang Nhập -->
+            <div class="bg-white rounded-xl border border-blue-200 shadow-sm p-6 mb-5">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-800">Đang ghi dữ liệu vào hệ thống...</h3>
+                    <p class="text-xs text-slate-500">Đang xử lý dòng 8 / 12 (TB-014 - Máy hút ẩm công nghiệp)</p>
+                  </div>
+                </div>
+                <span class="text-sm font-bold text-blue-600">65%</span>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200 mb-2">
+                <div class="bg-blue-600 h-3 rounded-full transition-all duration-300" style="width: 65%;"></div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-slate-500">
+                <span>Vui lòng không đóng cửa sổ ứng dụng hoặc chuyển màn hình trong lúc dữ liệu đang được nhập.</span>
+                <span class="font-medium text-slate-700">8 / 12 thiết bị đã ghi nhận</span>
+              </div>
+            </div>
+
+            <!-- Bảng Xem Trước Được Khóa Mờ (Overlay Loading) -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden opacity-75">
+              <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                <div class="text-sm font-semibold text-slate-600">Dữ liệu đang được ghi (12 dòng)</div>
+                <span class="text-xs text-blue-600 font-medium flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping"></span> Đang đồng bộ với máy chủ
+                </span>
+              </div>
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-200">
+                  <tr>
+                    <th class="py-2.5 px-4 font-semibold w-16">Dòng</th>
+                    <th class="py-2.5 px-4 font-semibold w-36">Mã thiết bị</th>
+                    <th class="py-2.5 px-4 font-semibold">Tên thiết bị</th>
+                    <th class="py-2.5 px-4 font-semibold w-48">Vị trí</th>
+                    <th class="py-2.5 px-4 font-semibold w-64">Trạng thái ghi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-xs">
+                  <tr class="bg-emerald-50/20">
+                    <td class="py-2.5 px-4 font-mono text-slate-400">1</td>
+                    <td class="py-2.5 px-4 font-bold text-slate-800">TB-007</td>
+                    <td class="py-2.5 px-4 text-slate-700">Máy tiện cơ khí vạn năng</td>
+                    <td class="py-2.5 px-4 text-slate-600">Khu G</td>
+                    <td class="py-2.5 px-4 text-emerald-600 font-semibold flex items-center gap-1">✓ Đã tạo thành công</td>
+                  </tr>
+                  <tr class="bg-emerald-50/20">
+                    <td class="py-2.5 px-4 font-mono text-slate-400">2</td>
+                    <td class="py-2.5 px-4 font-bold text-slate-800">TB-008</td>
+                    <td class="py-2.5 px-4 text-slate-700">Băng tải con lăn số 2</td>
+                    <td class="py-2.5 px-4 text-slate-600">Xưởng 1</td>
+                    <td class="py-2.5 px-4 text-emerald-600 font-semibold flex items-center gap-1">✓ Đã tạo thành công</td>
+                  </tr>
+                  <tr class="bg-blue-50/40">
+                    <td class="py-2.5 px-4 font-mono text-blue-600 font-bold">8</td>
+                    <td class="py-2.5 px-4 font-bold text-blue-700">TB-014</td>
+                    <td class="py-2.5 px-4 text-slate-800 font-medium">Máy hút ẩm công nghiệp</td>
+                    <td class="py-2.5 px-4 text-slate-600">Khu B</td>
+                    <td class="py-2.5 px-4 text-blue-600 font-semibold flex items-center gap-1">
+                      <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                      Đang ghi...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>Quá trình nhập dữ liệu thực hiện theo từng thiết bị.</div>
+            <div class="text-blue-600 font-medium">Trạng thái: Đang nhập (tiến độ 65%)</div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== FRAME 4: FILE SAI ĐỊNH DẠNG HOẶC QUÁ LỚN ==================== -->
+  <section>
+    <div class="status-header-banner">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+        <span class="text-sm font-semibold text-rose-400">TRẠNG THÁI 4: TAB NHẬP THIẾT BỊ — FILE SAI ĐỊNH DẠNG HOẶC QUÁ LỚN</span>
+        <span class="text-xs text-slate-400">— Thông báo lỗi rõ ràng, tuyệt đối không nhập bất kỳ dữ liệu nào vào hệ thống, có nút chọn lại file</span>
+      </div>
+      <span class="text-xs px-2.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">Lỗi định dạng file</span>
+    </div>
+
+    <div class="desktop-window">
+      <!-- Titlebar -->
+      <div class="window-titlebar">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded bg-blue-600 text-white font-bold flex items-center justify-center text-xs">ML</div>
+          <span class="font-medium text-slate-700">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-xs text-slate-500">Tài khoản: <span class="font-semibold text-slate-700">manager</span></div>
+          <div class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="hover:text-slate-600 cursor-pointer">─</span>
+            <span class="hover:text-slate-600 cursor-pointer">□</span>
+            <span class="hover:text-red-500 cursor-pointer">✕</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="flex min-h-[620px]">
+        <!-- Sidebar Navigation -->
+        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col justify-between p-3 select-none">
+          <div class="space-y-6">
+            <div class="flex items-center gap-2.5 px-3 py-2 border-b border-slate-100">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+              </div>
+            </div>
+
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                  <span>Hàng chờ duyệt</span>
+                </div>
+                <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">2</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold text-sm border-l-4 border-blue-600 shadow-sm">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <span>Nhập/xuất dữ liệu</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Báo cáo</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Cấu hình</span>
+              </a>
+            </nav>
+          </div>
+
+          
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-slate-50 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-800">Nhập/xuất dữ liệu</h2>
+                <p class="text-sm text-slate-500 mt-0.5">Nhập hàng loạt thiết bị vào hệ thống hoặc xuất dữ liệu báo cáo</p>
+              </div>
+            </div>
+
+            <!-- Tab Switching Bar -->
+            <div class="flex border-b border-slate-200 mb-5 gap-6">
+              <button class="pb-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+              <button class="pb-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Xuất dữ liệu</span>
+              </button>
+            </div>
+
+            <!-- Action Controls: Báo file lỗi -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <button class="px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-sm hover:bg-slate-50 flex items-center gap-2 shadow-sm">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                  <span>Chọn file khác</span>
+                </button>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
+                  <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span class="font-medium">tai_lieu_huong_dan.docx</span>
+                  <span class="text-rose-500">• 8.4 MB (Không hợp lệ)</span>
+                </div>
+              </div>
+
+              <!-- Nút Nhập khóa -->
+              <button disabled="" class="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-400 font-semibold text-sm cursor-not-allowed flex items-center gap-2">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+            </div>
+
+            <!-- Error Banner & Card Chi Tiết Lỗi -->
+            <div class="bg-white rounded-xl border border-rose-200 shadow-sm p-8 text-center flex flex-col items-center justify-center">
+              <div class="w-16 h-16 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              </div>
+
+              <h3 class="text-base font-bold text-slate-800">Không thể đọc file dữ liệu</h3>
+              <p class="text-sm text-slate-600 mt-2 max-w-lg">
+                File bạn chọn có định dạng <strong>.docx</strong> và dung lượng <strong>8.4 MB</strong>, không đúng yêu cầu của hệ thống.
+              </p>
+
+              <!-- Chi tiết quy cách hợp lệ -->
+              <div class="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-lg text-left text-xs space-y-2 max-w-md w-full">
+                <div class="font-semibold text-slate-700">Yêu cầu định dạng file để nhập thiết bị:</div>
+                <div class="flex items-center gap-2 text-slate-600">
+                  <span class="text-blue-600 font-bold">•</span>
+                  <span>Định dạng được chấp nhận: <strong>CSV (.csv)</strong> hoặc <strong>JSON (.json)</strong></span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-600">
+                  <span class="text-blue-600 font-bold">•</span>
+                  <span>Dung lượng file tối đa: <strong>5 MB</strong></span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-600">
+                  <span class="text-blue-600 font-bold">•</span>
+                  <span>Dữ liệu thiết bị bắt buộc gồm 3 trường: <strong>Mã thiết bị, Tên thiết bị, Vị trí</strong></span>
+                </div>
+              </div>
+
+              <!-- Thao tác chọn lại file -->
+              <div class="mt-6 flex items-center gap-3">
+                <button class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center gap-2 shadow-sm transition-all">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Chọn file CSV hoặc JSON khác</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>Ứng dụng chỉ đọc nội dung file dưới dạng dữ liệu.</div>
+            <div class="text-rose-600 font-medium">Trạng thái: File không hợp lệ, không nhập gì</div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== FRAME 5: TAB XUẤT DỮ LIỆU ==================== -->
+  <section>
+    <div class="status-header-banner">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span class="text-sm font-semibold text-blue-400">TRẠNG THÁI 5: TAB XUẤT DỮ LIỆU</span>
+        <span class="text-xs text-slate-400">— Cho phép chọn định dạng xuất (CSV hoặc JSON), xem tóm tắt số lượng và bấm nút "Xuất" để lưu file</span>
+      </div>
+      <span class="text-xs px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">Tab Xuất dữ liệu</span>
+    </div>
+
+    <div class="desktop-window">
+      <!-- Titlebar -->
+      <div class="window-titlebar">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded bg-blue-600 text-white font-bold flex items-center justify-center text-xs">ML</div>
+          <span class="font-medium text-slate-700">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-xs text-slate-500">Tài khoản: <span class="font-semibold text-slate-700">manager</span></div>
+          <div class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="hover:text-slate-600 cursor-pointer">─</span>
+            <span class="hover:text-slate-600 cursor-pointer">□</span>
+            <span class="hover:text-red-500 cursor-pointer">✕</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="flex min-h-[620px]">
+        <!-- Sidebar Navigation -->
+        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col justify-between p-3 select-none">
+          <div class="space-y-6">
+            <div class="flex items-center gap-2.5 px-3 py-2 border-b border-slate-100">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+                <div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+              </div>
+            </div>
+
+            <nav class="space-y-1">
+              <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                  <span>Hàng chờ duyệt</span>
+                </div>
+                <span class="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">2</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold text-sm border-l-4 border-blue-600 shadow-sm">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                <span>Nhập/xuất dữ liệu</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span>Báo cáo</span>
+              </a>
+
+              <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm transition-colors">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Cấu hình</span>
+              </a>
+            </nav>
+          </div>
+
+          
+        </aside>
+
+        <!-- Main Content Area: TAB XUẤT DỮ LIỆU ĐANG ACTIVE -->
+        <main class="flex-1 bg-slate-50 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-800">Nhập/xuất dữ liệu</h2>
+                <p class="text-sm text-slate-500 mt-0.5">Nhập hàng loạt thiết bị vào hệ thống hoặc xuất dữ liệu báo cáo</p>
+              </div>
+            </div>
+
+            <!-- Tab Switching Bar (Tab Xuất Dữ Liệu Active) -->
+            <div class="flex border-b border-slate-200 mb-6 gap-6">
+              <button class="pb-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Nhập thiết bị</span>
+              </button>
+              <button class="pb-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Xuất dữ liệu</span>
+              </button>
+            </div>
+
+            <!-- Form Cấu Hình Xuất Dữ Liệu -->
+            <div class="max-w-2xl bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
+              <div>
+                <h3 class="text-base font-bold text-slate-800">Cấu hình xuất dữ liệu</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Xuất danh sách thiết bị ra file</p>
+              </div>
+
+              <!-- Lựa chọn định dạng xuất: CSV hoặc JSON -->
+              <div class="space-y-3">
+                <label class="block text-sm font-semibold text-slate-700">Chọn định dạng file xuất:</label>
+                <div class="grid grid-cols-2 gap-4">
+                  <!-- Lựa chọn CSV (Đang chọn) -->
+                  <label class="relative flex items-start gap-3 p-4 rounded-xl border-2 border-blue-600 bg-blue-50/30 cursor-pointer shadow-sm">
+                    <input type="radio" name="export_format" checked="" class="mt-1 h-4 w-4 text-blue-600 border-slate-300 focus:ring-blue-500">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm text-slate-800">Định dạng CSV (.csv)</span>
+                        
+                      </div>
+                      <p class="text-xs text-slate-500 mt-1">Dễ dàng mở và chỉnh sửa trực tiếp bằng Microsoft Excel, Google Trang tính.</p>
+                    </div>
+                  </label>
+
+                  <!-- Lựa chọn JSON -->
+                  <label class="relative flex items-start gap-3 p-4 rounded-xl border-2 border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition-colors">
+                    <input type="radio" name="export_format" class="mt-1 h-4 w-4 text-blue-600 border-slate-300 focus:ring-blue-500">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm text-slate-800">Định dạng JSON (.json)</span>
+                      </div>
+                      <p class="text-xs text-slate-500 mt-1">Cấu trúc dữ liệu phân cấp đầy đủ, thuận tiện sao lưu và tích hợp lập trình.</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Tóm tắt dữ liệu chuẩn bị xuất -->
+              <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-2.5">
+                <div class="text-xs font-semibold text-slate-700 uppercase tracking-wide">Dữ liệu sẽ được xuất bao gồm:</div>
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                  <div class="flex items-center justify-between p-2.5 bg-white rounded border border-slate-200">
+                    <span class="text-slate-600">Danh mục thiết bị:</span>
+                    <span class="font-bold text-slate-800">6 thiết bị (TB-001 ... <span style="white-space: nowrap;">TB-006</span>)</span>
+                  </div>
+                  <div class="flex items-center justify-between p-2.5 bg-white rounded border border-slate-200">
+                    <span class="text-slate-600">Thời điểm trích xuất:</span>
+                    <span class="font-bold text-slate-800">6 thiết bị (TB-001 ... <span style="white-space: nowrap;">TB-006</span>)</span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-500 italic">File xuất chứa đầy đủ thông tin: Mã thiết bị, Tên thiết bị, Vị trí lắp đặt và ngày khởi tạo.</p>
+              </div>
+
+              <!-- Nút Thao Tác Xuất -->
+              <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+                <div class="text-xs text-slate-500">File sẽ được lưu vào thư mục Downloads của máy tính.</div>
+                <button class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center gap-2 shadow-sm transition-all">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  <span>Xuất dữ liệu (.csv)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>Chức năng xuất dữ liệu phục vụ báo cáo định kỳ và lưu trữ nội bộ cho Quản lý thiết bị.</div>
+            <div class="text-emerald-600 font-medium">Trạng thái: Sẵn sàng xuất file</div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+</body></html>

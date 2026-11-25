@@ -4,5 +4,6 @@ keystore
 assets
 
 node_modules/
+dist/
 AGENTS.md
 CLAUDE.md

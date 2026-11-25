@@ -1,0 +1,868 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>D05 - Báo cáo (5 trạng thái nghiệp vụ)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .app-window {
+      width: 1280px;
+      min-width: 1280px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .skeleton-box {
+      animation: pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-800 p-8 space-y-16">
+<!-- TOP HEADER OVERVIEW -->
+<div class="max-w-[1280px] mx-auto text-white">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600/30 text-blue-300 text-xs font-semibold rounded-full border border-blue-500/30 mb-2 uppercase tracking-wide">
+      Ứng dụng Windows Desktop • 1280px
+    </div>
+<h1 class="text-2xl font-bold tracking-tight">D05 - Báo cáo (5 trạng thái nghiệp vụ)</h1>
+<p class="text-sm text-slate-400 mt-1">Hệ thống Quản lý Thiết bị &amp; Bảo trì MaintenanceLab • Vai trò Quản lý (manager) • Giao diện chuẩn Windows Desktop 1280px</p>
+</div>
+<!-- ========================================== -->
+<!-- FRAME 1: MẶC ĐỊNH CÓ KẾT QUẢ -->
+<!-- ========================================== -->
+<div class="space-y-3">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between text-xs text-slate-300 font-medium px-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+<span class="font-bold text-white uppercase tracking-wider">Trạng thái 1: Mặc định có kết quả</span>
+<span class="text-slate-400">— Bộ lọc đầy đủ, bảng tổng hợp theo trạng thái và danh sách phiếu bên dưới</span>
+</div>
+<span class="px-2.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">Có kết quả báo cáo</span>
+</div>
+<!-- WINDOW 1280px -->
+<div class="app-window bg-slate-50 border border-slate-300 rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-[780px]">
+<!-- Windows Title Bar -->
+<div class="bg-white border-b border-slate-200 h-9 px-3 flex items-center justify-between select-none">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold">ML</div>
+<span class="text-xs text-slate-600 font-medium">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500">Tài khoản: <strong class="text-slate-700 font-semibold">manager</strong></span>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="hover:text-slate-700 cursor-pointer text-sm">─</span>
+<span class="hover:text-slate-700 cursor-pointer text-xs">□</span>
+<span class="hover:text-rose-600 cursor-pointer text-sm">✕</span>
+</div>
+</div>
+</div>
+<!-- Main Layout: Sidebar + Content -->
+<div class="flex flex-1 min-h-[740px]">
+<!-- Left Sidebar -->
+<aside class="w-60 bg-white border-r border-slate-200 flex flex-col justify-start p-4 flex-shrink-0">
+<div class="space-y-6">
+<!-- Brand -->
+<div class="flex items-center gap-2.5 px-2">
+<div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+<div>
+<div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+<div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+</div>
+</div>
+<!-- Menu -->
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 font-medium transition-colors" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Hàng chờ duyệt
+                </span>
+<span class="px-2 py-0.5 text-xs font-semibold bg-amber-100 text-amber-800 rounded-full">2</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 font-medium transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Nhập/xuất dữ liệu
+              </a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600" href="#">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Báo cáo
+              </a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 font-medium transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Cấu hình
+              </a>
+</nav>
+</div>
+</aside>
+<!-- Right Content Area -->
+<main class="flex-1 p-6 space-y-6 overflow-y-auto">
+<!-- Page Header -->
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Báo cáo</h2>
+<p class="text-sm text-slate-500 mt-0.5">Thống kê số lượng phiếu theo trạng thái và theo dõi chi tiết trong khoảng thời gian</p>
+</div>
+</div>
+<!-- Bộ lọc Báo cáo -->
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+<div class="grid grid-cols-12 gap-4 items-end">
+<!-- Bộ lọc Trạng thái -->
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Trạng thái</label>
+<select class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium">
+<option selected="">Tất cả</option>
+<option>Đã giao</option>
+<option>Đang thực hiện</option>
+<option>Chờ duyệt</option>
+<option>Hoàn tất</option>
+</select>
+</div>
+<!-- Từ ngày -->
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Từ ngày</label>
+<div class="relative">
+<input class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium" type="text" value="01/11/2026">
+<svg class="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<!-- Đến ngày -->
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Đến ngày</label>
+<div class="relative">
+<input class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium" type="text" value="19/11/2026">
+<svg class="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<!-- Nút Xem & Xuất CSV/JSON -->
+<div class="col-span-3 flex items-center gap-2">
+<button class="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg flex items-center justify-center gap-1.5 shadow-sm transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Xem
+                </button>
+<button class="h-10 px-3.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-lg border border-slate-300 flex items-center gap-1.5 shadow-sm transition-colors">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Xuất CSV/JSON
+                </button>
+</div>
+</div>
+</div>
+<!-- Bảng số phiếu theo từng trạng thái (2 cột: TRẠNG THÁI, SỐ PHIẾU) -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Tổng hợp số phiếu theo trạng thái</h3>
+<span class="text-xs text-slate-500">Khoảng thời gian: <strong class="text-slate-700 font-semibold">01/11/2026 – 19/11/2026</strong></span>
+</div>
+<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 text-xs font-semibold text-slate-600 border-b border-slate-200">
+<th class="py-3 px-4">TRẠNG THÁI</th>
+<th class="py-3 px-4 text-right">SỐ PHIẾU</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-sm">
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                        Đã giao
+                      </span>
+</td>
+<td class="py-3 px-4 text-right font-bold text-slate-800">2</td>
+</tr>
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                        Đang thực hiện
+                      </span>
+</td>
+<td class="py-3 px-4 text-right font-bold text-slate-800">2</td>
+</tr>
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                        Chờ duyệt
+                      </span>
+</td>
+<td class="py-3 px-4 text-right font-bold text-amber-700">1</td>
+</tr>
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        Hoàn tất
+                      </span>
+</td>
+<td class="py-3 px-4 text-right font-bold text-emerald-700">1</td>
+</tr>
+<!-- Tổng cộng -->
+<tr class="bg-slate-50 font-semibold text-slate-900 border-t-2 border-slate-200">
+<td class="py-3 px-4 font-bold text-xs uppercase tracking-wider text-slate-700">TỔNG CỘNG</td>
+<td class="py-3 px-4 text-right font-bold text-blue-700">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Danh sách phiếu bên dưới (6 phiếu) -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Danh sách phiếu chi tiết (6 phiếu)</h3>
+<span class="text-xs text-slate-500">Sắp xếp: Mới nhất trước</span>
+</div>
+<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 text-xs font-semibold text-slate-600 border-b border-slate-200">
+<th class="py-3 px-4">MÃ PHIẾU</th>
+<th class="py-3 px-4">THIẾT BỊ</th>
+<th class="py-3 px-4">KỸ THUẬT VIÊN</th>
+<th class="py-3 px-4">TRẠNG THÁI</th>
+<th class="py-3 px-4">HẠN</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-sm">
+<!-- P001 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4 font-bold text-blue-600">P001</td>
+<td class="py-3 px-4">
+<div class="font-medium text-slate-900">TB-001 — Máy bơm nước chính</div>
+<div class="text-xs text-slate-500">Vị trí: Khu A</div>
+</td>
+<td class="py-3 px-4 text-slate-700">
+<div class="font-medium text-slate-800">tech-a</div>
+<div class="text-xs text-slate-500">Nguyễn Văn A</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                        Đã giao
+                      </span>
+</td>
+<td class="py-3 px-4 text-slate-700 font-medium">19/11/2026</td>
+</tr>
+<!-- P002 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4 font-bold text-blue-600">P002</td>
+<td class="py-3 px-4">
+<div class="font-medium text-slate-900">TB-002 — Máy nén khí trung tâm</div>
+<div class="text-xs text-slate-500">Vị trí: Khu B</div>
+</td>
+<td class="py-3 px-4 text-slate-700">
+<div class="font-medium text-slate-800">tech-a</div>
+<div class="text-xs text-slate-500">Nguyễn Văn A</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                        Đang thực hiện
+                      </span>
+</td>
+<td class="py-3 px-4 text-slate-700 font-medium">20/11/2026</td>
+</tr>
+<!-- P003 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4 font-bold text-blue-600">P003</td>
+<td class="py-3 px-4">
+<div class="font-medium text-slate-900">TB-003 — Tủ điện phân phối B2</div>
+<div class="text-xs text-slate-500">Vị trí: Khu C</div>
+</td>
+<td class="py-3 px-4 text-slate-700">
+<div class="font-medium text-slate-800">tech-b</div>
+<div class="text-xs text-slate-500">Trần Văn B</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                        Đã giao
+                      </span>
+</td>
+<td class="py-3 px-4 text-slate-700 font-medium">21/11/2026</td>
+</tr>
+<!-- P004 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4 font-bold text-blue-600">P004</td>
+<td class="py-3 px-4">
+<div class="font-medium text-slate-900">TB-004 — Quạt thông gió xưởng 1</div>
+<div class="text-xs text-slate-500">Vị trí: Khu D</div>
+</td>
+<td class="py-3 px-4 text-slate-700">
+<div class="font-medium text-slate-800">tech-a</div>
+<div class="text-xs text-slate-500">Nguyễn Văn A</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                        Chờ duyệt
+                      </span>
+</td>
+<td class="py-3 px-4 text-slate-700 font-medium">19/11/2026</td>
+</tr>
+<!-- P005 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4 font-bold text-blue-600">P005</td>
+<td class="py-3 px-4">
+<div class="font-medium text-slate-900">TB-005 — Băng tải phân loại hàng</div>
+<div class="text-xs text-slate-500">Vị trí: Khu E</div>
+</td>
+<td class="py-3 px-4 text-slate-700">
+<div class="font-medium text-slate-800">tech-b</div>
+<div class="text-xs text-slate-500">Trần Văn B</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        Hoàn tất
+                      </span>
+</td>
+<td class="py-3 px-4 text-slate-700 font-medium">18/11/2026</td>
+</tr>
+<!-- P006 -->
+<tr class="hover:bg-slate-50/70 transition-colors">
+<td class="py-3 px-4 font-bold text-blue-600">P006</td>
+<td class="py-3 px-4">
+<div class="font-medium text-slate-900">TB-006 — Máy phát điện dự phòng 250kVA</div>
+<div class="text-xs text-slate-500">Vị trí: Khu F</div>
+</td>
+<td class="py-3 px-4 text-slate-700">
+<div class="font-medium text-slate-800">tech-a</div>
+<div class="text-xs text-slate-500">Nguyễn Văn A</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                        Đang thực hiện
+                      </span>
+</td>
+<td class="py-3 px-4 text-slate-700 font-medium">22/11/2026</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- FRAME 2: ĐANG TẢI (SKELETON) -->
+<!-- ========================================== -->
+<div class="space-y-3">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between text-xs text-slate-300 font-medium px-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+<span class="font-bold text-white uppercase tracking-wider">Trạng thái 2: Đang tải</span>
+<span class="text-slate-400">— Đang truy vấn và tính toán báo cáo, nút Xem hiển thị spinner và khóa tương tác</span>
+</div>
+<span class="px-2.5 py-0.5 bg-blue-900/60 border border-blue-700 text-blue-200 rounded">Đang tải dữ liệu...</span>
+</div>
+<!-- WINDOW 1280px -->
+<div class="app-window bg-slate-50 border border-slate-300 rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-[740px]">
+<!-- Windows Title Bar -->
+<div class="bg-white border-b border-slate-200 h-9 px-3 flex items-center justify-between select-none">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold">ML</div>
+<span class="text-xs text-slate-600 font-medium">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500">Tài khoản: <strong class="text-slate-700 font-semibold">manager</strong></span>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="text-sm">─</span>
+<span class="text-xs">□</span>
+<span class="text-sm">✕</span>
+</div>
+</div>
+</div>
+<!-- Main Layout -->
+<div class="flex flex-1 min-h-[700px]">
+<!-- Left Sidebar -->
+<aside class="w-60 bg-white border-r border-slate-200 flex flex-col justify-start p-4 flex-shrink-0">
+<div class="space-y-6">
+<div class="flex items-center gap-2.5 px-2">
+<div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+<div>
+<div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+<div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Hàng chờ duyệt
+                </span>
+<span class="px-2 py-0.5 text-xs font-semibold bg-slate-100 text-slate-600 rounded-full">2</span>
+</div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Nhập/xuất dữ liệu
+              </div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Báo cáo
+              </div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Cấu hình
+              </div>
+</nav>
+</div>
+</aside>
+<!-- Right Content Area -->
+<main class="flex-1 p-6 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Báo cáo</h2>
+<p class="text-sm text-slate-500 mt-0.5">Thống kê số lượng phiếu theo trạng thái và theo dõi chi tiết trong khoảng thời gian</p>
+</div>
+<div class="text-xs text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+              Đang truy vấn dữ liệu...
+            </div>
+</div>
+<!-- Bộ lọc Báo cáo (Disabled trong lúc tải) -->
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm opacity-85">
+<div class="grid grid-cols-12 gap-4 items-end">
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Trạng thái</label>
+<div class="h-10 px-3 text-sm bg-slate-100 border border-slate-200 rounded-lg text-slate-500 flex items-center font-medium">Tất cả</div>
+</div>
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Từ ngày</label>
+<div class="h-10 px-3 text-sm bg-slate-100 border border-slate-200 rounded-lg text-slate-500 flex items-center font-medium">01/11/2026</div>
+</div>
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Đến ngày</label>
+<div class="h-10 px-3 text-sm bg-slate-100 border border-slate-200 rounded-lg text-slate-500 flex items-center font-medium">19/11/2026</div>
+</div>
+<div class="col-span-3 flex items-center gap-2">
+<button class="flex-1 h-10 bg-blue-500 text-white font-semibold text-sm rounded-lg flex items-center justify-center gap-2 cursor-wait" disabled="">
+<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" d="M4 12a8 8 0 018-8v8H4z" fill="currentColor"></path></svg>
+                  Đang tải...
+                </button>
+<button class="h-10 px-3.5 bg-slate-100 text-slate-400 font-semibold text-sm rounded-lg border border-slate-200 cursor-not-allowed" disabled="">
+                  Xuất CSV/JSON
+                </button>
+</div>
+</div>
+</div>
+<!-- Skeleton bảng tổng hợp số phiếu (2 cột) -->
+<div class="space-y-2">
+<div class="h-4 w-64 bg-slate-200 rounded skeleton-box"></div>
+<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 shadow-sm">
+<div class="flex justify-between gap-4">
+<div class="h-8 w-1/3 bg-slate-100 rounded skeleton-box"></div>
+<div class="h-8 w-24 bg-slate-100 rounded skeleton-box"></div>
+</div>
+<div class="flex justify-between gap-4">
+<div class="h-8 w-1/4 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-8 w-12 bg-slate-50 rounded skeleton-box"></div>
+</div>
+<div class="flex justify-between gap-4">
+<div class="h-8 w-1/4 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-8 w-12 bg-slate-50 rounded skeleton-box"></div>
+</div>
+<div class="flex justify-between gap-4">
+<div class="h-8 w-1/4 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-8 w-12 bg-slate-50 rounded skeleton-box"></div>
+</div>
+<div class="flex justify-between gap-4">
+<div class="h-8 w-1/4 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-8 w-12 bg-slate-50 rounded skeleton-box"></div>
+</div>
+<div class="flex justify-between gap-4 pt-2 border-t border-slate-100">
+<div class="h-8 w-1/4 bg-slate-100 rounded skeleton-box"></div>
+<div class="h-8 w-16 bg-slate-100 rounded skeleton-box"></div>
+</div>
+</div>
+</div>
+<!-- Skeleton danh sách phiếu (6 dòng) -->
+<div class="space-y-2">
+<div class="h-4 w-52 bg-slate-200 rounded skeleton-box"></div>
+<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 shadow-sm">
+<div class="h-8 bg-slate-100 rounded skeleton-box"></div>
+<div class="h-10 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-10 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-10 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-10 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-10 bg-slate-50 rounded skeleton-box"></div>
+<div class="h-10 bg-slate-50 rounded skeleton-box"></div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- FRAME 3: KHÔNG CÓ PHIẾU TRONG KHOẢNG ĐÃ CHỌN -->
+<!-- ========================================== -->
+<div class="space-y-3">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between text-xs text-slate-300 font-medium px-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+<span class="font-bold text-white uppercase tracking-wider">Trạng thái 3: Không có phiếu trong khoảng đã chọn</span>
+<span class="text-slate-400">— Lọc theo khoảng ngày không phát sinh phiếu nào, thông báo rỗng rõ ràng</span>
+</div>
+<span class="px-2.5 py-0.5 bg-slate-800 border border-slate-700 text-slate-300 rounded">0 phiếu tìm thấy</span>
+</div>
+<!-- WINDOW 1280px -->
+<div class="app-window bg-slate-50 border border-slate-300 rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-[740px]">
+<!-- Windows Title Bar -->
+<div class="bg-white border-b border-slate-200 h-9 px-3 flex items-center justify-between select-none">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold">ML</div>
+<span class="text-xs text-slate-600 font-medium">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500">Tài khoản: <strong class="text-slate-700 font-semibold">manager</strong></span>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="text-sm">─</span>
+<span class="text-xs">□</span>
+<span class="text-sm">✕</span>
+</div>
+</div>
+</div>
+<!-- Main Layout -->
+<div class="flex flex-1 min-h-[700px]">
+<!-- Left Sidebar -->
+<aside class="w-60 bg-white border-r border-slate-200 flex flex-col justify-start p-4 flex-shrink-0">
+<div class="space-y-6">
+<div class="flex items-center gap-2.5 px-2">
+<div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+<div>
+<div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+<div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Hàng chờ duyệt
+                </span>
+<span class="px-2 py-0.5 text-xs font-semibold bg-slate-100 text-slate-600 rounded-full">2</span>
+</div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Nhập/xuất dữ liệu
+              </div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Báo cáo
+              </div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Cấu hình
+              </div>
+</nav>
+</div>
+</aside>
+<!-- Right Content Area -->
+<main class="flex-1 p-6 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Báo cáo</h2>
+<p class="text-sm text-slate-500 mt-0.5">Thống kê số lượng phiếu theo trạng thái và theo dõi chi tiết trong khoảng thời gian</p>
+</div>
+</div>
+<!-- Bộ lọc (Khoảng ngày không có dữ liệu: 01/01/2026 - 15/01/2026) -->
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+<div class="grid grid-cols-12 gap-4 items-end">
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Trạng thái</label>
+<select class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium">
+<option selected="">Tất cả</option>
+<option>Đã giao</option>
+<option>Đang thực hiện</option>
+<option>Chờ duyệt</option>
+<option>Hoàn tất</option>
+</select>
+</div>
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Từ ngày</label>
+<input class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium" type="text" value="01/01/2026">
+</div>
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Đến ngày</label>
+<input class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium" type="text" value="15/01/2026">
+</div>
+<div class="col-span-3 flex items-center gap-2">
+<button class="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg flex items-center justify-center gap-1.5 shadow-sm">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Xem
+                </button>
+<button class="h-10 px-3.5 bg-slate-100 text-slate-400 font-semibold text-sm rounded-lg border border-slate-200 cursor-not-allowed" disabled="">
+                  Xuất CSV/JSON
+                </button>
+</div>
+</div>
+</div>
+<!-- Empty State Message -->
+<div class="bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm space-y-4">
+<div class="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</div>
+<div class="max-w-md mx-auto space-y-1">
+<h4 class="text-base font-bold text-slate-800">Không có phiếu trong khoảng đã chọn</h4>
+<p class="text-sm text-slate-500">Hệ thống không ghi nhận phiếu bảo trì nào được tạo hoặc cập nhật từ <strong class="text-slate-700">01/01/2026</strong> đến <strong class="text-slate-700">15/01/2026</strong>. Bạn có thể mở rộng khoảng ngày hoặc chọn lại trạng thái.</p>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- FRAME 4: NGÀY BẮT ĐẦU SAU NGÀY KẾT THÚC (BÁO LỖI TẠI Ô) -->
+<!-- ========================================== -->
+<div class="space-y-3">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between text-xs text-slate-300 font-medium px-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+<span class="font-bold text-white uppercase tracking-wider">Trạng thái 4: Ngày bắt đầu sau ngày kết thúc</span>
+<span class="text-slate-400">— Báo lỗi trực tiếp tại ô ngày, nút Xem bị tắt, giữ nguyên dữ liệu đã nhập</span>
+</div>
+<span class="px-2.5 py-0.5 bg-rose-900/60 border border-rose-700 text-rose-200 rounded">Lỗi khoảng ngày</span>
+</div>
+<!-- WINDOW 1280px -->
+<div class="app-window bg-slate-50 border border-slate-300 rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-[740px]">
+<!-- Windows Title Bar -->
+<div class="bg-white border-b border-slate-200 h-9 px-3 flex items-center justify-between select-none">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold">ML</div>
+<span class="text-xs text-slate-600 font-medium">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500">Tài khoản: <strong class="text-slate-700 font-semibold">manager</strong></span>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="text-sm">─</span>
+<span class="text-xs">□</span>
+<span class="text-sm">✕</span>
+</div>
+</div>
+</div>
+<!-- Main Layout -->
+<div class="flex flex-1 min-h-[700px]">
+<!-- Left Sidebar -->
+<aside class="w-60 bg-white border-r border-slate-200 flex flex-col justify-start p-4 flex-shrink-0">
+<div class="space-y-6">
+<div class="flex items-center gap-2.5 px-2">
+<div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+<div>
+<div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+<div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Hàng chờ duyệt
+                </span>
+<span class="px-2 py-0.5 text-xs font-semibold bg-slate-100 text-slate-600 rounded-full">2</span>
+</div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Nhập/xuất dữ liệu
+              </div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Báo cáo
+              </div>
+<div class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Cấu hình
+              </div>
+</nav>
+</div>
+</aside>
+<!-- Right Content Area -->
+<main class="flex-1 p-6 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Báo cáo</h2>
+<p class="text-sm text-slate-500 mt-0.5">Thống kê số lượng phiếu theo trạng thái và theo dõi chi tiết trong khoảng thời gian</p>
+</div>
+</div>
+<!-- Bộ lọc giữ nguyên border-slate-200 trung tính, chỉ báo đỏ tại 2 ô ngày -->
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+<div class="grid grid-cols-12 gap-4 items-start">
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Trạng thái</label>
+<select class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium">
+<option selected="">Tất cả</option>
+<option>Đã giao</option>
+<option>Đang thực hiện</option>
+<option>Chờ duyệt</option>
+<option>Hoàn tất</option>
+</select>
+</div>
+<!-- Ô Từ ngày bị lỗi (25/11/2026) -->
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-rose-700 uppercase tracking-wider mb-1.5">Từ ngày</label>
+<input class="w-full h-10 px-3 text-sm bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-900 font-semibold focus:outline-none" type="text" value="25/11/2026">
+<p class="text-[12px] text-rose-600 mt-1 font-medium flex items-center gap-1">
+<svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Ngày bắt đầu không được sau ngày kết thúc
+                </p>
+</div>
+<!-- Ô Đến ngày (10/11/2026) -->
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-rose-700 uppercase tracking-wider mb-1.5">Đến ngày</label>
+<input class="w-full h-10 px-3 text-sm bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-900 font-semibold focus:outline-none" type="text" value="10/11/2026">
+<p class="text-[12px] text-rose-600 mt-1 font-medium flex items-center gap-1">
+<svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Phải lớn hơn hoặc bằng ngày bắt đầu
+                </p>
+</div>
+<!-- Nút Xem (Tắt / Vô hiệu hóa) -->
+<div class="col-span-3 flex items-center gap-2 pt-6">
+<button class="flex-1 h-10 bg-slate-200 text-slate-400 font-semibold text-sm rounded-lg flex items-center justify-center gap-1.5 cursor-not-allowed" disabled="">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Xem
+                </button>
+<button class="h-10 px-3.5 bg-slate-100 text-slate-400 font-semibold text-sm rounded-lg border border-slate-200 cursor-not-allowed" disabled="">
+                  Xuất CSV/JSON
+                </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- FRAME 5: LỖI API KÈM NÚT "THỬ LẠI" -->
+<!-- ========================================== -->
+<div class="space-y-3">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between text-xs text-slate-300 font-medium px-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+<span class="font-bold text-white uppercase tracking-wider">Trạng thái 5: Lỗi API</span>
+<span class="text-slate-400">— Không thể lấy dữ liệu báo cáo từ máy chủ, banner cảnh báo kèm nút "Thử lại"</span>
+</div>
+<span class="px-2.5 py-0.5 bg-rose-900/60 border border-rose-700 text-rose-200 rounded">Lỗi tải dữ liệu</span>
+</div>
+<!-- WINDOW 1280px -->
+<div class="app-window bg-slate-50 border border-slate-300 rounded-lg shadow-2xl overflow-hidden flex flex-col min-h-[740px]">
+<!-- Windows Title Bar -->
+<div class="bg-white border-b border-slate-200 h-9 px-3 flex items-center justify-between select-none">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold">ML</div>
+<span class="text-xs text-slate-600 font-medium">MaintenanceLab Desktop — Quản lý Thiết bị &amp; Bảo trì</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500">Tài khoản: <strong class="text-slate-700 font-semibold">manager</strong></span>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="text-sm">─</span>
+<span class="text-xs">□</span>
+<span class="text-sm">✕</span>
+</div>
+</div>
+</div>
+<!-- Main Layout -->
+<div class="flex flex-1 min-h-[700px]">
+<!-- Left Sidebar -->
+<aside class="w-60 bg-white border-r border-slate-200 flex flex-col justify-start p-4 flex-shrink-0">
+<div class="space-y-6">
+<div class="flex items-center gap-2.5 px-2">
+<div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V19a2 2 0 002 2h12a2 2 0 002-2V7M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16M10 11h4"></path></svg></div>
+<div>
+<div class="font-bold text-slate-900 text-sm leading-tight">MaintenanceLab</div>
+<div class="text-[11px] text-slate-500">Quản lý Thiết bị</div>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 font-medium" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Hàng chờ duyệt
+                </span>
+<span class="px-2 py-0.5 text-xs font-semibold bg-slate-100 text-slate-600 rounded-full">2</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 font-medium" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Nhập/xuất dữ liệu
+              </a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600" href="#">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Báo cáo
+              </a>
+<a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 font-medium" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Cấu hình
+              </a>
+</nav>
+</div>
+</aside>
+<!-- Right Content Area -->
+<main class="flex-1 p-6 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold text-slate-900">Báo cáo</h2>
+<p class="text-sm text-slate-500 mt-0.5">Thống kê số lượng phiếu theo trạng thái và theo dõi chi tiết trong khoảng thời gian</p>
+</div>
+</div>
+<!-- Bộ lọc vẫn hiển thị giá trị -->
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+<div class="grid grid-cols-12 gap-4 items-end">
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Trạng thái</label>
+<select class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium">
+<option selected="">Tất cả</option>
+<option>Đã giao</option>
+<option>Đang thực hiện</option>
+<option>Chờ duyệt</option>
+<option>Hoàn tất</option>
+</select>
+</div>
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Từ ngày</label>
+<input class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium" type="text" value="01/11/2026">
+</div>
+<div class="col-span-3">
+<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Đến ngày</label>
+<input class="w-full h-10 px-3 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 font-medium" type="text" value="19/11/2026">
+</div>
+<div class="col-span-3 flex items-center gap-2">
+<button class="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg flex items-center justify-center gap-1.5 shadow-sm">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Xem
+                </button>
+<button class="h-10 px-3.5 bg-slate-100 text-slate-400 font-semibold text-sm rounded-lg border border-slate-200 cursor-not-allowed" disabled="">
+                  Xuất CSV/JSON
+                </button>
+</div>
+</div>
+</div>
+<!-- Duy nhất 1 Banner thông báo Lỗi API kèm nút "Thử lại" -->
+<div class="bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<h4 class="text-sm font-bold text-rose-900">Không thể tải dữ liệu báo cáo</h4>
+<p class="text-xs text-rose-700 mt-0.5">Không thể kết nối tới máy chủ API để kết xuất số liệu. Vui lòng kiểm tra lại đường truyền mạng hoặc thử lại.</p>
+</div>
+</div>
+<button class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Thử lại
+            </button>
+</div>
+</main>
+</div>
+</div>
+</div>
+
+
+
+
+</body></html>

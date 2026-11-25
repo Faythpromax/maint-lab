@@ -1,0 +1,1125 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W06 - Danh sách phiếu (5 trạng thái)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #1e293b;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-skeleton {
+      animation: pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="p-6 space-y-12">
+
+  <!-- TOP BAR OVERVIEW -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-xl flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-3">
+        <span class="px-2.5 py-1 bg-blue-600 text-white font-mono text-xs font-bold rounded">ID: W06</span>
+        <h1 class="text-xl font-bold text-white tracking-tight">W06 - Danh sách phiếu (5 trạng thái &amp; Phân quyền)</h1>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Hệ thống Bảo trì &amp; Thiết bị (MaintenanceLab) • Chuẩn Desktop Viewport 1440px • Phân quyền Server-side Quản lý vs Kỹ thuật viên (SC02, SC03, screens.md)</p>
+    </div>
+    <div class="flex items-center gap-2 text-xs">
+      <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 font-medium">1. Quản lý (All 6 phiếu)</span>
+      <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 font-medium">2. KTV tech-a (Chỉ phiếu mình)</span>
+      <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 font-medium">3. Đang tải (Loading)</span>
+      <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 font-medium">4. Không khớp bộ lọc</span>
+      <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 font-medium">5. Lỗi API (Thử lại)</span>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       FRAME 1: GÓC NHÌN QUẢN LÝ (DEFAULT VIEW - TẤT CẢ 6 PHIẾU)
+       ========================================== -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+    <!-- Frame Subheader -->
+    <div class="bg-slate-900/90 px-6 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping"></span>
+        <span class="font-bold text-blue-400 tracking-wide uppercase">Frame 1: Góc nhìn Quản lý (Manager View)</span>
+        <span class="text-slate-400">• Thấy tất cả 6 phiếu bảo trì • Đầy đủ bộ lọc: Trạng thái, Người nhận, Quá hạn • Menu đầy đủ (W02, W03, W06)</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span class="font-mono text-emerald-400 font-medium">● 6 bản ghi</span>
+        <span>Desktop Viewport 1440px</span>
+      </div>
+    </div>
+
+    <!-- Screen Canvas Container -->
+    <div class="w-[1440px] bg-slate-100 flex min-h-[780px]">
+      
+      <!-- Persistent Left Sidebar (240px) -->
+      <aside class="w-[240px] min-w-[240px] bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between flex-shrink-0">
+        <div>
+          <!-- Brand Logo -->
+          <div class="p-5 border-b border-slate-800/80 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="font-bold text-white text-base tracking-tight leading-tight">MaintenanceLab</div>
+              <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+            </div>
+          </div>
+
+          <!-- Navigation Links -->
+          <div class="p-3 space-y-1">
+            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Thực đơn Quản lý</div>
+            
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors text-sm font-medium">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              <span>Tổng quan (W02)</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors text-sm font-medium">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+              <span>Thiết bị (W03)</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-sm transition-colors text-sm">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+              <span>Phiếu kiểm tra (W06)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- User Profile footer -->
+        <div class="p-4 border-t border-slate-800 bg-slate-900/60 flex items-center justify-between">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="w-8 h-8 rounded-full bg-blue-900 text-blue-300 font-bold flex items-center justify-center text-xs border border-blue-700/50">
+              QL
+            </div>
+            <div class="truncate">
+              <div class="text-xs font-semibold text-white truncate">manager@demo.vn</div>
+              <div class="text-[11px] text-blue-400 font-medium">Vai trò: Quản lý</div>
+            </div>
+          </div>
+          <button title="Đăng xuất" class="text-slate-400 hover:text-white p-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content (1200px) -->
+      <main class="w-[1200px] flex-1 p-8 space-y-6">
+        
+        <!-- Breadcrumbs & Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs font-medium text-slate-500 mb-1 flex items-center gap-2">
+              <span>Hệ thống</span>
+              <span>/</span>
+              <span class="text-slate-700 font-semibold">Phiếu kiểm tra</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Danh sách phiếu kiểm tra</h2>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                Tất cả 6 phiếu
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Theo dõi tiến độ, phân công và kiểm tra trạng thái phiếu bảo trì thiết bị định kỳ</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="#" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm shadow-sm transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+              <span>Tạo &amp; Giao phiếu (W05)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 flex-wrap flex-1">
+            
+            <!-- Trạng thái Filter -->
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-600">
+              <label for="filter-status-1" class="whitespace-nowrap font-semibold text-slate-700">Trạng thái:</label>
+              <select id="filter-status-1" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg px-3 py-2 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                <option value="all" selected="">Tất cả trạng thái (6)</option>
+                <option value="assigned">Đã giao (assigned) - 2</option>
+                <option value="in_progress">Đang thực hiện (in_progress) - 2</option>
+                <option value="submitted">Chờ duyệt (submitted) - 1</option>
+                <option value="approved">Hoàn tất (approved) - 1</option>
+              </select>
+            </div>
+
+            <!-- Người nhận Filter (Chỉ có ở Quản lý) -->
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-600">
+              <label for="filter-tech-1" class="whitespace-nowrap font-semibold text-slate-700">Người nhận:</label>
+              <select id="filter-tech-1" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg px-3 py-2 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                <option value="all" selected="">Tất cả kỹ thuật viên (2)</option>
+                <option value="tech-a">tech-a (Nguyễn Văn A) - 4 phiếu</option>
+                <option value="tech-b">tech-b (Trần Văn B) - 2 phiếu</option>
+              </select>
+            </div>
+
+            <!-- Toggle Quá hạn Filter -->
+            <div class="flex items-center gap-2 text-xs">
+              <label class="inline-flex items-center cursor-pointer select-none bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                <span class="ml-2 font-semibold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  Chỉ xem phiếu Quá hạn
+                </span>
+              </label>
+            </div>
+
+            <!-- Active filter tags demo -->
+            <div class="text-xs text-slate-400 border-l border-slate-200 pl-3 hidden lg:block">
+              Hiển thị: <span class="font-medium text-slate-600">6/6 phiếu</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+              <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Làm mới</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Data: 6 Phiếu chuẩn theo yêu cầu -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                <th class="py-3.5 px-5 w-[140px]">Mã phiếu</th>
+                <th class="py-3.5 px-5 w-[280px]">Thiết bị</th>
+                <th class="py-3.5 px-5 w-[220px]">Người nhận</th>
+                <th class="py-3.5 px-5 w-[190px]">Trạng thái</th>
+                <th class="py-3.5 px-5 w-[220px]">Hạn hoàn thành (due_at)</th>
+                <th class="py-3.5 px-5 text-right w-[150px]">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              
+              <!-- P001: TB-001 | tech-a | Đã giao -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P001</span>
+                  <div class="text-[11px] text-slate-400">Tạo: Hôm nay 08:30</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-001 • Máy bơm nước chính</div>
+                  <div class="text-xs text-slate-500">Khu A - Tầng hầm kỹ thuật</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center">A</span>
+                    <div>
+                      <div class="font-medium text-slate-800 text-xs">tech-a</div>
+                      <div class="text-[11px] text-slate-400">Nguyễn Văn A (Đội Cơ điện)</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                    Đã giao (assigned)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">15/03/2025 • 17:00</div>
+                  <div class="text-[11px] text-blue-600 font-semibold">Còn 2 ngày</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P002: TB-002 | tech-a | Đang thực hiện -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P002</span>
+                  <div class="text-[11px] text-slate-400">Đã quét QR máy</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-002 • Máy nén khí trung tâm</div>
+                  <div class="text-xs text-slate-500">Khu B - Phòng phụ trợ 02</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center">A</span>
+                    <div>
+                      <div class="font-medium text-slate-800 text-xs">tech-a</div>
+                      <div class="text-[11px] text-slate-400">Nguyễn Văn A (Đội Cơ điện)</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Đang thực hiện (in_progress)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">14/03/2025 • 12:00</div>
+                  <div class="text-[11px] text-amber-600 font-semibold">Hôm nay • Còn 3 giờ</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P003: TB-003 | tech-b | Đã giao -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P003</span>
+                  <div class="text-[11px] text-slate-400">Tạo: Hôm qua 16:45</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-003 • Tủ điện phân phối B2</div>
+                  <div class="text-xs text-slate-500">Khu C - Trạm biến áp ngoài trời</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px] flex items-center justify-center">B</span>
+                    <div>
+                      <div class="font-medium text-slate-800 text-xs">tech-b</div>
+                      <div class="text-[11px] text-slate-400">Trần Văn B (Tự động hóa)</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                    Đã giao (assigned)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">16/03/2025 • 09:00</div>
+                  <div class="text-[11px] text-slate-500">Còn 3 ngày</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P004: TB-004 | tech-a | Chờ duyệt -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group bg-purple-50/20">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P004</span>
+                  <div class="text-[11px] text-purple-600 font-semibold">Đã tải ảnh &amp; nộp</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-004 • Quạt thông gió xưởng 1</div>
+                  <div class="text-xs text-slate-500">Khu D - Mái xưởng sản xuất 1</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center">A</span>
+                    <div>
+                      <div class="font-medium text-slate-800 text-xs">tech-a</div>
+                      <div class="text-[11px] text-slate-400">Nguyễn Văn A (Đội Cơ điện)</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
+                    Chờ duyệt (submitted)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">13/03/2025 • 17:00</div>
+                  <div class="text-[11px] text-emerald-600 font-semibold">Đã nộp trước hạn 1 giờ</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P005: TB-005 | tech-b | Hoàn tất -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P005</span>
+                  <div class="text-[11px] text-emerald-600 font-semibold">Đã duyệt bởi QL</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-005 • Băng tải phân loại hàng</div>
+                  <div class="text-xs text-slate-500">Khu E - Kho logistics thành phẩm</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px] flex items-center justify-center">B</span>
+                    <div>
+                      <div class="font-medium text-slate-800 text-xs">tech-b</div>
+                      <div class="text-[11px] text-slate-400">Trần Văn B (Tự động hóa)</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Hoàn tất (approved)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">10/03/2025 • 17:00</div>
+                  <div class="text-[11px] text-slate-400">Duyệt lúc 10/03 16:40</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P006: TB-006 | tech-a | Đang thực hiện -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P006</span>
+                  <div class="text-[11px] text-slate-400">Đang kiểm tra áp suất</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-006 • Máy phát điện dự phòng 250kVA</div>
+                  <div class="text-xs text-slate-500">Khu F - Nhà đặt máy phát độc lập</div>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center">A</span>
+                    <div>
+                      <div class="font-medium text-slate-800 text-xs">tech-a</div>
+                      <div class="text-[11px] text-slate-400">Nguyễn Văn A (Đội Cơ điện)</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Đang thực hiện (in_progress)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">14/03/2025 • 18:00</div>
+                  <div class="text-[11px] text-amber-600 font-semibold">Hôm nay • Còn 9 giờ</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <!-- Table Footer -->
+          <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>
+              Hiển thị <span class="font-semibold text-slate-700">6</span> trên <span class="font-semibold text-slate-700">6</span> phiếu kiểm tra
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-slate-400">Bấm vào bất kỳ dòng nào để mở màn hình Chi tiết phiếu &amp; Lịch sử (W07)</span>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       FRAME 2: GÓC NHÌN KỸ THUẬT VIÊN TECH-A
+       (MENU CHỈ CÒN "PHIẾU KIỂM TRA", CHỈ THẤY PHIẾU CỦA MÌNH, KHÔNG CÓ Ô LỌC NGƯỜI NHẬN)
+       ========================================== -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+    <!-- Frame Subheader -->
+    <div class="bg-slate-900/90 px-6 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="font-bold text-emerald-400 tracking-wide uppercase">Frame 2: Góc nhìn Kỹ thuật viên (Technician: tech-a)</span>
+        <span class="text-slate-400">• Server-side Filter: Chỉ thấy 4 phiếu của tech-a (P001, P002, P004, P006) • Menu rút gọn chỉ còn "Phiếu kiểm tra" • Không có ô lọc Người nhận</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span class="font-mono text-emerald-400 font-medium">● 4 bản ghi thuộc tech-a</span>
+        <span>Desktop Viewport 1440px</span>
+      </div>
+    </div>
+
+    <!-- Screen Canvas Container -->
+    <div class="w-[1440px] bg-slate-100 flex min-h-[720px]">
+      
+      <!-- Persistent Left Sidebar for Technician (240px - Restricted Menu) -->
+      <aside class="w-[240px] min-w-[240px] bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between flex-shrink-0">
+        <div>
+          <!-- Brand Logo -->
+          <div class="p-5 border-b border-slate-800/80 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="font-bold text-white text-base tracking-tight leading-tight">MaintenanceLab</div>
+              <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+            </div>
+          </div>
+
+          <!-- Navigation Links: DUY NHẤT "Phiếu kiểm tra" (screens.md) -->
+          <div class="p-3 space-y-1">
+            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Thực đơn Kỹ thuật</div>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-sm transition-colors text-sm">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+              <span>Phiếu kiểm tra</span>
+            </a>
+
+            <!-- Ghi chú phân quyền -->
+            <div class="mt-6 mx-2 p-3 bg-slate-800/60 rounded-lg border border-slate-800 text-[11px] text-slate-400">
+              <span class="text-amber-400 font-semibold block mb-1">Quyền hạn Kỹ thuật viên:</span>
+              KTV chỉ truy cập màn phiếu được giao. Không xem Tổng quan (W02) hoặc Quản lý thiết bị (W03).
+            </div>
+          </div>
+        </div>
+
+        <!-- User Profile footer: tech-a -->
+        <div class="p-4 border-t border-slate-800 bg-slate-900/60 flex items-center justify-between">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="w-8 h-8 rounded-full bg-emerald-900 text-emerald-300 font-bold flex items-center justify-center text-xs border border-emerald-700/50">
+              TA
+            </div>
+            <div class="truncate">
+              <div class="text-xs font-semibold text-white truncate">tech-a@demo.vn</div>
+              <div class="text-[11px] text-emerald-400 font-medium">Vai trò: Kỹ thuật viên</div>
+            </div>
+          </div>
+          <button title="Đăng xuất" class="text-slate-400 hover:text-white p-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content (1200px) -->
+      <main class="w-[1200px] flex-1 p-8 space-y-6">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs font-medium text-slate-500 mb-1 flex items-center gap-2">
+              <span>Kỹ thuật</span>
+              <span>/</span>
+              <span class="text-slate-700 font-semibold">Phiếu kiểm tra của tôi</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Phiếu kiểm tra được giao</h2>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                4 phiếu của tech-a
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Danh sách các công việc kiểm tra thiết bị định kỳ được giao cho kỹ thuật viên <strong>Nguyễn Văn A (tech-a)</strong></p>
+          </div>
+          <div class="text-right">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 text-slate-700 text-xs font-medium rounded-lg">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Đồng bộ dữ liệu thời gian thực
+            </span>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar (KHÔNG CÓ Ô LỌC NGƯỜI NHẬN - screens.md: "kỹ thuật viên không có lọc người nhận vì chỉ thấy phiếu mình") -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4 flex-wrap">
+            
+            <!-- Trạng thái Filter -->
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-600">
+              <label for="filter-status-2" class="whitespace-nowrap font-semibold text-slate-700">Trạng thái phiếu:</label>
+              <select id="filter-status-2" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg px-3 py-2 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                <option value="all" selected="">Tất cả trạng thái (4)</option>
+                <option value="assigned">Đã giao (assigned) - 1</option>
+                <option value="in_progress">Đang thực hiện (in_progress) - 2</option>
+                <option value="submitted">Chờ duyệt (submitted) - 1</option>
+              </select>
+            </div>
+
+            <!-- Toggle Quá hạn Filter -->
+            <div class="flex items-center gap-2 text-xs">
+              <label class="inline-flex items-center cursor-pointer select-none bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                <span class="ml-2 font-semibold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  Chỉ xem phiếu Quá hạn
+                </span>
+              </label>
+            </div>
+
+            <div class="text-xs text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>Bộ lọc <strong>Người nhận</strong> được ẩn tự động do hệ thống đã khóa dữ liệu theo tài khoản KTV.</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+              <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Làm mới</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Data: Chỉ 4 phiếu của tech-a (P001, P002, P004, P006) -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                <th class="py-3.5 px-5 w-[140px]">Mã phiếu</th>
+                <th class="py-3.5 px-5 w-[340px]">Thiết bị</th>
+                <th class="py-3.5 px-5 w-[200px]">Người nhận</th>
+                <th class="py-3.5 px-5 w-[200px]">Trạng thái</th>
+                <th class="py-3.5 px-5 w-[220px]">Hạn hoàn thành</th>
+                <th class="py-3.5 px-5 text-right w-[150px]">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              
+              <!-- P001 -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P001</span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-001 • Máy bơm nước chính</div>
+                  <div class="text-xs text-slate-500">Khu A - Tầng hầm kỹ thuật</div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-100 px-2 py-1 rounded">
+                    tech-a (Nguyễn Văn A)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                    Đã giao (assigned)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">15/03/2025 • 17:00</div>
+                  <div class="text-[11px] text-blue-600 font-semibold">Còn 2 ngày</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P002 -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P002</span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-002 • Máy nén khí trung tâm</div>
+                  <div class="text-xs text-slate-500">Khu B - Phòng phụ trợ 02</div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-100 px-2 py-1 rounded">
+                    tech-a (Nguyễn Văn A)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Đang thực hiện (in_progress)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">14/03/2025 • 12:00</div>
+                  <div class="text-[11px] text-amber-600 font-semibold">Hôm nay • Còn 3 giờ</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P004 -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group bg-purple-50/20">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P004</span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-004 • Quạt thông gió xưởng 1</div>
+                  <div class="text-xs text-slate-500">Khu D - Mái xưởng sản xuất 1</div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-100 px-2 py-1 rounded">
+                    tech-a (Nguyễn Văn A)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
+                    Chờ duyệt (submitted)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">13/03/2025 • 17:00</div>
+                  <div class="text-[11px] text-emerald-600 font-semibold">Đã gửi ảnh nộp phiếu</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+              <!-- P006 -->
+              <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                <td class="py-4 px-5">
+                  <span class="font-mono font-bold text-blue-600 text-sm group-hover:underline">P006</span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="font-semibold text-slate-900">TB-006 • Máy phát điện dự phòng 250kVA</div>
+                  <div class="text-xs text-slate-500">Khu F - Nhà đặt máy phát độc lập</div>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-100 px-2 py-1 rounded">
+                    tech-a (Nguyễn Văn A)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Đang thực hiện (in_progress)
+                  </span>
+                </td>
+                <td class="py-4 px-5">
+                  <div class="text-slate-800 font-medium text-xs">14/03/2025 • 18:00</div>
+                  <div class="text-[11px] text-amber-600 font-semibold">Hôm nay • Còn 9 giờ</div>
+                </td>
+                <td class="py-4 px-5 text-right">
+                  <span class="text-xs font-semibold text-blue-600 group-hover:text-blue-800 inline-flex items-center gap-1">
+                    Xem chi tiết (W07)
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <div>
+              Hiển thị <span class="font-semibold text-slate-700">4</span> phiếu của kỹ thuật viên <strong>tech-a</strong>
+            </div>
+            <div class="text-slate-400">
+              * Dữ liệu do Server lọc độc lập; tech-b và các phiếu khác không được trả về trình duyệt.
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       FRAME 3: ĐANG TẢI (LOADING / SKELETON STATE)
+       ========================================== -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+    <!-- Frame Subheader -->
+    <div class="bg-slate-900/90 px-6 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-spin"></span>
+        <span class="font-bold text-amber-400 tracking-wide uppercase">Frame 3: Đang tải danh sách phiếu (Loading / Skeleton State)</span>
+        <span class="text-slate-400">• Skeleton khớp trọn vẹn 6 cột bảng danh sách phiếu • Khóa tương tác trong lúc đợi API</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span class="font-mono text-amber-400 font-medium">Đang nhận dữ liệu...</span>
+        <span>Desktop Viewport 1440px</span>
+      </div>
+    </div>
+
+    <!-- Screen Canvas Container -->
+    <div class="w-[1440px] bg-slate-100 flex min-h-[640px]">
+      
+      <!-- Persistent Left Sidebar -->
+      <aside class="w-[240px] min-w-[240px] bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between flex-shrink-0">
+        <div>
+          <div class="p-5 border-b border-slate-800/80 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+            </div>
+            <div>
+              <div class="font-bold text-white text-base">MaintenanceLab</div>
+              <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+            </div>
+          </div>
+          <div class="p-3 space-y-1">
+            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase">Thực đơn Quản lý</div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium"><span>Tổng quan (W02)</span></div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium"><span>Thiết bị (W03)</span></div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium text-sm"><span>Phiếu kiểm tra (W06)</span></div>
+          </div>
+        </div>
+        <div class="p-4 border-t border-slate-800 bg-slate-900/60 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-900 text-blue-300 font-bold flex items-center justify-center text-xs">QL</div>
+          <div>
+            <div class="text-xs font-semibold text-white">manager@demo.vn</div>
+            <div class="text-[11px] text-blue-400">Vai trò: Quản lý</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content (1200px) -->
+      <main class="w-[1200px] flex-1 p-8 space-y-6">
+        
+        <!-- Header Skeleton -->
+        <div class="flex items-center justify-between">
+          <div class="space-y-2">
+            <div class="h-3 w-32 bg-slate-200 rounded animate-skeleton"></div>
+            <div class="h-7 w-64 bg-slate-200 rounded-lg animate-skeleton"></div>
+            <div class="h-3 w-96 bg-slate-200 rounded animate-skeleton"></div>
+          </div>
+          <div class="h-10 w-44 bg-slate-200 rounded-lg animate-skeleton"></div>
+        </div>
+
+        <!-- Filter Bar Skeleton -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div class="h-9 w-44 bg-slate-100 rounded-lg animate-skeleton"></div>
+            <div class="h-9 w-48 bg-slate-100 rounded-lg animate-skeleton"></div>
+            <div class="h-9 w-36 bg-slate-100 rounded-lg animate-skeleton"></div>
+          </div>
+          <div class="h-8 w-24 bg-slate-100 rounded-lg animate-skeleton"></div>
+        </div>
+
+        <!-- Table Skeleton: Khớp 6 cột chuẩn -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-slate-50 border-b border-slate-200 py-3.5 px-5 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-600 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Đang tải danh sách phiếu từ máy chủ...
+            </span>
+            <span class="text-xs text-slate-400">Vui lòng chờ trong giây lát</span>
+          </div>
+
+          <div class="divide-y divide-slate-100 p-2">
+            <!-- Row Skeleton 1 -->
+            <div class="py-4 px-4 flex items-center justify-between">
+              <div class="w-[140px] space-y-1.5"><div class="h-4 w-16 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-20 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[280px] space-y-1.5"><div class="h-4 w-48 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-36 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[220px] flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-200 animate-skeleton"></div><div class="h-4 w-28 bg-slate-200 rounded animate-skeleton"></div></div>
+              <div class="w-[190px]"><div class="h-6 w-32 bg-slate-200 rounded-full animate-skeleton"></div></div>
+              <div class="w-[220px] space-y-1"><div class="h-4 w-32 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-20 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[150px] text-right"><div class="h-4 w-20 ml-auto bg-slate-200 rounded animate-skeleton"></div></div>
+            </div>
+            <!-- Row Skeleton 2 -->
+            <div class="py-4 px-4 flex items-center justify-between">
+              <div class="w-[140px] space-y-1.5"><div class="h-4 w-16 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-20 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[280px] space-y-1.5"><div class="h-4 w-44 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-40 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[220px] flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-200 animate-skeleton"></div><div class="h-4 w-24 bg-slate-200 rounded animate-skeleton"></div></div>
+              <div class="w-[190px]"><div class="h-6 w-36 bg-slate-200 rounded-full animate-skeleton"></div></div>
+              <div class="w-[220px] space-y-1"><div class="h-4 w-32 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-20 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[150px] text-right"><div class="h-4 w-20 ml-auto bg-slate-200 rounded animate-skeleton"></div></div>
+            </div>
+            <!-- Row Skeleton 3 -->
+            <div class="py-4 px-4 flex items-center justify-between">
+              <div class="w-[140px] space-y-1.5"><div class="h-4 w-16 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-20 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[280px] space-y-1.5"><div class="h-4 w-52 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-32 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[220px] flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-200 animate-skeleton"></div><div class="h-4 w-28 bg-slate-200 rounded animate-skeleton"></div></div>
+              <div class="w-[190px]"><div class="h-6 w-32 bg-slate-200 rounded-full animate-skeleton"></div></div>
+              <div class="w-[220px] space-y-1"><div class="h-4 w-32 bg-slate-200 rounded animate-skeleton"></div><div class="h-3 w-20 bg-slate-100 rounded animate-skeleton"></div></div>
+              <div class="w-[150px] text-right"><div class="h-4 w-20 ml-auto bg-slate-200 rounded animate-skeleton"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       FRAME 4: KHÔNG CÓ PHIẾU KHỚP BỘ LỌC (EMPTY RESULT / GỢI Ý BỎ LỌC)
+       ========================================== -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+    <!-- Frame Subheader -->
+    <div class="bg-slate-900/90 px-6 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+        <span class="font-bold text-sky-400 tracking-wide uppercase">Frame 4: Không có phiếu khớp bộ lọc (Empty Filter State)</span>
+        <span class="text-slate-400">• screens.md: "Không có phiếu khớp bộ lọc thì báo rõ và gợi ý bỏ lọc" • Giữ nguyên trạng thái bộ lọc đang chọn</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span class="font-mono text-amber-400 font-medium">0 bản ghi khớp</span>
+        <span>Desktop Viewport 1440px</span>
+      </div>
+    </div>
+
+    <!-- Screen Canvas Container -->
+    <div class="w-[1440px] bg-slate-100 flex min-h-[660px]">
+      
+      <!-- Persistent Left Sidebar -->
+      <aside class="w-[240px] min-w-[240px] bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between flex-shrink-0">
+        <div>
+          <div class="p-5 border-b border-slate-800/80 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+            </div>
+            <div>
+              <div class="font-bold text-white text-base">MaintenanceLab</div>
+              <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+            </div>
+          </div>
+          <div class="p-3 space-y-1">
+            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase">Thực đơn Quản lý</div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium"><span>Tổng quan (W02)</span></div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium"><span>Thiết bị (W03)</span></div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium text-sm"><span>Phiếu kiểm tra (W06)</span></div>
+          </div>
+        </div>
+        <div class="p-4 border-t border-slate-800 bg-slate-900/60 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-900 text-blue-300 font-bold flex items-center justify-center text-xs">QL</div>
+          <div>
+            <div class="text-xs font-semibold text-white">manager@demo.vn</div>
+            <div class="text-[11px] text-blue-400">Vai trò: Quản lý</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content (1200px) -->
+      <main class="w-[1200px] flex-1 p-8 space-y-6">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs font-medium text-slate-500 mb-1 flex items-center gap-2">
+              <span>Hệ thống</span>
+              <span>/</span>
+              <span class="text-slate-700 font-semibold">Phiếu kiểm tra</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Danh sách phiếu kiểm tra</h2>
+          </div>
+          <a href="#" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm shadow-sm transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            <span>Tạo &amp; Giao phiếu (W05)</span>
+          </a>
+        </div>
+
+        <!-- Filter Bar with Unmatched condition -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-600">
+              <label class="whitespace-nowrap font-semibold text-slate-700">Trạng thái:</label>
+              <select class="bg-blue-50 border border-blue-300 text-blue-900 text-xs rounded-lg px-3 py-2 font-semibold">
+                <option selected="">Hoàn tất (approved)</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-600">
+              <label class="whitespace-nowrap font-semibold text-slate-700">Người nhận:</label>
+              <select class="bg-blue-50 border border-blue-300 text-blue-900 text-xs rounded-lg px-3 py-2 font-semibold">
+                <option selected="">tech-a (Nguyễn Văn A)</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs">
+              <label class="inline-flex items-center select-none bg-rose-50 border border-rose-300 px-3 py-1.5 rounded-lg">
+                <input type="checkbox" checked="" class="w-4 h-4 text-blue-600 rounded">
+                <span class="ml-2 font-bold text-rose-700">Quá hạn (Đang chọn)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nút bỏ lọc nhanh -->
+          <button class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <span>Bỏ bộ lọc</span>
+          </button>
+        </div>
+
+        <!-- Empty Result Card with Clear suggestion -->
+        <div class="bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
+          <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto text-slate-400 mb-4 border border-slate-200">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-800 mb-2">Không có phiếu nào khớp với bộ lọc</h3>
+          <p class="text-xs text-slate-500 max-w-md mx-auto mb-6">
+            Không tìm thấy phiếu nào có trạng thái <strong class="text-slate-700">Hoàn tất (approved)</strong> giao cho <strong class="text-slate-700">tech-a</strong> mà đang ở tình trạng <strong class="text-slate-700">Quá hạn</strong>.
+          </p>
+          <div class="flex items-center justify-center gap-3">
+            <button class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Xóa bộ lọc &amp; Xem tất cả phiếu</span>
+            </button>
+            <button class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors">
+              Chỉnh sửa điều kiện lọc
+            </button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       FRAME 5: LỖI API KÈM NÚT "THỬ LẠI" (API ERROR / NETWORK TIMEOUT)
+       ========================================== -->
+  <div class="w-[1440px] max-w-[1440px] min-w-[1440px] mx-auto bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+    <!-- Frame Subheader -->
+    <div class="bg-slate-900/90 px-6 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+        <span class="font-bold text-rose-400 tracking-wide uppercase">Frame 5: Lỗi kết nối API (Network / API Error)</span>
+        <span class="text-slate-400">• screens.md: "Báo lỗi kèm nút thử lại; hết phiên thì về W01" • Giữ nguyên giao diện không bị vỡ bố cục</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-400">
+        <span class="font-mono text-rose-400 font-semibold">HTTP 500 / ERR_TICKET_LIST_FAILED</span>
+        <span>Desktop Viewport 1440px</span>
+      </div>
+    </div>
+
+    <!-- Screen Canvas Container -->
+    <div class="w-[1440px] bg-slate-100 flex min-h-[680px]">
+      
+      <!-- Persistent Left Sidebar -->
+      <aside class="w-[240px] min-w-[240px] bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between flex-shrink-0">
+        <div>
+          <div class="p-5 border-b border-slate-800/80 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+            </div>
+            <div>
+              <div class="font-bold text-white text-base">MaintenanceLab</div>
+              <div class="text-[11px] text-slate-400">Bảo trì &amp; Thiết bị</div>
+            </div>
+          </div>
+          <div class="p-3 space-y-1">
+            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase">Thực đơn Quản lý</div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium"><span>Tổng quan (W02)</span></div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium"><span>Thiết bị (W03)</span></div>
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-medium text-sm"><span>Phiếu kiểm tra (W06)</span></div>
+          </div>
+        </div>
+        <div class="p-4 border-t border-slate-800 bg-slate-900/60 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-900 text-blue-300 font-bold flex items-center justify-center text-xs">QL</div>
+          <div>
+            <div class="text-xs font-semibold text-white">manager@demo.vn</div>
+            <div class="text-[11px] text-blue-400">Vai trò: Quản lý</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content (1200px) -->
+      <main class="w-[1200px] flex-1 p-8 space-y-6">
+        
+        <!-- Error Banner Top -->
+        <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center justify-between text-rose-900">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <div>
+              <div class="font-bold text-sm">Không thể kết nối đến máy chủ lấy danh sách phiếu</div>
+              <div class="text-xs text-rose-700">Hệ thống gặp sự cố đường truyền hoặc dịch vụ API bảo trì tạm thời không phản hồi. Mã lỗi: <code>HTTP 500 (API_GATEWAY_TIMEOUT)</code></div>
+            </div>
+          </div>
+          <button class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span>Thử lại</span>
+          </button>
+        </div>
+
+        <!-- Header (Disabled state) -->
+        <div class="flex items-center justify-between opacity-60">
+          <div>
+            <div class="text-xs font-medium text-slate-500 mb-1">Hệ thống / Phiếu kiểm tra</div>
+            <h2 class="text-2xl font-bold text-slate-900">Danh sách phiếu kiểm tra</h2>
+          </div>
+          <button disabled="" class="px-4 py-2.5 bg-slate-300 text-slate-500 rounded-lg font-semibold text-sm cursor-not-allowed">
+            Tạo &amp; Giao phiếu (W05)
+          </button>
+        </div>
+
+        <!-- Error Card Central -->
+        <div class="bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
+          <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-rose-100">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-800 mb-2">Tải dữ liệu thất bại</h3>
+          <p class="text-xs text-slate-500 max-w-md mx-auto mb-6">
+            Dữ liệu danh sách phiếu chưa thể tải về. Hãy kiểm tra kết nối mạng của bạn hoặc bấm nút bên dưới để thử lại truy vấn.
+          </p>
+          <div class="flex items-center justify-center gap-3">
+            <button class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Thử lại ngay</span>
+            </button>
+            <a href="#" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors">
+              Đăng nhập lại (W01)
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M03 - Quét QR thiết bị (4 trạng thái)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0b1120;
+      color: #0f172a;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .phone-mockup {
+      width: 390px;
+      height: 844px;
+      min-width: 390px;
+      min-height: 844px;
+      background: #ffffff;
+      border-radius: 44px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Dynamic Notch / Island */
+    .phone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #0f172a;
+      border-radius: 20px;
+      z-index: 50;
+    }
+    /* Camera scanner styling */
+    .scanner-viewfinder {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    /* Corner brackets for scanner */
+    .scanner-corner {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-color: #3b82f6;
+    }
+    .corner-tl { top: 0; left: 0; border-top-width: 4px; border-left-width: 4px; border-top-left-radius: 16px; }
+    .corner-tr { top: 0; right: 0; border-top-width: 4px; border-right-width: 4px; border-top-right-radius: 16px; }
+    .corner-bl { bottom: 0; left: 0; border-bottom-width: 4px; border-left-width: 4px; border-bottom-left-radius: 16px; }
+    .corner-br { bottom: 0; right: 0; border-bottom-width: 4px; border-right-width: 4px; border-bottom-right-radius: 16px; }
+
+    /* Red corner brackets for mismatch */
+    .corner-err {
+      border-color: #ef4444 !important;
+    }
+    /* Amber corner brackets for unreadable */
+    .corner-warn {
+      border-color: #f59e0b !important;
+    }
+
+    /* Laser scan line animation simulation */
+    @keyframes scan {
+      0% { top: 8%; opacity: 0.8; }
+      50% { top: 90%; opacity: 1; }
+      100% { top: 8%; opacity: 0.8; }
+    }
+    .scan-beam {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #60a5fa, #3b82f6, #60a5fa, transparent);
+      box-shadow: 0 0 12px 2px rgba(59, 130, 246, 0.7);
+      animation: scan 2.4s ease-in-out infinite;
+      border-radius: 2px;
+    }
+    .scan-beam-err {
+      background: linear-gradient(90deg, transparent, #f87171, #ef4444, #f87171, transparent);
+      box-shadow: 0 0 12px 2px rgba(239, 68, 68, 0.7);
+      animation: scan 2.4s ease-in-out infinite;
+    }
+    .scan-beam-warn {
+      background: linear-gradient(90deg, transparent, #fbbf24, #f59e0b, #fbbf24, transparent);
+      box-shadow: 0 0 12px 2px rgba(245, 158, 11, 0.7);
+      animation: scan 2.4s ease-in-out infinite;
+    }
+
+    /* Custom home bar */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 3px;
+      margin: 8px auto 6px auto;
+    }
+    .home-indicator-light {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="p-8 min-h-screen">
+
+  <!-- Main Showcase Container -->
+  <div class="max-w-[1720px] mx-auto space-y-8">
+    
+    <!-- Top Meta Header -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="px-2.5 py-1 bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded text-xs font-semibold tracking-wide">APP ANDROID • M03</span>
+          <span class="px-2.5 py-1 bg-slate-800 text-slate-300 rounded text-xs font-mono">390 × 844 px (4 trạng thái)</span>
+          <span class="px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded text-xs font-medium">Kỹ thuật viên: tech-a (Nguyễn Văn A)</span>
+        </div>
+        <h1 class="text-2xl lg:text-3xl font-bold tracking-tight text-white">M03: Quét QR thiết bị (Xác nhận đúng máy)</h1>
+        <p class="text-sm text-slate-400 mt-1">Giao diện nền sáng chuẩn Web MaintenanceLab &amp; M05/M06. Chỉ vùng camera là nền tối. Quét mã QR dán trên máy thật, tự động đọc mã không cần nút chụp. Kiểm tra chính xác mã thiết bị so với phiếu, xử lý lệch máy và quyền máy ảnh.</p>
+      </div>
+
+      <!-- Quick badge legend -->
+      <div class="flex flex-wrap items-center gap-2 text-xs bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
+        <span class="text-slate-400 font-medium mr-1">Quy ước Badge:</span>
+        <span class="px-2 py-0.5 bg-slate-800 text-slate-300 rounded border border-slate-700">Đã giao</span>
+        <span class="px-2 py-0.5 bg-blue-900/60 text-blue-300 rounded border border-blue-700">Đang thực hiện</span>
+        <span class="px-2 py-0.5 bg-amber-950 text-amber-300 rounded border border-amber-800">Chờ duyệt</span>
+        <span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 rounded border border-emerald-800">Hoàn tất</span>
+      </div>
+    </div>
+
+    <!-- Frames Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 justify-items-center">
+
+      <!-- ========================================================
+           FRAME 1: Camera sẵn sàng, đang chờ quét
+      ======================================================== -->
+      <div class="flex flex-col items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950 border border-emerald-800/80 text-emerald-300 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          FRAME 1: CAMERA SẴN SÀNG, ĐANG CHỜ QUÉT
+        </div>
+
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+
+          <!-- Status Bar (Light theme) -->
+          <div class="pt-3 px-7 pb-1 flex justify-between items-center text-xs font-medium text-slate-800 select-none z-40 bg-white">
+            <span class="font-semibold text-[13px]">09:14</span>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7 0 1.57-.52 3.03-1.42 4.22L12 19.64l-5.58-3.42C5.52 15.03 5 13.57 5 12c0-3.87 3.13-7 7-7z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-semibold">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar (Light theme) -->
+          <header class="bg-white border-b border-slate-100 px-4 py-2.5 flex items-center justify-between z-30 shadow-sm">
+            <button class="w-12 h-12 -ml-2 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 active:bg-slate-200 transition" aria-label="Quay lại">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <div class="text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <span class="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">P001 - TB-001</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Máy bơm nước chính (Khu A)</p>
+            </div>
+            <!-- Flashlight or placeholder balance element -->
+            <div class="flex items-center justify-end w-auto">
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[11px] font-semibold rounded-full whitespace-nowrap inline-block">Đã giao</span>
+            </div>
+          </header>
+
+          <!-- Camera Scanner View (Dark area - only camera zone is dark) -->
+          <main class="flex-1 bg-slate-950 flex flex-col items-center justify-between p-5 relative overflow-hidden">
+            <!-- Simulated Camera Feed Background Texture -->
+            <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+            <!-- Top Tip Instruction -->
+            <div class="z-10 mt-2 px-4 py-2 bg-slate-900/90 backdrop-blur border border-slate-700/80 rounded-full shadow-lg">
+              <p class="text-xs font-medium text-slate-200 text-center flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Đưa mã QR trên thiết bị vào khung
+              </p>
+            </div>
+
+            <!-- Scanner Box / Reticle -->
+            <div class="z-10 my-auto flex flex-col items-center">
+              <div class="scanner-viewfinder bg-slate-900/40 border border-slate-800 shadow-2xl backdrop-blur-[1px] flex items-center justify-center">
+                <!-- Laser line -->
+                <div class="scan-beam"></div>
+
+                <!-- 4 Brackets -->
+                <div class="scanner-corner corner-tl"></div>
+                <div class="scanner-corner corner-tr"></div>
+                <div class="scanner-corner corner-bl"></div>
+                <div class="scanner-corner corner-br"></div>
+
+                <!-- Center QR Placeholder Silhouette -->
+                <div class="opacity-25 p-4">
+                  <svg class="w-32 h-32 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-5 0h2v2h-2v-2zm2 2h2v2h-2v-2zm2 2h2v4h-2v-4zm-4 2h2v2h-2v-2zm4-4h2v2h-2v-2zm-6 2h2v4h-2v-4z"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Real-time hint under box -->
+              <div class="mt-4 text-center">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/70 border border-blue-800 text-[12px] text-blue-300 font-mono">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                  Đang tìm mã: TB-001
+                </span>
+              </div>
+            </div>
+
+            <!-- Bottom Camera Controls & Info -->
+            <div class="w-full z-10 space-y-3 pb-2">
+              <div class="bg-slate-900/80 backdrop-blur border border-slate-800 rounded-2xl p-3 text-center">
+                <p class="text-xs text-slate-300 font-medium">Tự động đọc mã khi nhận diện thiết bị</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Không cần bấm nút chụp • Giữ chắc điện thoại</p>
+              </div>
+            </div>
+          </main>
+
+          <!-- Bottom Home Indicator -->
+          <div class="bg-slate-950 pt-1 pb-2">
+            <div class="home-indicator home-indicator-light"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           FRAME 2: Quét nhầm thiết bị (Lệch thiết bị)
+      ======================================================== -->
+      <div class="flex flex-col items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-950 border border-red-800/80 text-red-300 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-red-400"></span>
+          FRAME 2: QUÉT NHẦM THIẾT BỊ (LỆCH MÃ)
+        </div>
+
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+
+          <!-- Status Bar -->
+          <div class="pt-3 px-7 pb-1 flex justify-between items-center text-xs font-medium text-slate-800 select-none z-40 bg-white">
+            <span class="font-semibold text-[13px]">09:15</span>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7 0 1.57-.52 3.03-1.42 4.22L12 19.64l-5.58-3.42C5.52 15.03 5 13.57 5 12c0-3.87 3.13-7 7-7z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-semibold">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <header class="bg-white border-b border-slate-100 px-4 py-2.5 flex items-center justify-between z-30 shadow-sm">
+            <button class="w-12 h-12 -ml-2 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 transition" aria-label="Quay lại">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <div class="text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <span class="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">P001 - TB-001</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Máy bơm nước chính (Khu A)</p>
+            </div>
+            <div class="w-10 flex items-center justify-end">
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[11px] font-semibold rounded-full">Đã giao</span>
+            </div>
+          </header>
+
+          <!-- Camera Scanner View with Red Alert -->
+          <main class="flex-1 bg-slate-950 flex flex-col items-center justify-between p-5 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#ef4444_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+            <!-- Banner Lỗi đỏ nhạt rõ ràng theo kịch bản -->
+            <div class="w-full z-20 mt-1">
+              <div class="bg-red-50/95 border-2 border-red-300 text-red-900 rounded-2xl p-3.5 shadow-xl backdrop-blur-md">
+                <div class="flex items-start gap-2.5">
+                  <div class="w-7 h-7 rounded-full bg-red-100 border border-red-200 flex items-center justify-center shrink-0 mt-0.5 text-red-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-red-800">Lệch thiết bị</h4>
+                    <p class="text-xs text-red-700 mt-0.5 font-medium leading-relaxed">
+                      Mã vừa quét không phải <span class="font-mono font-bold bg-red-100/80 px-1 py-0.2 rounded text-red-900">TB-001</span> (đã quét: <span class="font-mono font-bold text-red-800">TB-002</span>). Vui lòng di chuyển đến đúng máy.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scanner Box with Red Warning Brackets -->
+            <div class="z-10 my-auto flex flex-col items-center">
+              <div class="scanner-viewfinder bg-red-950/20 border border-red-900/50 shadow-2xl backdrop-blur-[1px] flex items-center justify-center">
+                <div class="scan-beam-err"></div>
+
+                <!-- 4 Red Brackets -->
+                <div class="scanner-corner corner-tl corner-err"></div>
+                <div class="scanner-corner corner-tr corner-err"></div>
+                <div class="scanner-corner corner-bl corner-err"></div>
+                <div class="scanner-corner corner-br corner-err"></div>
+
+                <!-- QR detected with mismatch mark -->
+                <div class="relative p-4 opacity-40">
+                  <svg class="w-32 h-32 text-red-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-5 0h2v2h-2v-2zm2 2h2v2h-2v-2zm2 2h2v4h-2v-4zm-4 2h2v2h-2v-2zm4-4h2v2h-2v-2zm-6 2h2v4h-2v-4z"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Retrying hint -->
+              <div class="mt-4 text-center">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/70 border border-red-800 text-[12px] text-red-300 font-mono">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping"></span>
+                  Đang giữ màn quét...
+                </span>
+              </div>
+            </div>
+
+            <!-- Bottom status: Stay on screen -->
+            <div class="w-full z-10 pb-2">
+              <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 text-center">
+                <p class="text-xs text-slate-300 font-medium">Ứng dụng tự động giữ màn quét để thử lại</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Không gắn mã sai vào phiếu bảo trì</p>
+              </div>
+            </div>
+          </main>
+
+          <div class="bg-slate-950 pt-1 pb-2">
+            <div class="home-indicator home-indicator-light"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           FRAME 3: Không đọc được mã QR
+      ======================================================== -->
+      <div class="flex flex-col items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-950 border border-amber-800/80 text-amber-300 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          FRAME 3: KHÔNG ĐỌC ĐƯỢC MÃ (THỬ LẠI)
+        </div>
+
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+
+          <!-- Status Bar -->
+          <div class="pt-3 px-7 pb-1 flex justify-between items-center text-xs font-medium text-slate-800 select-none z-40 bg-white">
+            <span class="font-semibold text-[13px]">09:16</span>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7 0 1.57-.52 3.03-1.42 4.22L12 19.64l-5.58-3.42C5.52 15.03 5 13.57 5 12c0-3.87 3.13-7 7-7z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-semibold">91%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <header class="bg-white border-b border-slate-100 px-4 py-2.5 flex items-center justify-between z-30 shadow-sm">
+            <button class="w-12 h-12 -ml-2 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 transition" aria-label="Quay lại">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <div class="text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <span class="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">P001 - TB-001</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Máy bơm nước chính (Khu A)</p>
+            </div>
+            <div class="w-10 flex items-center justify-end">
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[11px] font-semibold rounded-full">Đã giao</span>
+            </div>
+          </header>
+
+          <!-- Camera Scanner View with Amber Alert -->
+          <main class="flex-1 bg-slate-950 flex flex-col items-center justify-between p-5 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+            <!-- Banner Cảnh báo không đọc được mã -->
+            <div class="w-full z-20 mt-1">
+              <div class="bg-amber-50/95 border-2 border-amber-300 text-amber-900 rounded-2xl p-3.5 shadow-xl backdrop-blur-md">
+                <div class="flex items-start gap-2.5">
+                  <div class="w-7 h-7 rounded-full bg-amber-100 border border-amber-200 flex items-center justify-center shrink-0 mt-0.5 text-amber-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-amber-900">Không đọc được mã QR</h4>
+                    <p class="text-xs text-amber-800 mt-0.5 font-medium leading-relaxed">
+                      Không đọc được mã QR. Hãy thử lại bằng cách giữ vững máy, lau kính camera hoặc bật thêm ánh sáng.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scanner Box with Amber Brackets -->
+            <div class="z-10 my-auto flex flex-col items-center">
+              <div class="scanner-viewfinder bg-amber-950/20 border border-amber-900/50 shadow-2xl backdrop-blur-[1px] flex items-center justify-center">
+                <div class="scan-beam-warn"></div>
+
+                <!-- 4 Amber Brackets -->
+                <div class="scanner-corner corner-tl corner-warn"></div>
+                <div class="scanner-corner corner-tr corner-warn"></div>
+                <div class="scanner-corner corner-bl corner-warn"></div>
+                <div class="scanner-corner corner-br corner-warn"></div>
+
+                <!-- Blurry QR Icon -->
+                <div class="relative p-4 opacity-30 filter blur-[1.5px]">
+                  <svg class="w-32 h-32 text-amber-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-5 0h2v2h-2v-2zm2 2h2v2h-2v-2zm2 2h2v4h-2v-4zm-4 2h2v2h-2v-2zm4-4h2v2h-2v-2zm-6 2h2v4h-2v-4z"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Retrying notice -->
+              <div class="mt-4 text-center">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/70 border border-amber-800 text-[12px] text-amber-300 font-mono">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                  Đang căn nét lại...
+                </span>
+              </div>
+            </div>
+
+            <!-- Bottom Note -->
+            <div class="w-full z-10 pb-2">
+              <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 text-center">
+                <p class="text-xs text-slate-300 font-medium">App vẫn ở lại màn quét để tự động quét lại</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Khoảng cách quét lý tưởng: 15 – 25 cm</p>
+              </div>
+            </div>
+          </main>
+
+          <div class="bg-slate-950 pt-1 pb-2">
+            <div class="home-indicator home-indicator-light"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           FRAME 4: Chưa cấp quyền camera (Nền sáng hoàn toàn)
+      ======================================================== -->
+      <div class="flex flex-col items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-red-400"></span>
+          FRAME 4: CHƯA CẤP QUYỀN CAMERA (NỀN SÁNG)
+        </div>
+
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+
+          <!-- Status Bar -->
+          <div class="pt-3 px-7 pb-1 flex justify-between items-center text-xs font-medium text-slate-800 select-none z-40 bg-white">
+            <span class="font-semibold text-[13px]">09:14</span>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7 0 1.57-.52 3.03-1.42 4.22L12 19.64l-5.58-3.42C5.52 15.03 5 13.57 5 12c0-3.87 3.13-7 7-7z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-semibold">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <header class="bg-white border-b border-slate-100 px-4 py-2.5 flex items-center justify-between z-30 shadow-sm">
+            <button class="w-12 h-12 -ml-2 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 transition" aria-label="Quay lại">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <div class="text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <span class="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">P001 - TB-001</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Máy bơm nước chính (Khu A)</p>
+            </div>
+            <div class="w-10 flex items-center justify-end">
+              <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[11px] font-semibold rounded-full">Đã giao</span>
+            </div>
+          </header>
+
+          <!-- Fully Light Body for Permission State (Theo quy chuẩn M05 Frame 4) -->
+          <main class="flex-1 bg-white p-6 flex flex-col items-center justify-between">
+            <div class="w-full flex-1 flex flex-col items-center justify-center text-center">
+              <!-- Light red warning icon circle -->
+              <div class="w-20 h-20 rounded-full bg-red-50 border border-red-200 flex items-center justify-center text-red-500 mb-6 shadow-sm">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18"></path>
+                </svg>
+              </div>
+
+              <h3 class="text-xl font-bold text-slate-900 tracking-tight">Cần quyền camera</h3>
+              <p class="text-sm text-slate-600 mt-2 max-w-[270px] leading-relaxed">
+                Ứng dụng cần quyền truy cập camera để quét mã QR dán trên máy, giúp xác nhận bạn đang đứng đúng thiết bị trước khi bắt đầu công việc.
+              </p>
+
+              <!-- Helpful context box -->
+              <div class="mt-6 w-full p-4 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 mb-1">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                  Bảo mật &amp; Quyền hạn
+                </div>
+                <p class="text-xs text-slate-500 leading-normal">
+                  Chỉ kích hoạt camera khi quét QR và chụp ảnh kiểm tra. Mã QR chỉ chứa mã thiết bị, không chứa token bảo mật.
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Buttons: Min 48px Touch Target -->
+            <div class="w-full space-y-3 pb-2">
+              <button class="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-[15px] shadow-sm flex items-center justify-center gap-2 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Mở cài đặt
+              </button>
+              <button class="w-full h-12 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-semibold text-[15px] transition">
+                Quay lại
+              </button>
+            </div>
+          </main>
+
+          <div class="bg-white pt-1 pb-2">
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Audit Specs Card (Bảng đối soát quy chuẩn thiết kế M03) -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white shadow-xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">✓</div>
+          <h2 class="text-base font-bold text-white tracking-wide">Bảng đối soát quy chuẩn màn hình M03 (SC02, SC06 - Kỹ thuật viên quét QR thiết bị)</h2>
+        </div>
+        <span class="text-xs text-slate-400 font-mono">Tài liệu tham chiếu: screens.md (M03) &amp; scenarios v2.md (SC02, SC06)</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 text-xs">
+        <div class="space-y-2">
+          <p class="font-bold text-blue-400 text-sm">1. Quy chuẩn bố cục &amp; Vùng bấm:</p>
+          <ul class="space-y-1.5 text-slate-300 list-disc list-inside">
+            <li>Khung nhìn smartphone Android chuẩn <strong class="text-white">390×844px</strong>, tỷ lệ hiện đại.</li>
+            <li>Thanh trên nền sáng: nút quay lại tối thiểu <strong class="text-white">48×48px</strong>, mã phiếu và thiết bị <code class="font-mono text-blue-300">P001 - TB-001</code> rõ ràng.</li>
+            <li>Chỉ vùng camera là nền tối; các thông báo, thanh điều hướng và màn hình chưa cấp quyền dùng hoàn toàn nền sáng.</li>
+            <li>Chữ sans-serif tối thiểu <strong class="text-white">14px</strong> cho nội dung đọc chính, cỡ chữ phụ từ 11-12px.</li>
+          </ul>
+        </div>
+
+        <div class="space-y-2">
+          <p class="font-bold text-blue-400 text-sm">2. Nguyên tắc QR &amp; Logic an toàn:</p>
+          <ul class="space-y-1.5 text-slate-300 list-disc list-inside">
+            <li><strong class="text-white">Tự động đọc mã:</strong> Không có nút chụp; camera nhận diện mã QR tự động khi đưa vào khung vuông.</li>
+            <li><strong class="text-white">QR chỉ chứa ID thiết bị:</strong> Không chứa token bảo mật hay phân quyền. Quét QR không tự ý đổi trạng thái phiếu sang in_progress (phải qua M04 bấm Bắt đầu).</li>
+            <li><strong class="text-white">Xử lý lệch thiết bị (SC06):</strong> Nếu quét nhầm máy (ví dụ TB-002), báo banner rõ ràng <code class="text-red-300">"Lệch thiết bị"</code> và app ở lại màn quét, tuyệt đối không gắn vào phiếu P001.</li>
+            <li><strong class="text-white">Không hiện chữ kỹ thuật:</strong> Không có mã lỗi backend, không có tên màn hình M03 trên giao diện điện thoại.</li>
+          </ul>
+        </div>
+
+        <div class="space-y-2">
+          <p class="font-bold text-blue-400 text-sm">3. Luồng tiếp nối màn hình kế tiếp:</p>
+          <ul class="space-y-1.5 text-slate-300 list-disc list-inside">
+            <li><strong class="text-white">Quét đúng TB-001:</strong> Chuyển tiếp ngay sang màn hình <strong class="text-white">M04 (Chi tiết &amp; bắt đầu phiếu)</strong>.</li>
+            <li><strong class="text-white">Giải phóng camera:</strong> Sau khi quét QR xong, camera của M03 được giải phóng ngay trước khi sang M05 (chụp ảnh) để tránh tranh chấp phần cứng camera.</li>
+            <li><strong class="text-white">Nút "Quay lại":</strong> Đưa kỹ thuật viên trở về màn hình <strong class="text-white">M02 (Việc được giao)</strong> an toàn.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+
+</body></html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W01 - Đăng nhập (5 trạng thái)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      background-color: #0b0f19;
+      color: #1e293b;
+      margin: 0;
+      padding: 32px 16px;
+    }
+    .btn-primary {
+      background-color: #1d4ed8;
+      color: #ffffff;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: #1e40af;
+    }
+    .btn-secondary {
+      background-color: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #f8fafc;
+    }
+    .input-field {
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-field:focus {
+      border-color: #1d4ed8;
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center gap-12">
+
+  <!-- Tiêu đề tổng quan toàn trang -->
+  <div class="w-full max-w-[1440px] bg-slate-900 border border-slate-800 rounded-xl p-6 text-white shadow-xl flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-600/30 text-blue-400 border border-blue-500/30">SCREEN ID: W01</span>
+        <span class="text-xs text-slate-400">Thiết kế Web Desktop 1440px • Phân hệ Quản lý &amp; Kỹ thuật viên</span>
+      </div>
+      <h1 class="text-2xl font-bold tracking-tight text-white">W01 - Đăng nhập hệ thống (5 trạng thái)</h1>
+      <p class="text-sm text-slate-400 mt-1">Xác thực tài khoản người dùng và điều hướng theo vai trò (Quản lý → W02, Kỹ thuật viên → W06). Không có sidebar điều hướng.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2 text-xs">
+      <span class="px-3 py-1.5 rounded-md bg-slate-800 text-slate-300 font-medium border border-slate-700">1. Mặc định</span>
+      <span class="px-3 py-1.5 rounded-md bg-red-950/60 text-red-300 font-medium border border-red-800/40">2. Lỗi đăng nhập</span>
+      <span class="px-3 py-1.5 rounded-md bg-amber-950/60 text-amber-300 font-medium border border-amber-800/40">3. Đang đăng nhập</span>
+      <span class="px-3 py-1.5 rounded-md bg-rose-950/60 text-rose-300 font-medium border border-rose-800/40">4. Mất kết nối</span>
+      <span class="px-3 py-1.5 rounded-md bg-indigo-950/60 text-indigo-300 font-medium border border-indigo-800/40">5. Hết phiên</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- FRAME 1: MẶC ĐỊNH (DEFAULT)               -->
+  <!-- ========================================== -->
+  <div class="w-full max-w-[1440px] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+    <!-- Thanh nhãn trạng thái trên cùng -->
+    <div class="bg-slate-900 text-white px-6 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-3">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-500 ring-4 ring-blue-500/20"></span>
+        <span class="font-bold tracking-wide uppercase text-slate-200 text-xs">Trạng thái 1: Mặc định (Default Login View)</span>
+      </div>
+      <div class="text-slate-400 text-xs">Web Desktop 1440px • Thẻ trung tâm form chuẩn 440px</div>
+    </div>
+
+    <!-- Nội dung màn hình W01 -->
+    <div class="min-h-[580px] bg-[#f8fafc] flex flex-col items-center justify-center p-8 relative">
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+
+      <!-- Thẻ đăng nhập trung tâm -->
+      <div class="w-full max-w-[440px] bg-white rounded-2xl border border-slate-200/90 shadow-lg p-8 relative z-10">
+        <!-- Logo & Brand Header -->
+        <div class="flex flex-col items-center text-center mb-8">
+          <div class="w-12 h-12 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-md mb-3 shadow-blue-500/20">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">MaintenanceLab</h2>
+          <p class="text-slate-500 text-sm mt-1">Hệ thống Quản lý Thiết bị &amp; Bảo trì</p>
+        </div>
+
+        <!-- Form Đăng nhập -->
+        <form class="space-y-5" onsubmit="return false;">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Email đăng nhập <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="email" placeholder="Nhập email" value="" class="w-full px-3.5 py-2.5 input-field text-slate-800 placeholder-slate-400">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Mật khẩu <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="password" placeholder="Nhập mật khẩu" value="" class="w-full px-3.5 py-2.5 input-field text-slate-800 placeholder-slate-400">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="button" class="w-full py-3 btn-primary text-sm font-semibold shadow-sm hover:shadow flex items-center justify-center gap-2">
+              <span>Đăng nhập</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- FRAME 2: LỖI ĐĂNG NHẬP                     -->
+  <!-- ========================================== -->
+  <div class="w-full max-w-[1440px] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+    <!-- Thanh nhãn trạng thái trên cùng -->
+    <div class="bg-red-950 text-white px-6 py-3 border-b border-red-900 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-3">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 ring-4 ring-red-500/20"></span>
+        <span class="font-bold tracking-wide uppercase text-red-200 text-xs">Trạng thái 2: Lỗi đăng nhập (Sai email hoặc mật khẩu)</span>
+      </div>
+      <div class="text-red-300 text-xs">Báo lỗi ngay tại form • Giữ nguyên email đã nhập • Không xóa dữ liệu người dùng</div>
+    </div>
+
+    <!-- Nội dung màn hình W01 -->
+    <div class="min-h-[580px] bg-[#f8fafc] flex flex-col items-center justify-center p-8 relative">
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+
+      <div class="w-full max-w-[440px] bg-white rounded-2xl border border-slate-200/90 shadow-lg p-8 relative z-10">
+        <!-- Logo & Brand Header -->
+        <div class="flex flex-col items-center text-center mb-6">
+          <div class="w-12 h-12 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-md mb-3 shadow-blue-500/20">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">MaintenanceLab</h2>
+          <p class="text-slate-500 text-sm mt-1">Hệ thống Quản lý Thiết bị &amp; Bảo trì</p>
+        </div>
+
+        <!-- Banner Lỗi: Chỉ giữ thông điệp "Email hoặc mật khẩu không chính xác" -->
+        <div class="mb-5 p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700 text-sm">
+          <svg class="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+          <span class="font-medium">Email hoặc mật khẩu không chính xác</span>
+        </div>
+
+        <!-- Form Đăng nhập -->
+        <form class="space-y-5" onsubmit="return false;">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Email đăng nhập <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="email" value="manager@demo.vn" class="w-full px-3.5 py-2.5 input-field text-slate-800 bg-white">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Mật khẩu <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="password" placeholder="Nhập mật khẩu" value="" class="w-full px-3.5 py-2.5 input-field text-slate-800 placeholder-slate-400">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="button" class="w-full py-3 btn-primary text-sm font-semibold shadow-sm hover:shadow flex items-center justify-center gap-2">
+              <span>Đăng nhập lại</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- FRAME 3: ĐANG ĐĂNG NHẬP (SUBMITTING)       -->
+  <!-- ========================================== -->
+  <div class="w-full max-w-[1440px] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+    <!-- Thanh nhãn trạng thái trên cùng -->
+    <div class="bg-amber-950 text-white px-6 py-3 border-b border-amber-900 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-3">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-amber-500/20"></span>
+        <span class="font-bold tracking-wide uppercase text-amber-200 text-xs">Trạng thái 3: Đang đăng nhập (Submitting / Loading)</span>
+      </div>
+      <div class="text-amber-300 text-xs">Khóa nút Đăng nhập • Hiển thị Spinner • Tránh gửi request trùng lặp</div>
+    </div>
+
+    <!-- Nội dung màn hình W01 -->
+    <div class="min-h-[580px] bg-[#f8fafc] flex flex-col items-center justify-center p-8 relative">
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+
+      <div class="w-full max-w-[440px] bg-white rounded-2xl border border-slate-200/90 shadow-lg p-8 relative z-10">
+        <!-- Logo & Brand Header -->
+        <div class="flex flex-col items-center text-center mb-8">
+          <div class="w-12 h-12 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-md mb-3 shadow-blue-500/20">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">MaintenanceLab</h2>
+          <p class="text-slate-500 text-sm mt-1">Đang xác thực thông tin tài khoản...</p>
+        </div>
+
+        <!-- Form Đăng nhập Đang tải -->
+        <form class="space-y-5" onsubmit="return false;">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Email đăng nhập <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="email" value="manager@demo.vn" disabled="" class="w-full px-3.5 py-2.5 input-field text-slate-500 bg-slate-50 cursor-not-allowed opacity-80">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Mật khẩu <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="password" value="••••••••••••" disabled="" class="w-full px-3.5 py-2.5 input-field text-slate-500 bg-slate-50 cursor-not-allowed opacity-80 font-mono">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="button" disabled="" class="w-full py-3 bg-blue-600/70 text-white rounded-lg text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2 shadow-none">
+              <svg class="w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Đang đăng nhập...</span>
+            </button>
+          </div>
+
+          <div class="text-center pt-1">
+            <p class="text-xs text-slate-500">Vui lòng đợi trong giây lát</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- FRAME 4: MẤT KẾT NỐI (LỖI MẠNG)            -->
+  <!-- ========================================== -->
+  <div class="w-full max-w-[1440px] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+    <!-- Thanh nhãn trạng thái trên cùng -->
+    <div class="bg-rose-950 text-white px-6 py-3 border-b border-rose-900 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-3">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500 ring-4 ring-rose-500/20"></span>
+        <span class="font-bold tracking-wide uppercase text-rose-200 text-xs">Trạng thái 4: Mất kết nối (Lỗi kết nối máy chủ)</span>
+      </div>
+      <div class="text-rose-300 text-xs">Banner thông báo mất kết nối • Nút "Thử lại" • Giữ nguyên thông tin form</div>
+    </div>
+
+    <!-- Nội dung màn hình W01 -->
+    <div class="min-h-[580px] bg-[#f8fafc] flex flex-col items-center justify-center p-8 relative">
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+
+      <div class="w-full max-w-[440px] bg-white rounded-2xl border border-slate-200/90 shadow-lg p-8 relative z-10">
+        <!-- Logo & Brand Header -->
+        <div class="flex flex-col items-center text-center mb-6">
+          <div class="w-12 h-12 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-md mb-3 shadow-blue-500/20">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">MaintenanceLab</h2>
+          <p class="text-slate-500 text-sm mt-1">Hệ thống Quản lý Thiết bị &amp; Bảo trì</p>
+        </div>
+
+        <!-- Banner Lỗi: Không kết nối được tới máy chủ kèm nút Thử lại, không mã lỗi/VPN -->
+        <div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between gap-3 text-red-700">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824-2.179a5 5 0 014.243 2.18M3 3l18 18"></path>
+            </svg>
+            <span class="text-sm font-semibold">Không kết nối được tới máy chủ</span>
+          </div>
+          <button type="button" class="px-3 py-1.5 bg-white border border-red-300 hover:bg-red-50 text-red-700 text-xs font-semibold rounded-lg shadow-sm transition-colors flex items-center gap-1.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Thử lại</span>
+          </button>
+        </div>
+
+        <!-- Form Đăng nhập (Giữ nguyên thông tin form) -->
+        <form class="space-y-5" onsubmit="return false;">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Email đăng nhập <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="email" value="manager@demo.vn" class="w-full px-3.5 py-2.5 input-field text-slate-800 bg-white">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Mật khẩu <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="password" value="••••••••••••" class="w-full px-3.5 py-2.5 input-field text-slate-800 bg-white font-mono">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="button" class="w-full py-3 btn-primary text-sm font-semibold shadow-sm hover:shadow flex items-center justify-center gap-2">
+              <span>Đăng nhập</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- FRAME 5: HẾT PHIÊN LÀM VIỆC                -->
+  <!-- ========================================== -->
+  <div class="w-full max-w-[1440px] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+    <!-- Thanh nhãn trạng thái trên cùng -->
+    <div class="bg-indigo-950 text-white px-6 py-3 border-b border-indigo-900 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-3">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-indigo-500 ring-4 ring-indigo-500/20"></span>
+        <span class="font-bold tracking-wide uppercase text-indigo-200 text-xs">Trạng thái 5: Hết phiên làm việc (Session Expired)</span>
+      </div>
+      <div class="text-indigo-300 text-xs">Thông báo "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại." • Điền sẵn email</div>
+    </div>
+
+    <!-- Nội dung màn hình W01 -->
+    <div class="min-h-[580px] bg-[#f8fafc] flex flex-col items-center justify-center p-8 relative">
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+
+      <div class="w-full max-w-[440px] bg-white rounded-2xl border border-slate-200/90 shadow-lg p-8 relative z-10">
+        <!-- Logo & Brand Header -->
+        <div class="flex flex-col items-center text-center mb-6">
+          <div class="w-12 h-12 rounded-xl bg-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-md mb-3 shadow-blue-500/20">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">MaintenanceLab</h2>
+          <p class="text-slate-500 text-sm mt-1">Hệ thống Quản lý Thiết bị &amp; Bảo trì</p>
+        </div>
+
+        <!-- Banner cảnh báo hết phiên: ngắn gọn theo đúng yêu cầu -->
+        <div class="mb-5 p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-3 text-amber-800 text-sm">
+          <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="font-medium">Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.</span>
+        </div>
+
+        <!-- Form Đăng nhập (Email bình thường, điền sẵn, không khóa, không nhãn vai trò, nút "Đăng nhập") -->
+        <form class="space-y-5" onsubmit="return false;">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Email đăng nhập <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="email" value="manager@demo.vn" class="w-full px-3.5 py-2.5 input-field text-slate-800 bg-white">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Mật khẩu <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="password" placeholder="Nhập mật khẩu" value="" class="w-full px-3.5 py-2.5 input-field text-slate-800 placeholder-slate-400">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="button" class="w-full py-3 btn-primary text-sm font-semibold shadow-sm hover:shadow flex items-center justify-center gap-2">
+              <span>Đăng nhập</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</body></html>

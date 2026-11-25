@@ -1,0 +1,901 @@
+<!DOCTYPE html><html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M02 - Việc được giao (7 trạng thái)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0b0f19;
+      color: #0f172a;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .phone-mockup {
+      width: 390px;
+      height: 844px;
+      flex-shrink: 0;
+      border-radius: 46px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.4), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+      overflow: hidden;
+      position: relative;
+      background-color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+    }
+    .badge-assigned {
+      background-color: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    .badge-progress {
+      background-color: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+    .badge-submitted {
+      background-color: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+    .badge-approved {
+      background-color: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+    @keyframes pulse-skeleton {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-skeleton {
+      animation: pulse-skeleton 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    /* Hide scrollbars */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="p-8 lg:p-12 text-slate-100 min-h-screen overflow-x-auto">
+  
+  <!-- Canvas Header Information -->
+  <div class="max-w-[2700px] mx-auto mb-10">
+    <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-800 justify-center gap-6">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="px-2.5 py-1 text-xs font-bold tracking-wider uppercase bg-blue-900/50 text-blue-400 border border-blue-700/60 rounded-md">APP ANDROID • M02</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-800 text-slate-300 rounded-md border border-slate-700">390 × 844 px (7 trạng thái)</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-amber-950/60 text-amber-300 rounded-md border border-amber-800/60">Kỹ thuật viên: tech-a (Nguyễn Văn A)</span>
+        </div>
+        <h1 class="text-3xl font-extrabold text-white tracking-tight">M02: Việc được giao (Danh sách phiếu &amp; Chọn quét QR)</h1>
+        <p class="text-slate-400 text-sm mt-1 max-w-4xl">Giao diện nền sáng chuẩn Web MaintenanceLab &amp; M01/M05/M06. Hiển thị danh sách phiếu của riêng kỹ thuật viên tech-a, tìm kiếm nhanh theo mã/tên máy, chọn phiếu để kích hoạt nút Quét QR cố định ở đáy. Vùng bấm tối thiểu 48px, cỡ chữ tối thiểu 14px.</p>
+      </div>
+
+      <!-- Badge legend -->
+      <div class="flex items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+        <span class="text-xs text-slate-400 font-medium mr-2">Quy ước Badge:</span>
+        <span class="px-2.5 py-1 rounded text-xs font-semibold badge-assigned">Đã giao</span>
+        <span class="px-2.5 py-1 rounded text-xs font-semibold badge-progress">Đang thực hiện</span>
+        <span class="px-2.5 py-1 rounded text-xs font-semibold badge-submitted">Chờ duyệt</span>
+        <span class="px-2.5 py-1 rounded text-xs font-semibold badge-approved">Hoàn tất</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frames Grid / Flow Container -->
+  <div class="w-full overflow-x-auto pb-8">
+    <div class="flex items-start flex-nowrap gap-8 px-8 pb-10 min-w-max">
+
+      <!-- ========================================== -->
+      <!-- FRAME 1: MẶC ĐỊNH (CHƯA CHỌN PHIẾU) -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          FRAME 1: Mặc định (Chưa chọn phiếu)
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:14</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm z-10"><div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">4 phiếu</p>
+            </div>
+            <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition cursor-pointer" aria-label="Menu">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+              </svg>
+            </button></div>
+
+          <!-- Search Input Box -->
+          <div class="bg-white px-5 py-3 border-b border-slate-100 z-10">
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <input type="text" placeholder="Tìm theo mã phiếu, tên thiết bị..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition">
+            </div>
+          </div>
+
+          <!-- Card List (Scrollable Area) -->
+          <div class="flex-1 overflow-y-auto px-5 py-4 space-y-3 no-scrollbar pb-28">
+            <div class="text-[13px] font-semibold text-slate-500 px-1">Chọn một phiếu rồi bấm Quét QR</div>
+
+            <!-- Card 1: P001 (Assigned) - Not selected -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition hover:border-slate-300 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P001</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-001</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-assigned">Đã giao</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy bơm nước chính</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">17:00 • Hôm nay</span>
+              </div>
+            </div>
+
+            <!-- Card 2: P002 (In Progress) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition hover:border-slate-300 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P002</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-002</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-progress">Đang thực hiện</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy nén khí trung tâm</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">18:00 • Hôm nay</span>
+              </div>
+            </div>
+
+            <!-- Card 3: P004 (Submitted) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition hover:border-slate-300 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P004</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-004</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-submitted">Chờ duyệt</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Quạt thông gió xưởng 1</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">12:00 • Ngày mai</span>
+              </div>
+            </div>
+
+            <!-- Card 4: P006 (In Progress) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition hover:border-slate-300 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P006</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-006</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-progress">Đang thực hiện</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy phát điện dự phòng 250kVA</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">17:00 • 28/05/2025</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Fixed Bar: Disabled "Quét QR" -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-5 pt-3 pb-7 shadow-lg z-20">
+            <p class="text-center text-xs text-slate-400 mb-2">Vui lòng chọn một phiếu để quét QR</p>
+            <button disabled="" class="w-full h-12 rounded-xl bg-slate-100 text-slate-400 font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200 transition">
+              <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Quét QR
+            </button>
+          </div>
+        </div>
+      </div><!-- ========================================== -->
+      <!-- FRAME 7: MENU ĐĂNG XUẤT -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-950/80 text-rose-300 border border-rose-700/60 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+          FRAME 7: Menu Đăng xuất
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40 relative">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:14</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar with Active Menu Button -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm relative z-30">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">4 phiếu</p>
+            </div>
+            <div class="relative">
+              <button class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 text-slate-900 ring-2 ring-blue-500/20 transition cursor-pointer" aria-label="Menu">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                </svg>
+              </button>
+
+              <!-- Dropdown Menu: Only 'Đăng xuất' -->
+              <div class="absolute right-0 top-11 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 w-36 z-30">
+                <button class="w-full px-3.5 py-2 flex items-center gap-2 text-rose-600 hover:bg-rose-50 text-sm font-medium transition text-left cursor-pointer">
+                  <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                  </svg>
+                  <span>Đăng xuất</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dim Backdrop when menu is open -->
+          <div class="absolute inset-0 bg-slate-900/10 z-20 pointer-events-none"></div>
+
+          <!-- Search Input Box -->
+          <div class="bg-white px-5 py-3 border-b border-slate-100 z-10">
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <input type="text" placeholder="Tìm theo mã phiếu, tên thiết bị..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition" disabled="">
+            </div>
+          </div>
+
+          <!-- Card List (Scrollable Area) -->
+          <div class="flex-1 overflow-y-auto px-5 py-4 space-y-3 no-scrollbar pb-28">
+            <div class="text-[13px] font-semibold text-slate-500 px-1">Chọn một phiếu rồi bấm Quét QR</div>
+
+            <!-- Card 1: P001 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P001</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-001</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-assigned">Đã giao</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy bơm nước chính</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">17:00 • Hôm nay</span>
+              </div>
+            </div>
+
+            <!-- Card 2: P002 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P002</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-002</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-progress">Đang thực hiện</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy nén khí trung tâm</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">18:00 • Hôm nay</span>
+              </div>
+            </div>
+
+            <!-- Card 3: P004 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P004</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-004</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-submitted">Chờ duyệt</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Quạt thông gió xưởng 1</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">12:00 • Ngày mai</span>
+              </div>
+            </div>
+
+            <!-- Card 4: P006 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm transition">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P006</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-006</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-progress">Đang thực hiện</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy phát điện dự phòng 250kVA</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">17:00 • 28/05/2025</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Fixed Bar: Disabled "Quét QR" -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-5 pt-3 pb-7 shadow-lg z-20">
+            <p class="text-center text-xs text-slate-400 mb-2">Vui lòng chọn một phiếu để quét QR</p>
+            <button disabled="" class="w-full h-12 rounded-xl bg-slate-100 text-slate-400 font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200 transition">
+              <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Quét QR
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- FRAME 2: ĐÃ CHỌN P001 (NÚT QUÉT QR SÁNG) -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-950/80 text-blue-300 border border-blue-700/60 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+          FRAME 2: Đã chọn P001 (Nút Quét QR sáng)
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:15</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm z-10"><div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <p class="text-xs text-blue-600 font-medium mt-0.5">Đã chọn 1 phiếu</p>
+            </div>
+            <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition cursor-pointer" aria-label="Menu">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+              </svg>
+            </button></div>
+
+          <!-- Search Input Box -->
+          <div class="bg-white px-5 py-3 border-b border-slate-100 z-10">
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <input type="text" placeholder="Tìm theo mã phiếu, tên thiết bị..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Card List with P001 selected -->
+          <div class="flex-1 overflow-y-auto px-5 py-4 space-y-3 no-scrollbar pb-28">
+            
+
+            <!-- Card 1: P001 - SELECTED (Blue Border & Background Accent) -->
+            <div class="bg-blue-50/70 p-4 rounded-2xl border-2 border-blue-600 shadow-md ring-4 ring-blue-500/10 transition cursor-pointer relative">
+              <div class="absolute -top-2.5 right-4 bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                ĐÃ CHỌN
+              </div>
+
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-white bg-blue-600 px-2 py-0.5 rounded shadow-sm">P001</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-bold text-slate-800">TB-001</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-assigned">Đã giao</span>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 leading-snug">Máy bơm nước chính</h3>
+              <p class="text-xs text-slate-600 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-blue-200/80 flex items-center justify-between text-xs text-slate-700">
+                <span class="text-slate-500 font-medium">Hạn hoàn thành:</span>
+                <span class="font-bold text-blue-900">17:00 • Hôm nay</span>
+              </div>
+            </div>
+
+            <!-- Card 2: P002 (In Progress) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm opacity-80 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P002</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-002</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-progress">Đang thực hiện</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy nén khí trung tâm</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">18:00 • Hôm nay</span>
+              </div>
+            </div>
+
+            <!-- Card 3: P004 (Submitted) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm opacity-80 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P004</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-004</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-submitted">Chờ duyệt</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Quạt thông gió xưởng 1</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">12:00 • Ngày mai</span>
+              </div>
+            </div>
+
+            <!-- Card 4: P006 (In Progress) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm opacity-80 cursor-pointer">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">P006</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="font-mono text-xs font-semibold text-slate-600">TB-006</span>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-progress">Đang thực hiện</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">Máy phát điện dự phòng 250kVA</h3>
+              <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Khu A</p>
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span class="text-slate-400">Hạn hoàn thành:</span>
+                <span class="font-medium text-slate-700">17:00 • 28/05/2025</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Fixed Bar: ACTIVE "Quét QR" BUTTON -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-5 pt-3 pb-7 shadow-xl z-20">
+            <p class="text-center text-xs text-blue-700 font-semibold mb-2">Đã chọn: P001 - Máy bơm nước chính</p>
+            <button class="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 active:scale-[0.99] transition">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Quét QR
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- FRAME 3: ĐANG TẢI DANH SÁCH (SKELETON) -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-slate-400 animate-ping"></span>
+          FRAME 3: Đang tải danh sách (Khung chờ)
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:14</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm z-10"><div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <div class="h-3 w-20 bg-slate-200 rounded mt-1.5 animate-skeleton"></div>
+            </div>
+            <div class="w-9 h-9 rounded-full bg-slate-100 animate-skeleton"></div></div>
+
+          <!-- Search Input Box Skeleton -->
+          <div class="bg-white px-5 py-3 border-b border-slate-100 z-10">
+            <div class="h-10 bg-slate-100 rounded-xl border border-slate-200 animate-skeleton"></div>
+          </div>
+
+          <!-- Card Skeletons -->
+          <div class="flex-1 overflow-y-auto px-5 py-4 space-y-3 no-scrollbar pb-28">
+            <div class="h-4 w-32 bg-slate-200 rounded animate-skeleton mb-2"></div>
+
+            <!-- Skeleton Card 1 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm animate-skeleton">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="h-5 w-12 bg-slate-200 rounded"></div>
+                  <div class="h-5 w-16 bg-slate-200 rounded"></div>
+                </div>
+                <div class="h-5 w-20 bg-slate-200 rounded-full"></div>
+              </div>
+              <div class="h-5 w-48 bg-slate-200 rounded mb-2"></div>
+              <div class="h-3.5 w-36 bg-slate-100 rounded mb-4"></div>
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div class="h-3 w-24 bg-slate-100 rounded"></div>
+                <div class="h-3 w-20 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+
+            <!-- Skeleton Card 2 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm animate-skeleton">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="h-5 w-12 bg-slate-200 rounded"></div>
+                  <div class="h-5 w-16 bg-slate-200 rounded"></div>
+                </div>
+                <div class="h-5 w-24 bg-slate-200 rounded-full"></div>
+              </div>
+              <div class="h-5 w-52 bg-slate-200 rounded mb-2"></div>
+              <div class="h-3.5 w-40 bg-slate-100 rounded mb-4"></div>
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div class="h-3 w-24 bg-slate-100 rounded"></div>
+                <div class="h-3 w-20 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+
+            <!-- Skeleton Card 3 -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm animate-skeleton">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="h-5 w-12 bg-slate-200 rounded"></div>
+                  <div class="h-5 w-16 bg-slate-200 rounded"></div>
+                </div>
+                <div class="h-5 w-20 bg-slate-200 rounded-full"></div>
+              </div>
+              <div class="h-5 w-44 bg-slate-200 rounded mb-2"></div>
+              <div class="h-3.5 w-32 bg-slate-100 rounded mb-4"></div>
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div class="h-3 w-24 bg-slate-100 rounded"></div>
+                <div class="h-3 w-20 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Fixed Bar: Disabled Skeleton -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-200 px-5 pt-3 pb-7 shadow-lg z-20">
+            <div class="h-3 w-40 bg-slate-200 rounded mx-auto mb-2 animate-skeleton"></div>
+            <div class="w-full h-12 rounded-xl bg-slate-100 border border-slate-200 animate-skeleton"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- FRAME 4: CHƯA CÓ PHIẾU (EMPTY STATE) -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+          FRAME 4: Chưa có phiếu
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:15</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">92%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm z-10"><div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">0 phiếu</p>
+            </div>
+            <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition cursor-pointer" aria-label="Menu">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+              </svg>
+            </button></div>
+
+          <!-- Empty State Container -->
+          <div class="flex-1 flex flex-col items-center justify-center px-6 text-center -mt-10">
+            <div class="w-20 h-20 rounded-3xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-4 shadow-sm">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Bạn chưa được giao phiếu nào</h3>
+            <p class="text-sm text-slate-500 max-w-xs leading-relaxed">Khi bạn được giao phiếu, danh sách sẽ hiện ở đây.</p>
+          </div>
+
+          <!-- Bottom Bar Disabled -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-5 pt-3 pb-7 shadow-lg z-20">
+            <button disabled="" class="w-full h-12 rounded-xl bg-slate-100 text-slate-400 font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200">
+              <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Quét QR
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- FRAME 5: TÌM KHÔNG THẤY (NO RESULT) -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-950/80 text-amber-300 border border-amber-700/60 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          FRAME 5: Tìm không thấy
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:16</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">91%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm z-10"><div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Tìm kiếm</p>
+            </div>
+            <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition cursor-pointer" aria-label="Menu">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+              </svg>
+            </button></div>
+
+          <!-- Search Input Box with Query -->
+          <div class="bg-white px-5 py-3 border-b border-slate-100 z-10">
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-blue-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <input type="text" value="TB-999" class="w-full pl-10 pr-9 py-2.5 bg-slate-50 border border-blue-500 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none">
+              <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- No Result Body -->
+          <div class="flex-1 flex flex-col items-center justify-center px-6 text-center -mt-10">
+            <div class="w-20 h-20 rounded-3xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 mb-4 shadow-sm">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Không có kết quả</h3>
+            <p class="text-sm text-slate-500 max-w-xs leading-relaxed">
+              Không tìm thấy phiếu nào khớp với từ khóa <span class="font-mono font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">"TB-999"</span>. Vui lòng kiểm tra lại mã phiếu hoặc tên máy.
+            </p>
+            <button class="mt-4 px-4 py-2 rounded-xl text-xs font-bold text-blue-600 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition">
+              Xóa từ khóa tìm kiếm
+            </button>
+          </div>
+
+          <!-- Bottom Bar Disabled -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-5 pt-3 pb-7 shadow-lg z-20">
+            <button disabled="" class="w-full h-12 rounded-xl bg-slate-100 text-slate-400 font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200">
+              <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Quét QR
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================================== -->
+      <!-- FRAME 6: LỖI API (KHÔNG TẢI ĐƯỢC DANH SÁCH) -->
+      <!-- ========================================== -->
+      <div class="flex flex-col items-center">
+        <!-- Frame Tag -->
+        <div class="mb-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-950/80 text-rose-300 border border-rose-700/60 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+          FRAME 6: Lỗi API (Thử lại)
+        </div>
+
+        <!-- Phone Container -->
+        <div class="phone-mockup border border-slate-300/40">
+          <!-- Status Bar -->
+          <div class="h-11 px-7 pt-3 flex justify-between items-center text-xs font-semibold text-slate-900 bg-white select-none z-10">
+            <span>09:16</span>
+            <div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1.5"></div>
+            <div class="flex items-center gap-1.5 text-slate-800">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"></path></svg>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path></svg>
+              <span class="text-[11px] font-mono">91%</span>
+            </div>
+          </div>
+
+          <!-- Top AppBar -->
+          <div class="bg-white border-b border-slate-200 px-5 pt-3 pb-3.5 flex items-center justify-between shadow-sm z-10"><div>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Việc được giao</h2>
+              <p class="text-xs text-rose-600 font-medium mt-0.5">Lỗi kết nối</p>
+            </div>
+            <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition cursor-pointer" aria-label="Menu">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+              </svg>
+            </button></div>
+
+          <!-- API Error Body with Retry Button -->
+          <div class="flex-1 flex flex-col items-center justify-center px-6 text-center -mt-6">
+            <div class="w-20 h-20 rounded-3xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-500 mb-4 shadow-sm">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Không tải được danh sách</h3>
+            <p class="text-sm text-slate-500 max-w-xs leading-relaxed mb-6">
+              Không thể kết nối đến máy chủ hoặc mạng của bạn bị gián đoạn. Vui lòng kiểm tra lại kết nối Wifi/4G.
+            </p>
+            
+            <!-- Nút chính "Thử lại" 48px chuẩn cảm ứng -->
+            <button class="w-full max-w-xs h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-[0.99] transition">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              Thử lại
+            </button>
+          </div>
+
+          <!-- Bottom Bar Disabled -->
+          <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-5 pt-3 pb-7 shadow-lg z-20">
+            <button disabled="" class="w-full h-12 rounded-xl bg-slate-100 text-slate-400 font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed border border-slate-200">
+              <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Quét QR
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Documentation & Spec Audit Footer -->
+  <div class="max-w-[2700px] mx-auto mt-8 bg-slate-900/90 rounded-2xl border border-slate-800 p-6 text-sm text-slate-300">
+    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800 flex-wrap justify-center gap-6">
+      <div class="flex items-center gap-2 font-bold text-white text-base">
+        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Bảng đối soát quy chuẩn màn hình M02 (SC02 - Kỹ thuật viên xem danh sách phiếu &amp; Quét QR)
+      </div>
+      <div class="text-xs text-slate-400">
+        Tài liệu tham chiếu: screens.md (M02) &amp; scenarios v2.md (SC02, SC05)
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-400">
+      <div class="space-y-2">
+        <h4 class="font-bold text-slate-200 text-sm">1. Quy chuẩn bố cục &amp; Vùng bấm:</h4>
+        <ul class="list-disc pl-4 space-y-1">
+          <li>Khung nhìn smartphone Android chuẩn <strong class="text-slate-300">390×844px</strong>, giao diện nền sáng Slate-50 đồng bộ Web MaintenanceLab &amp; M01/M05/M06.</li>
+          <li>Thanh trên nền sáng: tiêu đề rõ ràng <strong class="text-slate-300">"Việc được giao"</strong>.</li>
+          <li>Ô tìm kiếm theo mã phiếu, tên thiết bị đặt ngay dưới thanh trên.</li>
+          <li>Thẻ phiếu hiển thị trực quan: mã phiếu, mã/tên thiết bị, badge trạng thái màu chuẩn, hạn hoàn thành.</li>
+          <li>Nút cố định ở đáy: <strong class="text-slate-300">"Quét QR"</strong> chiều cao 48px, chỉ kích hoạt khi đã chọn phiếu.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="font-bold text-slate-200 text-sm">2. Nguyên tắc dữ liệu &amp; Quyền hạn:</h4>
+        <ul class="list-disc pl-4 space-y-1">
+          <li>Khung nhìn smartphone Android chuẩn <strong class="text-slate-300">390×844px</strong>, giao diện nền sáng Slate-50 đồng bộ Web MaintenanceLab &amp; M01/M05/M06.</li>
+          <li>Kỹ thuật viên khác (tech-b) không nhìn thấy phiếu của tech-a.</li>
+          <li><strong class="text-slate-300">Không tự thêm tính năng</strong>: Không có thông báo đẩy, không có đội nhóm, không có quyền quản lý.</li>
+          <li><strong class="text-slate-300">Không hiện chữ kỹ thuật</strong>: Không có mã lỗi backend, không tên màn hình, không mã kịch bản SC.</li>
+        </ul>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="font-bold text-slate-200 text-sm">3. Luồng tiếp nối màn hình kế tiếp:</h4>
+        <ul class="list-disc pl-4 space-y-1">
+          <li>Khung nhìn smartphone Android chuẩn <strong class="text-slate-300">390×844px</strong>, giao diện nền sáng Slate-50 đồng bộ Web MaintenanceLab &amp; M01/M05/M06.</li>
+          <li>Bấm nút <strong class="text-slate-300">"Quét QR"</strong>: Điều hướng trực tiếp sang màn hình <strong class="text-slate-300">M03 (Quét QR thiết bị)</strong> cho đúng phiếu đang chọn.</li>
+          <li>Xử lý sự cố: Trạng thái khung chờ (Skeleton pulse) khi tải dữ liệu; Trạng thái lỗi có nút <strong class="text-slate-300">"Thử lại"</strong> rõ ràng.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+</body></html>
